@@ -23,7 +23,7 @@ App (.exe, pywebview) ──HTTPS──► agent.<domain>
 |---|---|---|
 | 0 | WSL2, Ubuntu, Docker Engine, NVIDIA Container Toolkit, GPU-Test | erledigt 02.11.2026 |
 | 1 | Container für Ollama und Agent (docker compose) | erledigt 02.11.2026 |
-| 2 | Cloudflare Tunnel und Domain | offen |
+| 2 | Cloudflare Tunnel und Domain | begonnen 02.11.2026 (Domain liegt bei Strato) |
 | 3 | Anmeldung über Cloudflare Access | offen |
 | 4 | Client-App (pywebview als .exe) | offen |
 | 5 | Demo-Betrieb: Start per Doppelklick, Statusprüfung | offen |
@@ -180,6 +180,29 @@ Neustart geänderte Module lädt.
 
 **Für Jonas:** Auf seinem Rechner ändert sich nichts, er arbeitet weiter mit dem Windows-Ollama. Auf Max' Rechner
 gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert dort, solange die VM läuft.
+
+## Phase 2: Tunnel und Domain (begonnen)
+
+### Stand 02.11.2026
+- Die Domain ist bei **Strato** registriert. Domainname, bisherige Nutzung (Mail, Website) und Cloudflare-Konto
+  sind noch zu klären.
+
+### Geplante Reihenfolge
+1. **Bestandsaufnahme bei Strato:** Welche DNS-Einträge gibt es (MX für Mail, A/CNAME für eine Website, TXT für
+   SPF/DKIM)? Sie müssen bei Cloudflare identisch übernommen werden, sonst fällt z. B. die Mail aus.
+2. **Cloudflare-Konto** (Free-Plan) anlegen und die Domain hinzufügen. Konto und Anmeldung legt Max selbst an.
+3. **Nameserver bei Strato** auf die beiden von Cloudflare genannten Server umstellen. Die Umstellung kann
+   einige Stunden dauern.
+4. **Zuerst die Access-Regel** (Phase 3) für die geplante Adresse anlegen, **dann** den Tunnel freischalten (E15).
+5. **Tunnel** im Cloudflare-Dashboard anlegen. Das Tunnel-Token trägt Max selbst als `TUNNEL_TOKEN` in die `.env` ein
+   (geheim, nicht im Repository).
+6. **Container `cloudflared`** in `server/docker-compose.yml`, Ziel `http://agent:8510` im internen Docker-Netz.
+7. **Test von außen**, z. B. über das Handy im Mobilfunknetz.
+
+### Entscheidungen
+| Nr. | Entscheidung | Alternativen | Begründung |
+|---|---|---|---|
+| E15 | **Anmeldung vor Freischaltung:** Die Access-Regel steht, bevor der Tunnel die Adresse erreichbar macht | Tunnel zuerst testen, Anmeldung danach | Sonst wäre die App mit GPU und Index für kurze Zeit ohne Schutz im Internet. Auch für einen Test gibt es keinen Grund dafür. |
 
 ## Abhängigkeiten zu anderer Arbeit im Repository
 **PR #1 „Persönliche Ablage“ (Branch `jonas/ablage-ordnerstruktur`, Stand 02.11.2026):** Nach jeder Antwort legt
