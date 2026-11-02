@@ -1,0 +1,27 @@
+# Zugangsdaten – niemals hochladen
+.env
+.token_cache.json
+
+# Lokale Daten: jeder baut seinen Index selbst (python ingest.py --source demo)
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# entsteht, wenn der venv-Befehl mit %USERPROFILE% in PowerShell ausgeführt wird
+/%USERPROFILE%/
+
+# Erzeugte Testergebnisse (jeder Lauf erzeugt sie neu)
+evaluation/ergebnisse.md
+evaluation/testlauf_antworten.json
+evaluation/testlauf_bericht.md
+
+# Präsentationen: Binärdateien lassen sich in Git nicht zusammenführen -> geteilter OneDrive-/Teams-Ordner
+*.pptx
+~$*
+
+# Persönliche Claude-Code-Einstellungen (enthalten lokale Pfade)
+.claude/launch.json
+.claude/settings.local.json

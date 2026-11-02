@@ -1,0 +1,21 @@
+[
+  {"frage": "Bis wann läuft der Rahmenvertrag mit Hoffmann Maschinenbau?", "erwartet": ["Rahmenvertrag RV-2023-117", "Verlängerung Rahmenvertrag"], "manuell_sek": null},
+  {"frage": "Wie hoch ist der Rabatt für Hoffmann auf Steuermodule?", "erwartet": ["Rahmenvertrag RV-2023-117"], "manuell_sek": null},
+  {"frage": "Wer ist bei Hoffmann für den Einkauf zuständig?", "erwartet": ["Kundenprofil Hoffmann"], "manuell_sek": null},
+  {"frage": "Was kostet der Pilot Predictive Maintenance für Hoffmann?", "erwartet": ["ANG-2026-0318"], "manuell_sek": null},
+  {"frage": "Wann wurden die verspäteten SM-400 an Hoffmann geliefert?", "erwartet": ["Lieferverzug", "SM-400 sind heute verschickt"], "manuell_sek": null},
+  {"frage": "Zu welchem Preis pro Modul haben wir 2019 an NordWerk geliefert?", "erwartet": ["Erstprojekt 2019", "Retrofit_Billbrook"], "manuell_sek": null},
+  {"frage": "Welche Lessons Learned gab es aus dem Projekt Billbrook?", "erwartet": ["Lessons Learned Billbrook"], "manuell_sek": null},
+  {"frage": "Wann ist der Termin für die Bedarfsanalyse Hannover bei NordWerk?", "erwartet": ["Kundenprofil NordWerk", "Bedarfsanalyse Hannover"], "manuell_sek": null},
+  {"frage": "Wer ist heute unser Ansprechpartner bei NordWerk?", "erwartet": ["Kundenprofil NordWerk"], "manuell_sek": null},
+  {"frage": "Was war die Ursache der Reklamation von Brenner 2021?", "erwartet": ["Reklamation Charge 21-0447"], "manuell_sek": null},
+  {"frage": "Welche Sonderkonditionen hat Brenner bei Ersatzteilen?", "erwartet": ["Sonderkonditionen Ersatzteile"], "manuell_sek": null},
+  {"frage": "Welche Abweichung gab es im ISO-13485-Audit von Brenner?", "erwartet": ["Audit ISO 13485"], "manuell_sek": null},
+  {"frage": "Wie viele PA-50 braucht Brenner 2026?", "erwartet": ["Abrufmengen PA-50"], "manuell_sek": null},
+  {"frage": "Wie läuft der interne Eskalationsweg bei Lieferproblemen?", "erwartet": ["Eskalationsweg"], "manuell_sek": null},
+  {"frage": "Welche Konditionen haben wir mit der Firma Siemens Energy vereinbart?", "erwartet": [], "manuell_sek": null},
+  {"frage": "Welche Termine habe ich nächste Woche?", "erwartet": ["Q4-Gespräch Brenner"], "manuell_sek": null},
+  {"frage": "Was steht nächste Woche bei Hoffmann an?", "erwartet": ["Lieferantengespräch Hoffmann"], "manuell_sek": null},
+  {"frage": "Was war letzte Woche los?", "erwartet": ["Telefonat Dr. Wolff"], "manuell_sek": null},
+  {"frage": "Was ist im November mit NordWerk geplant?", "erwartet": ["Bedarfsanalyse Hannover"], "manuell_sek": null}
+]

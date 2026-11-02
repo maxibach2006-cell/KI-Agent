@@ -1,0 +1,614 @@
+<title>KAM-Agent Bauplan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: ein Dokument in drei Teilen – Strecke (1D-Simulation), Baum (Entscheidungen), Lernkurve. Schmale Spalte, Strecke als Gleis. */
+:root {
+  --bg: #f5f6f4;
+  --surface: #ffffff;
+  --ink: #1d2523;
+  --muted: #5d6965;
+  --line: #d5dbd8;
+  --track: #c4ccc8;
+  --accent: #0f6e63;          /* Petrol: aktiver Schritt, gewählte Entscheidung */
+  --accent-soft: #dcefeb;
+  --ok: #2f7d3a;   --ok-soft: #e1f1e2;
+  --no: #8a5a00;   --no-soft: #f7ecd6;       /* verworfen */
+  --bad: #b23a2b;  --bad-soft: #f8e1dd;      /* Irrweg */
+  --future: #4b56a8; --future-soft: #e5e7f6; /* Zukunft */
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121816; --surface: #19211f; --ink: #e6ece9; --muted: #9aa8a3; --line: #2c3633; --track: #3a4642;
+    --accent: #4fc2b2; --accent-soft: #173a35;
+    --ok: #6cc979; --ok-soft: #1b3320; --no: #e0b45a; --no-soft: #3a2d12;
+    --bad: #f08a7a; --bad-soft: #42201b; --future: #9aa4f0; --future-soft: #23264a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121816; --surface: #19211f; --ink: #e6ece9; --muted: #9aa8a3; --line: #2c3633; --track: #3a4642;
+  --accent: #4fc2b2; --accent-soft: #173a35;
+  --ok: #6cc979; --ok-soft: #1b3320; --no: #e0b45a; --no-soft: #3a2d12;
+  --bad: #f08a7a; --bad-soft: #42201b; --future: #9aa4f0; --future-soft: #23264a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; }
+h3 { font-size: 17px; font-weight: 500; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lead { color: var(--muted); font-size: 16px; }
+header { display: grid; gap: 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+section { display: grid; gap: 20px; }
+.sec-head { display: grid; gap: 6px; }
+
+/* Status-Chips (Baum + Legende) */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.s-gewaehlt { color: var(--ok); background: var(--ok-soft); }
+.s-verworfen { color: var(--no); background: var(--no-soft); }
+.s-irrweg { color: var(--bad); background: var(--bad-soft); }
+.s-zukunft { color: var(--future); background: var(--future-soft); }
+
+/* ---------- 1D-Simulation ---------- */
+.sim { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 18px; }
+.scenarios { display: flex; flex-wrap: wrap; gap: 8px; }
+.scenario { font: inherit; font-size: 14px; text-align: left; cursor: pointer; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); max-width: 100%; }
+.scenario[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.scenario small { display: block; color: var(--muted); font-size: 12px; }
+.scenario:focus-visible, .ctrl:focus-visible, .stop:focus-visible, .node-btn:focus-visible, .filter:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.track-wrap { overflow-x: auto; padding-bottom: 6px; }
+.track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(96px, 1fr); position: relative; min-width: 940px; }
+.track::before { content: ""; position: absolute; left: 4%; right: 4%; top: 37px; height: 3px; background: var(--track); border-radius: 2px; }
+.phase-band { grid-row: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); padding: 0 4px 6px; border-bottom: 1px dashed var(--line); margin-bottom: 8px; }
+.stop { grid-row: 2; position: relative; z-index: 1; display: grid; justify-items: center; gap: 8px; padding: 0 4px;
+  background: none; border: 0; cursor: pointer; font: inherit; color: var(--ink); }
+.dot { width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--track); background: var(--surface);
+  display: grid; place-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--muted); transition: all .25s; }
+.stop .lbl { font-size: 12.5px; line-height: 1.3; text-align: center; color: var(--muted); }
+.stop.done .dot { border-color: var(--accent); background: var(--accent); color: var(--surface); }
+.stop.skip .dot { border-style: dashed; }
+.stop.skip .lbl { text-decoration: line-through; text-decoration-color: var(--track); }
+.stop.active .dot { border-color: var(--accent); background: var(--accent); color: var(--surface); transform: scale(1.25);
+  box-shadow: 0 0 0 6px var(--accent-soft); }
+.stop.active .lbl { color: var(--ink); font-weight: 600; }
+.stop.prep .dot { border-color: var(--line); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ctrl { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 9px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.ctrl.primary { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+.ctrl:disabled { opacity: .45; cursor: default; }
+.progress { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+.detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.panel { border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.panel h3 { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.panel .file { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; font-size: 14px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.io { background: var(--bg); border-radius: 8px; padding: 10px 12px; font-family: var(--font-mono); font-size: 12.5px;
+  white-space: pre-wrap; word-break: break-word; line-height: 1.5; }
+.panel.case { border-color: var(--accent); }
+.badge-time { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+/* ---------- Baum ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; cursor: pointer; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); }
+.filter[aria-pressed="true"] { border-color: var(--ink); font-weight: 600; }
+.tree, .tree ul { list-style: none; margin: 0; padding: 0; }
+.tree > li { margin-bottom: 14px; }
+.root-node { font-family: var(--font-display); font-size: 18px; font-weight: 700; padding: 10px 0 6px; }
+.tree ul { margin-left: 14px; padding-left: 18px; border-left: 2px solid var(--line); display: grid; gap: 8px; }
+.tree ul > li { position: relative; }
+.tree ul > li::before { content: ""; position: absolute; left: -18px; top: 20px; width: 14px; border-top: 2px solid var(--line); }
+.cat-btn { font: inherit; font-family: var(--font-display); font-size: 16px; font-weight: 500; background: none; border: 0;
+  color: var(--ink); cursor: pointer; padding: 8px 0; display: flex; gap: 10px; align-items: center; }
+.cat-btn .count { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-weight: 400; }
+.cat-btn .caret { display: inline-block; transition: transform .2s; color: var(--muted); }
+.cat-btn[aria-expanded="false"] .caret { transform: rotate(-90deg); }
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.node.irrweg { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.node-btn { width: 100%; font: inherit; text-align: left; background: none; border: 0; color: var(--ink); cursor: pointer;
+  padding: 10px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+.node-btn .t { font-weight: 600; }
+.node-btn .s { grid-column: 1 / -1; color: var(--muted); font-size: 13.5px; }
+.node-body { padding: 0 14px 14px; display: grid; gap: 10px; font-size: 14px; }
+.node-body h4 { margin: 0; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
+.node-body .fix { border-left: 3px solid var(--ok); padding-left: 10px; }
+.node-body .fail { border-left: 3px solid var(--bad); padding-left: 10px; }
+.node-body .metric { font-family: var(--font-mono); font-size: 12.5px; background: var(--bg); border-radius: 6px; padding: 6px 10px; }
+
+/* ---------- Lernkurve ---------- */
+.curves { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.curve { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.curve svg { width: 100%; height: auto; display: block; }
+.curve .note { font-size: 13px; color: var(--muted); }
+.ax { stroke: var(--line); }
+.axl { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; }
+.pl { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.pt { fill: var(--accent); }
+.pt.bad { fill: var(--bad); }
+.pv { fill: var(--ink); font-family: var(--font-mono); font-size: 11px; font-weight: 500; }
+.ps { fill: var(--muted); font-family: var(--font-body); font-size: 10.5px; }
+
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 720px) {
+  .detail { grid-template-columns: minmax(0, 1fr); }
+  .sim { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">DHBW-Projekt · Lokaler Informations-Agent für das Key-Account-Management</span>
+    <h1>Bauplan des KAM-Agenten</h1>
+    <p class="lead">Wie eine Frage durch das System läuft, welche Entscheidungen dahinterstehen und wo der Weg zwischendurch falsch abgebogen ist. Stand: 31.10.2026.</p>
+    <div class="legend" aria-label="Legende">
+      <span class="chip s-gewaehlt">gewählt</span>
+      <span class="chip s-verworfen">verworfen</span>
+      <span class="chip s-irrweg">Irrweg, korrigiert</span>
+      <span class="chip s-zukunft">Zukunft</span>
+    </div>
+  </header>
+
+  <!-- ===================== 1D-SIMULATION ===================== -->
+  <section aria-labelledby="sim-h">
+    <div class="sec-head">
+      <span class="eyebrow">Teil 1 · 1D-Simulation</span>
+      <h2 id="sim-h">Eine Frage auf der Strecke</h2>
+      <p class="lead">Die Daten werden einmal vorab eingelesen (Phase A). Danach durchläuft jede Frage dieselbe Strecke (Phase B). Wähle eine Beispielfrage und gehe Schritt für Schritt durch. Werte und Zeiten stammen aus den Testläufen.</p>
+    </div>
+
+    <div class="sim">
+      <div class="scenarios" role="group" aria-label="Beispielfrage wählen" id="scenarios"></div>
+
+      <div class="track-wrap">
+        <div class="track" id="track"></div>
+      </div>
+
+      <div class="controls">
+        <button class="ctrl" id="prev" type="button">◀ Zurück</button>
+        <button class="ctrl primary" id="next" type="button">Weiter ▶</button>
+        <button class="ctrl" id="play" type="button">Abspielen</button>
+        <span class="progress" id="progress"></span>
+      </div>
+
+      <div class="detail">
+        <div class="panel" id="what"></div>
+        <div class="panel case" id="case"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ENTSCHEIDUNGSBAUM ===================== -->
+  <section aria-labelledby="tree-h">
+    <div class="sec-head">
+      <span class="eyebrow">Teil 2 · Entscheidungsbaum</span>
+      <h2 id="tree-h">Was entschieden wurde und warum</h2>
+      <p class="lead">Jeder Ast ist ein Bereich des Systems. Ein Klick auf eine Entscheidung zeigt die Begründung. Bei Irrwegen steht dabei, was schiefging, woran es erkannt wurde und wie korrigiert wurde.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Nach Status filtern" id="filters"></div>
+    <ul class="tree" id="tree"></ul>
+  </section>
+
+  <!-- ===================== LERNKURVE ===================== -->
+  <section aria-labelledby="curve-h">
+    <div class="sec-head">
+      <span class="eyebrow">Teil 3 · Lernkurve</span>
+      <h2 id="curve-h">Was die Korrekturen gebracht haben</h2>
+      <p class="lead">Zwei Messgrößen über die Entwicklung hinweg. Rote Punkte markieren Verschlechterungen durch einen Irrweg.</p>
+    </div>
+    <div class="curves">
+      <figure class="curve" style="margin:0">
+        <h3>Testlauf: bestandene Regelprüfung (von 46 Fragen)</h3>
+        <div id="c1"></div>
+        <p class="note">Ab Stand 4 hat der Katalog 60 Fragen. Für die neuen Kategorien gibt es bisher nur Einzeltests: Rückbezug 6 von 7, Umschreibung 7 von 7. Der 14B-Gutachter kam zuletzt auf 38 von 46. Nachgeprüft waren 5 seiner 8 Beanstandungen Fehlurteile.</p>
+      </figure>
+      <figure class="curve" style="margin:0">
+        <h3>Antwortzeit einer typischen Frage (Sekunden)</h3>
+        <div id="c2"></div>
+        <p class="note">Gemessen auf RTX 2070 Super (8 GB). Der Ausreißer bei Stand 5 kam von uneinheitlichen Kontextfenstern: Ollama hat das Modell bei jedem Wechsel neu geladen.</p>
+      </figure>
+    </div>
+  </section>
+
+  <footer>
+    Lokal: Ollama (qwen2.5:7b, bge-m3), ChromaDB, Streamlit. Datenzugang: Microsoft Graph (delegiert) oder Demo-Daten. Quellcode und Details: README.md im Projektordner.
+  </footer>
+</div>
+
+<script>
+/* ===================== Daten: Strecke ===================== */
+const STAGES = [
+  { id: "quellen", phase: "A", nr: "A1", name: "Quellen", file: "connectors/ · local_loader.py",
+    what: "OneNote „MBS 2“, Outlook-Mails, Kalender, Teams-Kanäle und Dateien (.msg/.eml/.docx/.pdf) werden geladen: über Microsoft Graph mit delegierter Anmeldung oder aus den Demo-Daten.",
+    why: "Delegierte Rechte: Graph liefert nur, was der angemeldete Mitarbeitende sehen darf. So ist die Datenschutz-Vorgabe technisch umgesetzt." },
+  { id: "aufbereiten", phase: "A", nr: "A2", name: "Aufbereiten", file: "parsers.py · ingest.py",
+    what: "Text aus HTML, Mails und Dokumenten holen. In Abschnitte von ca. 800 Zeichen teilen (150 Überlappung). Jeder Abschnitt bekommt Metadaten: Quelle, Titel, Ablageort, Absender, Datum, Link und alle im Text genannten Daten.",
+    why: "Kleine Abschnitte machen die Suche genau. Die Metadaten machen die Quellenangabe exakt. Die gemerkten Daten machen Fragen wie „nächste Woche“ möglich." },
+  { id: "index", phase: "A", nr: "A3", name: "Index", file: "ingest.py · ChromaDB",
+    what: "Jeder Abschnitt wird mit bge-m3 in einen Vektor umgerechnet und in ChromaDB gespeichert, ein Index pro Nutzer. Dazu kommt ein automatisches Inhaltsverzeichnis der Ablage.",
+    why: "Unveränderte Abschnitte werden nicht neu berechnet, gelöschte werden entfernt. Das Inhaltsverzeichnis beantwortet Überblicksfragen wie „Welche Kunden betreue ich?“." },
+  { id: "verstehen", phase: "B", nr: "B1", name: "Frage verstehen", file: "verstehen.py",
+    what: "Gibt es einen Gesprächsverlauf, schreibt das Modell eine Folgefrage in eine eigenständige Frage um.",
+    why: "Die Suche kennt das Gespräch nicht. „Und bis wann läuft der?“ allein findet nichts." },
+  { id: "zeit", phase: "B", nr: "B2", name: "Zeitraum erkennen", file: "zeitraum.py",
+    what: "Regeln erkennen „morgen“, „nächste Woche“, „KW 47“, „im November“ und rechnen sie ab dem heutigen Datum in ein Von–Bis-Datum um.",
+    why: "Die Ähnlichkeitssuche kann nicht rechnen. „Nächste Woche“ ähnelt keinem Text, in dem „03.11.2026“ steht." },
+  { id: "suche", phase: "B", nr: "B3", name: "Suchen", file: "agent.py · suche()",
+    what: "Hybride Suche: Bedeutung (Embedding) plus Stichwörter und bekannte Namen. Bei einer Zeitfrage stattdessen alle Abschnitte mit Datum im Zeitraum. Eine Sperre lässt nur ausreichend passende Treffer durch.",
+    why: "Embeddings finden Umschreibungen, aber Eigennamen und kurze Fragen schlecht. Die Sperre verhindert, dass das Modell aus unpassenden Quellen etwas zusammenreimt." },
+  { id: "varianten", phase: "B", nr: "B4", name: "Suchvarianten", file: "verstehen.py · agent.py",
+    what: "Nur wenn der beste Treffer schwach ist: Das Modell formuliert die Frage in Fachsprache um, und es wird zusätzlich damit gesucht. Nicht bei Begriffen, die es in den Daten gar nicht gibt.",
+    why: "Umgangssprache wie „Steuerungen zu spät“ trifft den Fachbegriff „Lieferverzug Steuermodule“ nicht." },
+  { id: "widerspruch", phase: "B", nr: "B5", name: "Widersprüche prüfen", file: "agent.py · pruefe_widersprueche()",
+    what: "Kandidaten kommen vom Modell (JSON) und vom Code (verschiedene Daten mit gemeinsamem Fachwort). Danach folgen eine Belegprüfung (Wert steht wörtlich in der Quelle) und eine zweistufige Gegenprüfung, ob beide Werte dieselbe Sache betreffen.",
+    why: "Ein 7B-Modell übersieht Widersprüche, wenn es nebenbei die Antwort schreibt, und meldet sonst viele Fehlalarme." },
+  { id: "antwort", phase: "B", nr: "B6", name: "Antwort schreiben", file: "agent.py · generiere() · prompts.py",
+    what: "qwen2.5:7b schreibt nach dem Ausgabekonzept: Kurzantwort, Details mit [n]-Verweisen, Rückfragen. Es sieht nur die gefundenen Quellen, das heutige Datum und die geprüften Widersprüche. Die Antwort wird gestreamt.",
+    why: "Das einheitliche Ausgabekonzept ist ein Teilziel der Aufgabe. Ohne passende Quelle antwortet das Modell gar nicht." },
+  { id: "anhang", phase: "B", nr: "B7", name: "Belege anhängen", file: "agent.py · anhang_markdown()",
+    what: "Der Code hängt Terminliste, Widersprüche und Quellenliste an, aus den Metadaten und nicht vom Modell.",
+    why: "Links, Daten und Absender können so nicht erfunden sein. Kleine Modelle lassen in langen Listen gern Einträge weg." },
+];
+
+/* Pro Szenario: was an jeder Station passiert. skip = Station wird übersprungen */
+const SCENARIOS = [
+  { id: "folge", titel: "„Und bis wann läuft der?“", sub: "Folgefrage nach „Welche Konditionen hat Hoffmann?“",
+    steps: {
+      quellen: { io: "36 Dokumente geladen (Demo-Daten)\nOneNote 10 · Outlook 7 · Teams 7 · Kalender 7 · Dateien 4 · Übersicht 1" },
+      aufbereiten: { io: "z. B. OneNote-Seite „Rahmenvertrag RV-2023-117“\n→ Ablage: MBS 2 / Hoffmann Maschinenbau\n→ genannte Daten: 01.04.2023, 31.03.2027" },
+      index: { io: "36 Abschnitte · Index „demo“ · 0 neu, 0 entfernt" },
+      verstehen: { io: "Verlauf: „Welche Konditionen hat Hoffmann?“\n„Und bis wann läuft der?“\n→ „Bis wann läuft der Rahmenvertrag mit Hoffmann?“", t: "≈ 0,5 s" },
+      zeit: { io: "kein Zeitraum erkannt → normale Suche", t: "< 0,01 s" },
+      suche: { io: "1. Rahmenvertrag RV-2023-117 (OneNote) · Ähnlichkeit 0,74\n2. AW: Verlängerung Rahmenvertrag (Outlook)\n… Sperre: offen (0,74 ≥ 0,56)", t: "≈ 0,1 s" },
+      varianten: { skip: true, io: "übersprungen: bester Treffer 0,74 ≥ 0,60" },
+      widerspruch: { io: "Kandidat: 31.03.2027 [1] vs. 30.06.2027 [2]\nBeleg: beide Werte stehen wörtlich in ihrer Quelle\nGegenprüfung: „Enddatum der Laufzeit“ / „Neues Enddatum des Rahmenvertrags“\n→ Widerspruch bestätigt", t: "≈ 1,5 s (danach zwischengespeichert)" },
+      antwort: { io: "Kurzantwort: läuft bis 30.06.2027 [2], ursprünglich 31.03.2027 [1]; die Mail ist neuer.", t: "≈ 3 s, erstes Wort nach ≈ 2 s" },
+      anhang: { io: "### Widersprüche\n– Laufzeit: „31.03.2027“ [1] (OneNote, 2023-04-03) vs. „30.06.2027“ [2] (Outlook, 2026-09-12)\n### Quellen\n[1] OneNote – MBS 2 / Hoffmann – Rahmenvertrag …\n[2] Outlook – Dr. Katrin Wolff – 2026-09-12 …" },
+    } },
+  { id: "zeit", titel: "„Welche Termine habe ich nächste Woche?“", sub: "Zeitfrage",
+    steps: {
+      quellen: { io: "Kalendertermine liegen relativ zur aktuellen Woche (Demo)" },
+      aufbereiten: { io: "Kalendertext: „Wann: Dienstag, 03.11.2026, 09:30–11:00 Uhr“\n→ genannte Daten: 2026-11-03" },
+      index: { io: "Metadaten „termine“ je Abschnitt gespeichert" },
+      verstehen: { skip: true, io: "kein Verlauf → Frage bleibt unverändert" },
+      zeit: { io: "„nächste Woche“ → 02.11.2026 bis 08.11.2026\n(heute: Donnerstag, 29.10.2026, KW 44)", t: "< 0,01 s" },
+      suche: { io: "Datumssuche statt Ähnlichkeit:\nDi 03.11. Q4-Gespräch Brenner\nDo 05.11. Vorbereitung Präsentation NordWerk\nFr 06.11. Lieferantengespräch Hoffmann\n→ chronologisch sortiert", t: "≈ 0,1 s" },
+      varianten: { skip: true, io: "übersprungen: Zeitfrage" },
+      widerspruch: { io: "keine Kandidaten (drei verschiedene Termine)", t: "≈ 0,7 s" },
+      antwort: { io: "Vorgabe an das Modell: 3 Kalendertermine, 0 weitere Einträge\n→ Kurzantwort nennt Anzahl und wichtigste Termine", t: "≈ 5–9 s, erstes Wort nach ≈ 1,3 s" },
+      anhang: { io: "### Termine im Zeitraum\n| Di, 03.11.2026 | 09:30–11:00 | Q4-Gespräch Brenner | Termin | [1] |\n| Do, 05.11.2026 | 13:00–14:00 | Vorbereitung … NordWerk | Termin | [2] |\n| Fr, 06.11.2026 | 10:00–12:00 | Lieferantengespräch Hoffmann | Termin | [3] |" },
+    } },
+  { id: "umschreibung", titel: "„Wann endet unsere Vereinbarung mit den Feuerbachern?“", sub: "Umgangssprache",
+    steps: {
+      quellen: { io: "Kundenprofil Hoffmann: „Stuttgart-Feuerbach“" },
+      aufbereiten: { io: "Ablageort und Titel kommen mit in den Abschnittstext" },
+      index: { io: "unverändert" },
+      verstehen: { skip: true, io: "kein Verlauf → unverändert" },
+      zeit: { io: "kein Zeitraum erkannt" },
+      suche: { io: "bester Treffer unter 0,60 → schwach\n„Feuerbachern“ kommt in den Daten vor (Wortanfang „feuerb“)", t: "≈ 0,1 s" },
+      varianten: { io: "Varianten:\n„Wann endet der Rahmenvertrag mit den Feuerbachern?“\n„In welchem Zeitraum läuft der Rahmenvertrag … aus?“\n→ Rahmenvertrag RV-2023-117 auf Platz 1", t: "≈ 0,8 s" },
+      widerspruch: { io: "31.03.2027 vs. 30.06.2027 → aus dem Zwischenspeicher, kein neuer Modellaufruf", t: "≈ 0,8 s" },
+      antwort: { io: "Kurzantwort: Rahmenvertrag mit Hoffmann Maschinenbau, verlängert bis 30.06.2027 …", t: "≈ 3 s" },
+      anhang: { io: "Widersprüche + Quellen wie bei der Folgefrage" },
+    } },
+  { id: "unbekannt", titel: "„Welche Konditionen haben wir mit Siemens Energy?“", sub: "keine Daten vorhanden",
+    steps: {
+      quellen: { io: "Siemens kommt in keiner Quelle vor" },
+      aufbereiten: { io: "–" },
+      index: { io: "–" },
+      verstehen: { skip: true, io: "kein Verlauf → unverändert" },
+      zeit: { io: "kein Zeitraum erkannt" },
+      suche: { io: "bester Treffer 0,53 (Rahmenvertrag Hoffmann) < 0,56\nkein bekannter Name in der Frage\n„Siemens“ ist ein unbekannter Begriff\n→ Sperre bleibt zu: 0 Treffer", t: "≈ 0,1 s" },
+      varianten: { skip: true, io: "bewusst nicht: Eine Variante ohne „Siemens“ würde die Hoffmann-Konditionen finden, und der Agent würde sie als Siemens-Antwort ausgeben." },
+      widerspruch: { skip: true, io: "übersprungen: keine Quellen" },
+      antwort: { io: "feste Meldung ohne Sprachmodell:\n„Zu dieser Frage wurde keine passende Quelle gefunden. Ich gebe daher keine ungesicherte Antwort.“\n+ Vorschläge für präzisere Rückfragen", t: "≈ 0,1 s" },
+      anhang: { skip: true, io: "keine Quellen" },
+    } },
+];
+
+/* ===================== Daten: Entscheidungsbaum ===================== */
+const TREE = [
+  { cat: "Grundansatz", items: [
+    { s: "gewaehlt", t: "RAG statt Fine-Tuning", k: "Daten im lokalen Suchindex, das Modell bekommt pro Frage die passenden Quellen.",
+      why: "Die Daten ändern sich laufend, und jede Aussage braucht eine Quelle. Fine-Tuning kann beides nicht: Wissen ist danach fest eingebacken und nicht belegbar. RAG funktioniert ohne Training und zeigt immer, woher eine Aussage stammt." },
+    { s: "verworfen", t: "Fine-Tuning des Sprachmodells", k: "Modell auf Kundendaten nachtrainieren.",
+      why: "Keine Quellenangaben möglich, neues Training bei jeder neuen Mail, für 8 GB VRAM aufwendig und eine Halluzinationsgefahr bei Details. Widerspricht der Pflicht „keine Information ohne Quelle“." },
+    { s: "verworfen", t: "Frameworks wie LangChain / LlamaIndex", k: "Fertige RAG-Bausteine statt eigenem Code.",
+      why: "Vorgabe: einfach verständlicher Code. Eigener Code mit ollama + chromadb ist in wenigen Dateien nachvollziehbar, jeder Schritt lässt sich in der Arbeit erklären und gezielt verbessern. Das war später entscheidend, z. B. für Widerspruchsprüfung und Zeitfragen." },
+    { s: "gewaehlt", t: "Alles lokal (Ollama)", k: "Sprachmodell, Embeddings und Datenbank laufen auf dem eigenen Rechner.",
+      why: "Kundendaten verlassen den Rechner nicht. Das ist das stärkste Datenschutzargument gegenüber der Copilot-Lösung." },
+  ]},
+  { cat: "Modelle", items: [
+    { s: "gewaehlt", t: "qwen2.5:7b als Sprachmodell", k: "ca. 4,7 GB, läuft vollständig auf der RTX 2070 Super (8 GB).",
+      why: "Bestes Verhältnis aus Deutsch-Qualität und Platz im Grafikspeicher. Gemessen: ca. 68 Token/s." },
+    { s: "verworfen", t: "qwen2.5:14b als Sprachmodell", k: "War bereits installiert.",
+      why: "9 GB sind mehr als die 8 GB VRAM: Ein Teil läuft auf der CPU, das ist deutlich langsamer. Er wird nur noch als Gutachter im Testlauf genutzt, dort spielt die Geschwindigkeit keine Rolle." },
+    { s: "gewaehlt", t: "bge-m3 für Embeddings", k: "Mehrsprachiges Embedding-Modell.",
+      why: "Funktioniert gut mit deutschen Fachtexten und ist klein (ca. 0,7 GB im VRAM)." },
+    { s: "zukunft", t: "Größeres Modell bei mehr VRAM", k: "z. B. 14B vollständig auf der GPU.",
+      why: "Die verbleibenden Fehler (unvollständige Aufzählungen, gelegentlich vertauschte Kunden) sind typische Grenzen eines 7B-Modells." },
+  ]},
+  { cat: "Datenzugang", items: [
+    { s: "gewaehlt", t: "Microsoft Graph, delegierte Anmeldung", k: "Device-Code-Login, nur lesende Rechte.",
+      why: "Graph liefert technisch nur die Daten, auf die der Nutzer Zugriff hat. Die Grenze „nur eigene Daten“ muss also nicht selbst programmiert werden." },
+    { s: "gewaehlt", t: "Demo-Daten als Fallback", k: "Dieselbe Pipeline mit lokalen Dateien.",
+      why: "Die Demo funktioniert ohne Tenant und ohne Internet, sodass die Präsentation nicht ausfallen kann." },
+    { s: "verworfen", t: "DHBW-Tenant", k: "Mit dem Hochschulkonto testen.",
+      why: "Keine Admin-Rechte (Kanalnachrichten brauchen Admin-Freigabe) und echte persönliche Daten. Stattdessen ein eigener Test-Tenant." },
+    { s: "verworfen", t: ".msg-Dateien selbst erzeugen", k: "Demo-Mails als Outlook-.msg.",
+      why: "In Python nicht zuverlässig erzeugbar. Die Demo nutzt .eml, .msg wird beim Einlesen genauso unterstützt (extract-msg)." },
+    { s: "irrweg", t: "Teams-Nachrichten rückdatieren", k: "Demo-Nachrichten mit altem Datum anlegen.",
+      fail: "Teams-Nachrichten lassen sich per Graph nicht rückdatieren, sie hätten alle das Datum „heute“.",
+      fix: "Das Seed-Skript schreibt „[Datum – Absender]“ in den Text, der Teams-Connector liest es wieder aus." },
+    { s: "irrweg", t: "Demo-Termine „X Tage ab heute“", k: "Kalender relativ zum heutigen Tag.",
+      fail: "„Nächste Woche“ traf je nach Wochentag andere Termine. Bei einem Start am Montag wäre „+5 Tage“ noch diese Woche gewesen.",
+      fix: "Termine werden über Woche und Wochentag festgelegt (z. B. „nächste Woche, Dienstag“)." },
+    { s: "zukunft", t: "Test mit echtem Tenant / Dev Proxy", k: "Die Graph-Connectoren sind geschrieben, aber noch ungetestet.",
+      why: "Option 1: Test-Tenant (Anmeldung und Rechte inklusive). Option 2: Dev Proxy mit Mocks, die aus den Demo-Daten erzeugt werden (testet den Code ohne Tenant). Dazu ein Blindtest mit fremden Daten gegen Überanpassung." },
+    { s: "zukunft", t: "Delta-Abfragen", k: "Nur Änderungen statt allem neu einlesen.",
+      why: "Bei großen Postfächern spart das viel Zeit, Graph bietet dafür Delta-Endpunkte." },
+  ]},
+  { cat: "Suche", items: [
+    { s: "gewaehlt", t: "Hybride Suche", k: "Ähnlichkeit (Embedding) + Anteil gefundener Fragewörter + bekannte Namen.",
+      why: "„hoffmann rabatt?“ und „Wer ist Jens Albrecht?“ fand die reine Ähnlichkeitssuche nicht. Die Stichwortsuche allein versteht dafür keine Umschreibungen.",
+      metric: "Testlauf: 30/46 → 43/46 nach Einführung" },
+    { s: "irrweg", t: "Sperre nur über Ähnlichkeit", k: "Schwellwert 0,45, später 0,56.",
+      fail: "Bei 0,45 bekam „Konditionen mit Siemens Energy“ Treffer. Bei 0,56 fielen kurze Fragen und Namen durch („Wer ist Jens Albrecht?“ → keine Quelle).",
+      fix: "Die Sperre öffnet zusätzlich bei bekannten Namen oder bei vielen gefundenen Fragewörtern, aber nur, wenn die Frage keinen unbekannten Begriff enthält." },
+    { s: "irrweg", t: "Vielfalt: max. 2 Abschnitte pro Ort", k: "Damit Überblicksfragen nicht nur einen Kunden abdecken.",
+      fail: "Bei „Fasse Brenner zusammen“ wurden die Sonderkonditionen verdrängt. Alle Mails haben den Ort „Postfach“, damit kamen nie mehr als zwei Mails durch.",
+      fix: "Vielfalt gilt nur bei Überblicksfragen ohne Namen: erst der beste Abschnitt jedes Ortes, dann wird aufgefüllt." },
+    { s: "irrweg", t: "Kundenliste aus Einzelabschnitten", k: "„Welche Kunden betreue ich?“",
+      fail: "NordWerk fehlte. Danach mischte das Modell Fakten verschiedener Kunden (Brenner-Umsatz bei Hoffmann).",
+      fix: "Ein automatisches Inhaltsverzeichnis der Ablage, eine Zeile pro Kunde. Die eigentliche Ursache: Im Quellenkopf fehlte der Ablageort, jetzt steht dort „Ablage: MBS 2 / Brenner …“." },
+    { s: "gewaehlt", t: "OneNote-Bonus", k: "+0,05 auf die Ähnlichkeit für „MBS 2“.",
+      why: "Laut ursprünglichem Copilot-Prompt hat OneNote Vorrang. Der kleine Bonus ändert die Reihenfolge nur bei knappen Fällen." },
+    { s: "zukunft", t: "BM25 / skalierbare Stichwortsuche", k: "Heute wird pro Frage der ganze Korpus durchgezählt.",
+      why: "Für einige tausend Abschnitte reicht das. Bei echten Postfächern braucht es einen richtigen Stichwortindex." },
+  ]},
+  { cat: "Zeitfragen", items: [
+    { s: "gewaehlt", t: "Regelbasierte Zeitraum-Erkennung", k: "„nächste Woche“, „KW 47“, „im November“ → Von–Bis-Datum.",
+      why: "Embeddings können nicht rechnen. Regeln sind hier zuverlässiger und in Millisekunden fertig." },
+    { s: "gewaehlt", t: "Terminliste aus dem Code", k: "Chronologische Tabelle aus den Metadaten.",
+      why: "Bei „Termine im November“ nannte das Modell 3 von 7 Einträgen. Der Code lässt nichts weg." },
+    { s: "irrweg", t: "Kein Kalender, kein „heute“", k: "Erste Version.",
+      fail: "„Welche Termine habe ich nächste Woche?“ → keine Quelle. Es fehlten der Kalender, das heutige Datum und eine Zeitlogik.",
+      fix: "Kalender als Quelle, Datum im System-Prompt, zeitraum.py und Datumssuche." },
+    { s: "irrweg", t: "Stichwortfilter über Großschreibung", k: "„bei Hoffmann“ → nur Hoffmann-Termine.",
+      fail: "„in den nächsten 14 Tagen“: „Tagen“ galt als Stichwort und filterte alle Termine weg.",
+      fix: "Als Filter zählen nur Namen, die in Titeln, Orten oder Absendern vorkommen." },
+  ]},
+  { cat: "Widersprüche", items: [
+    { s: "irrweg", t: "Widerspruch im Antwort-Prompt", k: "Das Modell soll Widersprüche nebenbei melden.",
+      fail: "Das 7B-Modell übernahm stillschweigend einen Wert und schrieb „Keine Widersprüche“.",
+      fix: "Ein eigener Prüfschritt vor der Antwort (JSON)." },
+    { s: "irrweg", t: "Ja/Nein-Urteil des Modells", k: "„Betreffen beide Werte dieselbe Sache?“",
+      fail: "Das Modell sagte bei echten Fällen „nein“, obwohl seine eigene Beschreibung „Enddatum“ / „Neues Enddatum“ lautete.",
+      fix: "Nur die Beschreibungen werden genutzt, der Code vergleicht die Wörter." },
+    { s: "irrweg", t: "Beschreibungen in einem Aufruf", k: "Beide Sätze sichtbar, beide beschreiben lassen.",
+      fail: "Das Modell kopierte die Beschreibung: „Bitte Angebot bis 31.03. schicken“ wurde zu „Gültigkeitsende des Angebots“, ein Fehlalarm.",
+      fix: "Zweistufig: gemeinsame Beschreibung und zusätzlich getrennte Beschreibung, das Hauptwort muss übereinstimmen.",
+      metric: "Widerspruchstest: 46/46 ohne Fehlalarm, beide echten erkannt" },
+    { s: "verworfen", t: "Bedeutungsvergleich per Embedding", k: "Beschreibungen mit bge-m3 vergleichen.",
+      why: "Getestet: Das falsche Paar „Frist Angebotsabgabe / Gültigkeit Angebot“ erreichte 0,72, das echte „Kick-off-Termin / Neuer Termin“ nur 0,50. Die Trennung war unbrauchbar." },
+    { s: "gewaehlt", t: "Code-Kandidaten + Belegprüfung", k: "Verschiedene Daten mit gemeinsamem Fachwort, Werte müssen wörtlich in der Quelle stehen.",
+      why: "Fängt Fälle ab, die das Modell übersieht, und verwirft erfundene Werte. Bei „01.04.2023 bis 31.03.2027“ zählt nur das Enddatum." },
+    { s: "irrweg", t: "„Widerspruch in der Kurzantwort erwähnen“", k: "Anweisung an das Antwortmodell.",
+      fail: "Der Vertrags-Widerspruch tauchte bei jeder Hoffmann-Frage auf, sogar bei „Um wie viel steigen die Listenpreise?“, mit Spekulationen.",
+      fix: "Nur erwähnen, wenn der Widerspruch das Gefragte betrifft. Dazu ein Spekulationsverbot im Prompt." },
+  ]},
+  { cat: "Frageverständnis", items: [
+    { s: "gewaehlt", t: "Folgefragen umschreiben", k: "Mit den letzten 3 Runden eine eigenständige Frage bilden.",
+      why: "Standardverfahren für Chat-RAG. Ein Aufruf mit ca. 0,5 s, die Oberfläche zeigt „Verstanden als …“.",
+      metric: "Umschreiben 5/5 · Dialogtests 6/7 (Rest war ein zu strenger Test)" },
+    { s: "gewaehlt", t: "Suchvarianten nur bei schwachen Treffern", k: "Fachsprache statt Umgangssprache.",
+      why: "Spart Zeit bei klaren Fragen. Bei unbekannten Begriffen wie „Siemens“ wird nicht erweitert, weil sonst die Antwort zu einem anderen Kunden käme." },
+    { s: "irrweg", t: "Beispiel „die Hamburger“ im Prompt", k: "Konkretes Beispiel für die Umformulierung.",
+      fail: "Das Modell schrieb „Kunde in Hamburg“ auch in fremde Fragen. Das Ergebnis 11/12 war dadurch geschönt.",
+      fix: "Neutrale Beispiele und das Verbot, Orte oder Kunden hinzuzufügen. Ehrliches Ergebnis zunächst 10/12, nach Anpassung der Sperre 11/12." },
+    { s: "irrweg", t: "„sie“ = falsche Person", k: "„Wann treffe ich sie das nächste Mal?“",
+      fail: "Es wurde Frank Matthiesen eingesetzt. Ursache war die Vorantwort, die nur ihn nannte und Sabine Ehlers wegließ.",
+      fix: "Regel: bei Fragen nach Ansprechpartnern alle Personen mit Rolle nennen." },
+  ]},
+  { cat: "Ausgabe & Oberfläche", items: [
+    { s: "gewaehlt", t: "Einheitliches Ausgabekonzept", k: "Kurzantwort · Details mit [n] · Rückfragen · Widersprüche · Quellen.",
+      why: "Teilziel der Aufgabe. Quellen und Widersprüche schreibt der Code, damit sie nicht erfunden sein können." },
+    { s: "gewaehlt", t: "Streamlit-Chat", k: "Browser-Oberfläche mit Quellen zum Aufklappen und Antwortzeit.",
+      why: "In wenigen Zeilen eine präsentierbare Demo, mit Beispielfragen als Knöpfen." },
+    { s: "irrweg", t: "Start über Terminal-Befehle", k: "„streamlit run app.py“",
+      fail: "„No module named chromadb“: Das Terminal nutzte das falsche Python. Der README-Befehl mit %USERPROFILE% legte in PowerShell einen 614-MB-Ordner im Projekt an.",
+      fix: "start_demo.bat nutzt immer die richtige Umgebung, die README nennt die PowerShell-Schreibweise." },
+    { s: "zukunft", t: "Desktop-App statt localhost", k: "A: Streamlit im Programmfenster (pywebview). B: echte App mit PySide6 als .exe.",
+      why: "Ein eigenes Programm wirkt in der Abgabe überzeugender. Ollama läuft weiterhin unsichtbar im Hintergrund." },
+    { s: "zukunft", t: "Teams-App / Bot", k: "Der Agent direkt in Teams, wie Copilot.",
+      why: "Passt zur Geschichte, braucht aber eine Bot-Registrierung und einen erreichbaren Endpunkt für das lokale Modell. Eher etwas für den Ausblick." },
+  ]},
+  { cat: "Test & Betrieb", items: [
+    { s: "gewaehlt", t: "Doppelte Prüfung", k: "Regelprüfung im Code + 14B-Modell als Gutachter.",
+      why: "Die Regeln sind objektiv (Fakten, Quellen, Format). Der Gutachter bewertet den Inhalt. Beide finden unterschiedliche Fehler." },
+    { s: "irrweg", t: "Agent und Gutachter gleichzeitig", k: "7B + 14B parallel geladen.",
+      fail: "Der Arbeitsspeicher lief voll, der PC stürzte ab (Kernel-Power 41).",
+      fix: "Die Modelle laufen nacheinander, vor dem Gutachter wird alles entladen, dazu ein RAM-Check. Jedes Gutachten wird sofort gespeichert, damit ein Lauf nach einem Abbruch fortgesetzt werden kann." },
+    { s: "irrweg", t: "7B-Modell als Gutachter", k: "Ersatz bei wenig Speicher.",
+      fail: "Es bewertete Rückfragen und Terminlisten als „Halluzination“, die Begründungen widersprachen sich selbst.",
+      fix: "Der Gutachter ist ein größeres Modell als der Agent. Der 7B dient nur noch als Notlösung, mit Hinweis im Bericht." },
+    { s: "irrweg", t: "Gutachter ohne Datum", k: "14B-Prüfung der Zeitfragen.",
+      fail: "„Der 13.11. ist nicht übernächste Woche“: Ohne das heutige Datum konnte er nicht rechnen. 5 von 8 Beanstandungen waren Fehlurteile.",
+      fix: "Datum und Wochenbereich im Gutachter-Prompt, Bewertung der gesamten Antwort statt nur der Kurzantwort." },
+    { s: "irrweg", t: "Uneinheitliches Kontextfenster", k: "Kurze Prüfaufrufe ohne num_ctx.",
+      fail: "Ollama lud das Modell bei jedem Wechsel neu, die Antwortzeit stieg auf 30–60 s.",
+      fix: "Alle Aufrufe mit demselben Kontextfenster, dazu Vorladen beim App-Start und ein Zwischenspeicher für Widerspruchsprüfungen.",
+      metric: "33 s → 4–7 s pro Frage" },
+    { s: "irrweg", t: "Testlauf parallel zur App", k: "Gesamttest im Hintergrund, während die App lief.",
+      fail: "Die App war extrem langsam, weil beide um die Grafikkarte konkurrierten.",
+      fix: "Regel: Testlauf und App nie gleichzeitig." },
+    { s: "zukunft", t: "Blindtest mit fremden Daten", k: "Ein unabhängig erzeugter Datensatz mit Antwortschlüssel.",
+      why: "Prompts und Schwellwerte sind auf die eigenen Demo-Daten abgestimmt. Ein Blindtest zeigt, ob der Agent auch fremde Daten versteht." },
+  ]},
+];
+
+/* ===================== Simulation ===================== */
+const $ = (s) => document.querySelector(s);
+let scen = 0, pos = 0, timer = null;
+
+function renderScenarios() {
+  $("#scenarios").innerHTML = SCENARIOS.map((s, i) =>
+    `<button class="scenario" type="button" aria-pressed="${i === scen}" data-i="${i}">${s.titel}<small>${s.sub}</small></button>`).join("");
+  $("#scenarios").querySelectorAll(".scenario").forEach(b => b.onclick = () => { stop(); scen = +b.dataset.i; pos = 0; renderScenarios(); render(); });
+}
+
+function renderTrack() {
+  const phaseA = STAGES.filter(s => s.phase === "A").length;
+  $("#track").innerHTML =
+    `<div class="phase-band" style="grid-column: 1 / span ${phaseA}">Phase A · Einlesen (einmalig)</div>` +
+    `<div class="phase-band" style="grid-column: ${phaseA + 1} / span ${STAGES.length - phaseA}">Phase B · pro Frage</div>` +
+    STAGES.map((s, i) => `<button class="stop" type="button" data-i="${i}" style="grid-column:${i + 1}"
+      aria-label="Schritt ${s.nr}: ${s.name}"><span class="dot">${s.nr}</span><span class="lbl">${s.name}</span></button>`).join("");
+  $("#track").querySelectorAll(".stop").forEach(b => b.onclick = () => { stop(); pos = +b.dataset.i; render(); });
+}
+
+function render() {
+  const sc = SCENARIOS[scen];
+  document.querySelectorAll(".stop").forEach((el, i) => {
+    const st = sc.steps[STAGES[i].id] || {};
+    el.classList.toggle("active", i === pos);
+    el.classList.toggle("done", i < pos && !st.skip);
+    el.classList.toggle("skip", !!st.skip);
+  });
+  const stage = STAGES[pos], step = sc.steps[stage.id] || {};
+  $("#what").innerHTML = `
+    <span class="eyebrow">Komponente ${stage.nr}</span>
+    <h3>${stage.name}<span class="file">${stage.file}</span></h3>
+    <p>${stage.what}</p>
+    <dl class="kv"><dt>Warum</dt><dd>${stage.why}</dd></dl>`;
+  $("#case").innerHTML = `
+    <span class="eyebrow">Beispiel: ${sc.sub}</span>
+    <h3>${step.skip ? "Übersprungen" : "Was hier passiert"}${step.t ? `<span class="badge-time">⏱ ${step.t}</span>` : ""}</h3>
+    <div class="io">${(step.io || "–").replace(/</g, "&lt;")}</div>`;
+  $("#progress").textContent = `Schritt ${pos + 1} / ${STAGES.length}`;
+  $("#prev").disabled = pos === 0;
+  $("#next").disabled = pos === STAGES.length - 1;
+  const active = document.querySelector(".stop.active");
+  if (active && active.scrollIntoView) active.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+}
+
+function stop() { clearInterval(timer); timer = null; $("#play").textContent = "Abspielen"; }
+$("#prev").onclick = () => { stop(); pos = Math.max(0, pos - 1); render(); };
+$("#next").onclick = () => { stop(); pos = Math.min(STAGES.length - 1, pos + 1); render(); };
+$("#play").onclick = () => {
+  if (timer) return stop();
+  if (pos === STAGES.length - 1) pos = 0;
+  render();
+  $("#play").textContent = "Anhalten";
+  timer = setInterval(() => { if (pos >= STAGES.length - 1) return stop(); pos++; render(); }, 2200);
+};
+
+/* ===================== Baum ===================== */
+const LABEL = { gewaehlt: "gewählt", verworfen: "verworfen", irrweg: "Irrweg, korrigiert", zukunft: "Zukunft" };
+let filter = "alle";
+
+function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+function nodeHtml(n, id) {
+  const body = n.s === "irrweg"
+    ? `<div class="fail"><h4>Was schiefging</h4>${esc(n.fail)}</div><div class="fix"><h4>Korrektur</h4>${esc(n.fix)}</div>`
+    : `<div><h4>Begründung</h4>${esc(n.why)}</div>`;
+  return `<li data-s="${n.s}"><div class="node ${n.s}">
+    <button class="node-btn" type="button" aria-expanded="false" aria-controls="${id}">
+      <span class="t">${esc(n.t)}</span><span class="chip s-${n.s}">${LABEL[n.s]}</span><span class="s">${esc(n.k)}</span>
+    </button>
+    <div class="node-body" id="${id}" hidden>${body}${n.metric ? `<div class="metric">${esc(n.metric)}</div>` : ""}</div>
+  </div></li>`;
+}
+
+function renderTree() {
+  const counts = { alle: 0, gewaehlt: 0, verworfen: 0, irrweg: 0, zukunft: 0 };
+  TREE.forEach(c => c.items.forEach(n => { counts[n.s]++; counts.alle++; }));
+  $("#filters").innerHTML = ["alle", "gewaehlt", "verworfen", "irrweg", "zukunft"].map(f =>
+    `<button class="filter" type="button" data-f="${f}" aria-pressed="${f === filter}">${f === "alle" ? "Alle" : LABEL[f]} · ${counts[f]}</button>`).join("");
+  $("#filters").querySelectorAll(".filter").forEach(b => b.onclick = () => { filter = b.dataset.f; renderTree(); });
+
+  $("#tree").innerHTML = `<li><div class="root-node">Lokaler Informations-Agent (Ollama + RAG)</div><ul>` +
+    TREE.map((c, ci) => {
+      const items = c.items.filter(n => filter === "alle" || n.s === filter);
+      if (!items.length) return "";
+      return `<li><button class="cat-btn" type="button" aria-expanded="true" aria-controls="cat${ci}">
+        <span class="caret">▾</span>${esc(c.cat)}<span class="count">${items.length}</span></button>
+        <ul id="cat${ci}">${items.map((n, ni) => nodeHtml(n, `n${ci}-${ni}`)).join("")}</ul></li>`;
+    }).join("") + `</ul></li>`;
+
+  $("#tree").querySelectorAll(".node-btn").forEach(b => b.onclick = () => {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", String(!open));
+    document.getElementById(b.getAttribute("aria-controls")).hidden = open;
+  });
+  $("#tree").querySelectorAll(".cat-btn").forEach(b => b.onclick = () => {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", String(!open));
+    document.getElementById(b.getAttribute("aria-controls")).hidden = open;
+  });
+}
+
+/* ===================== Lernkurven (SVG, eine Skala je Achse) ===================== */
+function chart(el, pts, yMax, yTicks, unit) {
+  const W = 460, H = 230, L = 40, R = 16, T = 28, B = 64;
+  const x = i => L + (W - L - R) * (pts.length === 1 ? 0.5 : i / (pts.length - 1));
+  const y = v => T + (H - T - B) * (1 - v / yMax);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${unit}">`;
+  yTicks.forEach(v => { s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="axl" x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${v}</text>`; });
+  s += `<polyline class="pl" points="${pts.map((p, i) => `${x(i)},${y(p.v)}`).join(" ")}"/>`;
+  pts.forEach((p, i) => {
+    const anchor = i === 0 ? "start" : i === pts.length - 1 ? "end" : "middle";
+    s += `<circle class="pt${p.bad ? " bad" : ""}" cx="${x(i)}" cy="${y(p.v)}" r="5"/>`;
+    s += `<text class="pv" x="${x(i)}" y="${y(p.v) - 10}" text-anchor="${anchor}">${p.label ?? p.v}</text>`;
+    s += `<text class="ps" x="${x(i)}" y="${H - B + 18}" text-anchor="${anchor}">${p.n}</text>`;
+    s += `<text class="ps" x="${x(i)}" y="${H - B + 32}" text-anchor="${anchor}">${p.d}</text>`;
+  });
+  el.innerHTML = s + `</svg>`;
+}
+
+chart($("#c1"), [
+  { v: 30, n: "1 · Start", d: "nur Ähnlichkeit" },
+  { v: 43, n: "2 · Hybrid", d: "+ Gegenprüfung" },
+  { v: 46, n: "3 · Struktur", d: "+ Ablage im Kopf" },
+  { v: 46, n: "4 · Dialoge", d: "+ Verstehen" },
+], 46, [0, 15, 30, 46], "Bestandene Regelprüfung von 46 Fragen");
+
+chart($("#c2"), [
+  { v: 135, n: "1", d: "Kaltstart" },
+  { v: 21, n: "2", d: "Modelle geladen" },
+  { v: 5, n: "3", d: "warm" },
+  { v: 11, n: "4", d: "+ Prüfschritte", bad: true },
+  { v: 33, n: "5", d: "num_ctx-Fehler", bad: true },
+  { v: 6, n: "6", d: "korrigiert" },
+], 140, [0, 35, 70, 105, 140], "Antwortzeit in Sekunden");
+
+renderScenarios(); renderTrack(); render(); renderTree();
+</script>

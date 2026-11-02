@@ -1,0 +1,4 @@
+# Einheitliche Zeilenenden auf allen Rechnern (Windows/Mac) -> keine Schein-Änderungen in Pull Requests
+* text=auto eol=lf
+*.bat text eol=crlf
+*.docx binary

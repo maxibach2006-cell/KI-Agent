@@ -1,0 +1,8 @@
+# Datenschutz: keine Nutzungsstatistik an Streamlit senden, App nur auf diesem Rechner erreichbar
+[browser]
+gatherUsageStats = false
+
+[server]
+address = "localhost"
+# eigener Port, damit andere Streamlit-Apps (Standard 8501) nicht kollidieren
+port = 8510

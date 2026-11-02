@@ -1,0 +1,51 @@
+[
+  {
+    "kanal": "Hoffmann Maschinenbau",
+    "absender": "Key-Account-Manager",
+    "datum": "2026-08-06",
+    "betreff": "Eskalation Lieferverzug SM-400",
+    "text": "Eskalation Lieferverzug Bestellung 4500-8812 (40x SM-400) für Hoffmann. Grund: fehlende Leiterplatten beim Zulieferer. Herr Okafor (Supply Chain) ist informiert. Neuer Termin laut Disposition: KW 33. Hoffmann braucht die Module spätestens KW 34 für Halle 4."
+  },
+  {
+    "kanal": "Hoffmann Maschinenbau",
+    "absender": "Daniel Okafor",
+    "datum": "2026-08-14",
+    "betreff": "",
+    "text": "Update Hoffmann: 40 SM-400 sind heute verschickt worden, Zustellung am 17.08.2026 (KW 34). Als Entschuldigung bieten wir Hoffmann die Fracht kostenlos an."
+  },
+  {
+    "kanal": "NordWerk Logistik",
+    "absender": "Key-Account-Manager",
+    "datum": "2026-10-05",
+    "betreff": "Bedarfsanalyse Hannover verschoben",
+    "text": "Info: Frau Ehlers hat die Bedarfsanalyse Hannover-Lahe auf den 20.11.2026 verschoben. Bitte Präsentation mit den Referenzdaten aus Billbrook vorbereiten (Verfügbarkeit 99,2 % seit 2020)."
+  },
+  {
+    "kanal": "NordWerk Logistik",
+    "absender": "Lena Vogt",
+    "datum": "2026-10-06",
+    "betreff": "",
+    "text": "Ich bereite die Referenzfolien Billbrook vor. Wichtig: Laut Service-Report lag die durchschnittliche Reaktionszeit 2025 bei 3,1 Stunden, also unter den vertraglichen 4 Stunden."
+  },
+  {
+    "kanal": "Brenner Medizintechnik",
+    "absender": "Key-Account-Manager",
+    "datum": "2026-05-22",
+    "betreff": "Ergebnis Audit ISO 13485",
+    "text": "Audit von Brenner (Frau Haas) am 20./21.05.2026 bestanden. Eine Nebenabweichung: Kalibriernachweise der Prüfmittel in Halle 2 unvollständig. Maßnahme bis 30.06.2026 umsetzen und Nachweis an Frau Haas senden."
+  },
+  {
+    "kanal": "Brenner Medizintechnik",
+    "absender": "Markus Brenner",
+    "datum": "2026-09-30",
+    "betreff": "",
+    "text": "Wir überlegen, ab 2027 auch die neue Baureihe PA-70 bei Ihnen zu beziehen. Können Sie uns zum Q4-Gespräch Muster und eine Preisindikation für 300 Stück pro Jahr mitbringen?"
+  },
+  {
+    "kanal": "Allgemein",
+    "absender": "Claudia Schäfer",
+    "datum": "2026-09-01",
+    "betreff": "Preiserhöhung 2027",
+    "text": "Info an alle KAMs: Die Listenpreise steigen zum 01.01.2027 um durchschnittlich 3,5 %. Bitte Kunden mit Preisgleitklausel rechtzeitig informieren."
+  }
+]
