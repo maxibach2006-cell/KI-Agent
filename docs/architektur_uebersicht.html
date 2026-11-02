@@ -472,6 +472,18 @@ const TREE = [
     { s: "zukunft", t: "Blindtest mit fremden Daten", k: "Ein unabhängig erzeugter Datensatz mit Antwortschlüssel.",
       why: "Prompts und Schwellwerte sind auf die eigenen Demo-Daten abgestimmt. Ein Blindtest zeigt, ob der Agent auch fremde Daten versteht." },
   ]},
+  { cat: "Persönliche Ablage", items: [
+    { s: "gewaehlt", t: "Ordner je Kunde > Thema", k: "Nach jeder Antwort ordnet ablage.py die Frage ein und legt Antwort und Quellen ab.",
+      why: "Wer mehrmals zum selben Kunden, Projekt oder zur selben Verhandlung fragt, baut so ohne eigenen Aufwand eine geordnete Ablage auf. Zwei Ebenen reichen: Unterhalb des Kunden liegen Projekte, Verhandlungen und Verträge, alles Übrige in _Allgemein." },
+    { s: "gewaehlt", t: "Modell beschreibt, Code ordnet zu", k: "Das 7B-Modell nennt Kunde und Thema (JSON), der Code entscheidet über „bekannt oder neu“.",
+      why: "Gleiche Lehre wie bei den Widersprüchen: Ja/Nein-Urteile des 7B-Modells sind unzuverlässig. Der Code vergleicht Namen ohne Rechtsform, trennt Themen mit verschiedenen Vertragsnummern und nutzt erst danach die Embedding-Ähnlichkeit. Ein Kunde, der weder in der Frage noch in den Quellen vorkommt, wird verworfen." },
+    { s: "gewaehlt", t: "Ordner erst ab der 2. Frage", k: "Die erste Frage wird nur im Register vorgemerkt und beim Anlegen nachgetragen.",
+      why: "Verhindert Ordner-Wildwuchs durch einmalige Fragen. Einzelne Themen liegen in _Allgemein und ziehen in einen eigenen Ordner um, sobald es eine zweite Frage dazu gibt." },
+    { s: "gewaehlt", t: "Quellen als Kopie oder Auszug", k: "Lokale Dateien werden kopiert, alles andere als Textauszug mit Link (.url) zum Original.",
+      why: "OneNote, Mails, Teams und Kalender liegen nicht als Datei vor. Ein Download über Graph bei jeder Frage wäre langsam und bräuchte eine aktive Anmeldung. Der Auszug enthält genau die Stellen, auf die sich die Antwort stützt." },
+    { s: "zukunft", t: "Themen-Schwellwert kalibrieren", k: "ABLAGE_THEMA_SCHWELLE = 0,8 ist geschätzt.",
+      why: "Mit echten Frageserien messen, ab welcher bge-m3-Ähnlichkeit zwei Themenbeschreibungen wirklich dasselbe meinen (vgl. Erfahrung bei den Widersprüchen: Embeddings trennen kurze Beschreibungen schlecht)." },
+  ]},
 ];
 
 /* ===================== Simulation ===================== */

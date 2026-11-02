@@ -101,6 +101,23 @@ streamlit run app.py
 ```
 **Kommandozeile:** `python agent.py "Bis wann läuft der Vertrag mit Hoffmann?"`
 
+### Persönliche Ablage
+Nach jeder Antwort ordnet der Agent die Frage einem Kunden und einem Thema (Projekt, Verhandlung, Vertrag …) zu und baut daraus eine Ordnerstruktur auf, die mit jeder Frage wächst. Standardort ist `<Benutzerordner>\KAM-Ablage\<nutzer>`, änderbar mit `ABLAGE_DIR` in der `.env`.
+```
+KAM-Ablage/<nutzer>/
+├─ _Uebersicht.md                 alle Kunden und Themen
+└─ <Kunde>/
+   ├─ _Uebersicht.md              alle Fragen zum Kunden
+   ├─ _Allgemein/                 Fragen ohne eigenen Themenordner
+   └─ <Thema>/                    z. B. Rahmenvertrag RV-…
+      ├─ 2026-11-02_0930 <Frage>.md
+      └─ Quellen/                 Kopien (lokale Dateien) bzw. Textauszüge + Link zum Original
+```
+- Ordner entstehen erst ab der **2. Frage** zum selben Kunden bzw. Thema. Vorher wird die Frage nur vorgemerkt und beim Anlegen nachgetragen.
+- Das Sprachmodell beschreibt nur Kunde und Thema. Ob es ein bekannter Kunde bzw. ein bekanntes Thema ist, entscheidet der Code (Namensvergleich, gleiche Vertrags- oder Projektnummer, Embedding-Ähnlichkeit).
+- In der App lässt sich die Ablage in der Seitenleiste abschalten. `python ablage.py` zeigt den aktuellen Stand. Der Testlauf legt nichts ab.
+- Test ohne Ollama: `python evaluation/test_ablage.py`
+
 ## Evaluation
 ```bash
 python evaluation/evaluate.py            # Quellen-Trefferquote (schnell)
@@ -154,6 +171,7 @@ Die Demo-Kalendertermine liegen relativ zum heutigen Tag (letzte, diese und näc
 | [local_loader.py](local_loader.py) | Demo-Daten im selben Format |
 | [ingest.py](ingest.py) | Abschnitte bilden, Embeddings, Index |
 | [agent.py](agent.py) | Suche, Antwort, Quellenliste |
+| [ablage.py](ablage.py) | persönliche Ablage: Ordner je Kunde/Thema, wächst mit jeder Frage |
 | [app.py](app.py) | Streamlit-Oberfläche |
 | [seed_graph.py](seed_graph.py) | Test-Tenant mit Demo-Daten befüllen |
 | [evaluation/](evaluation) | Testfragen und Messung |

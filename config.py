@@ -97,6 +97,17 @@ DATA_DIR = BASE_DIR / "data"           # Vektor-Datenbank (ChromaDB), getrennt p
 DEMO_DIR = BASE_DIR / "demo_data"      # fiktive Beispieldaten für den Demo-Modus
 TOKEN_CACHE = BASE_DIR / ".token_cache.json"  # gespeichertes Microsoft-Anmeldetoken
 
+# =============================================================================
+# Persönliche Ablage (ablage.py): Ordner je Kunde und Thema, wächst mit jeder Frage
+# =============================================================================
+# Bewusst außerhalb des Projektordners (keine Kundendaten im Repository) und standardmäßig nicht in OneDrive.
+ABLAGE_DIR = Path(os.getenv("ABLAGE_DIR", str(Path.home() / "KAM-Ablage")))
+ABLAGE_AKTIV = os.getenv("ABLAGE_AKTIV", "1") != "0"  # Voreinstellung des Schalters in der App
+ABLAGE_MIN_FRAGEN = 2       # Ordner für Kunde bzw. Thema erst ab so vielen Fragen (vorher nur vorgemerkt)
+# Ab dieser Embedding-Ähnlichkeit gilt ein Thema als bereits bekannt (z. B. "Rahmenvertrag" ~ "Rahmenvertrag RV-1").
+# Vorläufiger Wert, noch nicht mit echten Fragen kalibriert.
+ABLAGE_THEMA_SCHWELLE = 0.8
+
 
 def heute() -> date:
     """Heutiges Datum, auf das sich relative Zeitangaben ("nächste Woche") beziehen.
