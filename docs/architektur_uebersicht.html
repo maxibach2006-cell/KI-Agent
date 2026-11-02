@@ -477,6 +477,8 @@ const TREE = [
       why: "Wer mehrmals zum selben Kunden, Projekt oder zur selben Verhandlung fragt, baut so ohne eigenen Aufwand eine geordnete Ablage auf. Zwei Ebenen reichen: Unterhalb des Kunden liegen Projekte, Verhandlungen und Verträge, alles Übrige in _Allgemein." },
     { s: "gewaehlt", t: "Modell beschreibt, Code ordnet zu", k: "Das 7B-Modell nennt Kunde und Thema (JSON), der Code entscheidet über „bekannt oder neu“.",
       why: "Gleiche Lehre wie bei den Widersprüchen: Ja/Nein-Urteile des 7B-Modells sind unzuverlässig. Der Code vergleicht Namen ohne Rechtsform, trennt Themen mit verschiedenen Vertragsnummern und nutzt erst danach die Embedding-Ähnlichkeit. Ein Kunde, der weder in der Frage noch in den Quellen vorkommt, wird verworfen." },
+    { s: "gewaehlt", t: "Kunde ohne Namen in der Frage nur bei eindeutigen Quellen", k: "Mindestens die Hälfte der Quellen muss zum Kunden gehören.",
+      why: "Bei „Warum kamen die Steuerungen zu spät?“ leitet das Modell den Kunden aus den Quellen ab. Stammen die Quellen von mehreren Kunden, greift ein 7B-Modell leicht den falschen heraus. Dann lieber nicht ablegen als falsch ablegen. Allgemeine Fragen ohne Kunden- und Projektbezug werden ebenfalls nicht abgelegt." },
     { s: "gewaehlt", t: "Ordner erst ab der 2. Frage", k: "Die erste Frage wird nur im Register vorgemerkt und beim Anlegen nachgetragen.",
       why: "Verhindert Ordner-Wildwuchs durch einmalige Fragen. Einzelne Themen liegen in _Allgemein und ziehen in einen eigenen Ordner um, sobald es eine zweite Frage dazu gibt." },
     { s: "gewaehlt", t: "Quellen als Kopie oder Auszug", k: "Lokale Dateien werden kopiert, alles andere als Textauszug mit Link (.url) zum Original.",

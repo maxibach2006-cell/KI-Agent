@@ -114,6 +114,7 @@ KAM-Ablage/<nutzer>/
       └─ Quellen/                 Kopien (lokale Dateien) bzw. Textauszüge + Link zum Original
 ```
 - Ordner entstehen erst ab der **2. Frage** zum selben Kunden bzw. Thema. Vorher wird die Frage nur vorgemerkt und beim Anlegen nachgetragen.
+- Fragen ohne Kunden- oder Projektbezug („Welche Termine habe ich nächste Woche?“) werden nicht abgelegt. Steht der Kunde nicht in der Frage, wird er aus den Quellen nur übernommen, wenn mindestens die Hälfte der Quellen zu ihm gehört (`ABLAGE_KUNDE_ANTEIL`).
 - Das Sprachmodell beschreibt nur Kunde und Thema. Ob es ein bekannter Kunde bzw. ein bekanntes Thema ist, entscheidet der Code (Namensvergleich, gleiche Vertrags- oder Projektnummer, Embedding-Ähnlichkeit).
 - In der App lässt sich die Ablage in der Seitenleiste abschalten. `python ablage.py` zeigt den aktuellen Stand. Der Testlauf legt nichts ab.
 - Test ohne Ollama: `python evaluation/test_ablage.py`

@@ -17,7 +17,8 @@ Idee:
 Ablauf von ablegen():
     1. _analysiere()     Das Sprachmodell BESCHREIBT, worum es geht: Kunde + Thema (JSON).
     2. _kunde_zuordnen() Der CODE entscheidet, ob es ein bekannter Kunde ist (Namensvergleich, nicht das Modell;
-                         siehe CLAUDE.md: Ja/Nein-Urteile des 7B-Modells sind unzuverlässig).
+                         siehe CLAUDE.md: Ja/Nein-Urteile des 7B-Modells sind unzuverlässig). Steht der Kunde nicht
+                         in der Frage, müssen mindestens die Hälfte der Quellen zu ihm gehören, sonst keine Ablage.
     3. _thema_zuordnen() Der CODE entscheidet, ob es ein bekanntes Thema ist: gleiche Kennwörter (z. B. Vertrags-
                          nummer, Projektname) oder Embedding-Ähnlichkeit (bge-m3) über ABLAGE_THEMA_SCHWELLE.
     4. Eintrag im Register vermerken. Ordner entstehen erst ab ABLAGE_MIN_FRAGEN Fragen:
@@ -200,10 +201,13 @@ def _kunden_aus_quellen(treffer: list[dict]) -> list[str]:
     return namen
 
 
-def _kunde_zuordnen(kunde: str, frage: str, treffer: list[dict], register: dict) -> str:
-    """Schritt 2: endgültiger Kundenname oder "" (keiner erkennbar).
+def _kunde_zuordnen(kunde: str, frage: str, treffer: list[dict], register: dict) -> str | None:
+    """Schritt 2: endgültiger Kundenname, "" (keiner erkennbar) oder None (nicht eindeutig -> nicht ablegen).
 
     Schutz vor Halluzination: Der Name muss in der Frage oder in den Quellen vorkommen.
+    Steht er NICHT in der Frage (z. B. "Warum kamen die Steuerungen zu spät?"), hat das Modell ihn aus den Quellen
+    abgeleitet. Das gilt nur, wenn mindestens ABLAGE_KUNDE_ANTEIL der Quellen zu diesem Kunden gehören; bei Quellen
+    mehrerer Kunden greift das 7B-Modell sonst leicht den falschen heraus.
     Bekannte Kunden behalten ihren Namen (gleicher Ordner); sonst wird die Schreibweise aus der Ablage übernommen.
     """
     if not kunde or kunde.lower() in ("allgemein", "keiner", "unbekannt", "mehrere"):
@@ -211,6 +215,11 @@ def _kunde_zuordnen(kunde: str, frage: str, treffer: list[dict], register: dict)
     belegt = frage + "\n" + "\n".join(t["text"] + " " + t["meta"]["ort"] for t in treffer)
     if not _kommt_vor(kunde, belegt):
         return ""  # Modell hat einen Namen erfunden
+    if not _kommt_vor(kunde, frage):
+        quellen = [t for t in treffer if t["meta"]["quelle"] != "Übersicht"]
+        eigene = [t for t in quellen if _kommt_vor(kunde, t["text"] + " " + t["meta"]["ort"])]
+        if len(eigene) < config.ABLAGE_KUNDE_ANTEIL * len(quellen):
+            return None  # Quellen gehören überwiegend zu anderen Kunden
     for k in register["kunden"]:
         if gleicher_kunde(kunde, k["name"]):
             return k["name"]
@@ -252,10 +261,13 @@ def _thema_zuordnen(thema: str, kunde_eintrag: dict, vektor: list[float]) -> dic
 
 def einordnen(frage: str, treffer: list[dict], register: dict, model: str = config.CHAT_MODEL) -> dict | None:
     """Schritte 1-3: {"kunde", "thema", "art", "vektor", "kunde_neu": bool, "thema_neu": bool} oder None,
-    wenn weder Kunde noch konkretes Thema erkennbar sind (z. B. "Welche Termine habe ich nächste Woche?")."""
+    wenn weder Kunde noch konkretes Thema erkennbar sind (z. B. "Welche Termine habe ich nächste Woche?") oder
+    der Kunde nicht eindeutig ist (Name nicht in der Frage, Quellen von mehreren Kunden)."""
     alle_themen = [f"{t['name']} ({k['name']})" for k in register["kunden"] for t in k["themen"]]
     analyse = _analysiere(frage, treffer, alle_themen, model)
     kunde = _kunde_zuordnen(analyse["kunde"], frage, treffer, register)
+    if kunde is None:
+        return None
     thema = analyse["thema"]
     if thema.lower() in ("", "allgemein", "keins", "kein thema"):
         thema = ""
@@ -405,7 +417,7 @@ def ablegen(frage: str, treffer: list[dict], antwort: str, user: str = "demo", m
     einordnung = einordnen(verstanden_als or frage, treffer, register, model)
     if not einordnung:
         return {"status": "übersprungen", "kunde": "", "thema": "", "ordner": None,
-                "meldung": "Nicht abgelegt: kein Kunde und kein Projekt erkennbar."}
+                "meldung": "Nicht abgelegt: kein eindeutiger Kunde und kein Projekt erkennbar."}
 
     # --- Schritt 4: Register aktualisieren ---
     kunde = next((k for k in register["kunden"] if k["name"] == einordnung["kunde"]), None)

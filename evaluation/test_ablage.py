@@ -111,6 +111,19 @@ def main():
                "Kunde, der in Frage und Quellen nicht vorkommt, wird verworfen")
         pruefe(ablage.ablegen("x", [], "x", user="test")["status"] == "übersprungen", "ohne Quellen übersprungen")
 
+        print("Frage ohne Kundennamen: Kunde nur, wenn die Quellen überwiegend zu ihm gehören")
+        andere = [treffer("OneNote", "Kundenprofil", "MBS 2 / Firma Y AG", "onenote:MBS 2/y", "Firma Y Profil"),
+                  treffer("Outlook", "Lieferung", "Postfach", "outlook:y", "Firma Y Lieferung")]
+        ANTWORTEN["Warum kam die Lieferung zu spät?"] = ("Firma X", "Lieferverzug")
+        pruefe(ablage.einordnen("Warum kam die Lieferung zu spät?", t_vertrag, ablage.lade_register(wurzel)) is not None,
+               "alle Quellen von Firma X -> Kunde übernommen")
+        gemischt = t_vertrag[:1] + andere  # 1 von 3 Quellen gehört zu Firma X
+        pruefe(ablage.einordnen("Warum kam die Lieferung zu spät?", gemischt, ablage.lade_register(wurzel)) is None,
+               "Quellen überwiegend von anderem Kunden -> nicht ablegen")
+        ANTWORTEN["Was gilt bei Firma X?"] = ("Firma X", "Allgemein")
+        pruefe(ablage.einordnen("Was gilt bei Firma X?", gemischt, ablage.lade_register(wurzel)) is not None,
+               "Kunde in der Frage genannt -> Quellenanteil egal")
+
     print(f"\n{'Alle Prüfungen bestanden' if not FEHLER else f'{len(FEHLER)} Prüfung(en) fehlgeschlagen'}")
     sys.exit(1 if FEHLER else 0)
 

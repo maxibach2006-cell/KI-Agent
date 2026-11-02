@@ -104,6 +104,8 @@ TOKEN_CACHE = BASE_DIR / ".token_cache.json"  # gespeichertes Microsoft-Anmeldet
 ABLAGE_DIR = Path(os.getenv("ABLAGE_DIR", str(Path.home() / "KAM-Ablage")))
 ABLAGE_AKTIV = os.getenv("ABLAGE_AKTIV", "1") != "0"  # Voreinstellung des Schalters in der App
 ABLAGE_MIN_FRAGEN = 2       # Ordner für Kunde bzw. Thema erst ab so vielen Fragen (vorher nur vorgemerkt)
+# Frage ohne Kundennamen: Kunde aus den Quellen nur übernehmen, wenn mindestens dieser Anteil der Quellen zu ihm gehört
+ABLAGE_KUNDE_ANTEIL = 0.5
 # Ab dieser Embedding-Ähnlichkeit gilt ein Thema als bereits bekannt (z. B. "Rahmenvertrag" ~ "Rahmenvertrag RV-1").
 # Vorläufiger Wert, noch nicht mit echten Fragen kalibriert.
 ABLAGE_THEMA_SCHWELLE = 0.8
