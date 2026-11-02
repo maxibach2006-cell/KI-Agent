@@ -1,0 +1,12 @@
+# Nicht ins Container-Image: Zugangsdaten, lokale Daten, Git-Verlauf, Präsentationen
+.env
+.token_cache.json
+data/
+.git/
+.claude/
+__pycache__/
+*.pyc
+*.pptx
+evaluation/testlauf_antworten.json
+evaluation/testlauf_bericht.md
+evaluation/ergebnisse.md

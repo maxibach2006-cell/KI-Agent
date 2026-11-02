@@ -101,6 +101,12 @@ streamlit run app.py
 ```
 **Kommandozeile:** `python agent.py "Bis wann läuft der Vertrag mit Hoffmann?"`
 
+**Als Server (Docker in WSL2):** Agent und Ollama laufen als Container in einer WSL2-VM. Einrichtung, Entscheidungen und Messwerte: [docs/server_einrichtung.md](docs/server_einrichtung.md).
+```bash
+wsl -d kam-server --cd /mnt/c/Projekte/KI-Agent -- docker compose -f server/docker-compose.yml up -d --build
+```
+Danach ist die App unter http://localhost:8510 erreichbar.
+
 ### Persönliche Ablage
 Nach jeder Antwort ordnet der Agent die Frage einem Kunden und einem Thema (Projekt, Verhandlung, Vertrag …) zu und baut daraus eine Ordnerstruktur auf, die mit jeder Frage wächst. Standardort ist `<Benutzerordner>\KAM-Ablage\<nutzer>`, änderbar mit `ABLAGE_DIR` in der `.env`.
 ```

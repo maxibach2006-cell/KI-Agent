@@ -1,0 +1,73 @@
+# =========================================================================
+# Server des KAM-Agenten: zwei Container in der WSL2-VM "kam-server".
+#   ollama  Sprachmodell und Embeddings auf der GPU
+#   agent   Streamlit-App (app.py), spricht Ollama über das interne Docker-Netz an
+# Doku: docs/server_einrichtung.md (Phase 1)
+#
+# Starten (in der VM, im Projektordner):  docker compose -f server/docker-compose.yml up -d --build
+# Logs:                                    docker compose -f server/docker-compose.yml logs -f agent
+# Stoppen:                                 docker compose -f server/docker-compose.yml down
+# =========================================================================
+name: kam-server
+
+services:
+  ollama:
+    # feste Version statt "latest": ein Update soll eine bewusste Entscheidung sein, kein Zufall beim Neustart
+    image: ollama/ollama:0.40.13
+    restart: unless-stopped
+    gpus: all
+    environment:
+      # Chat-Modell + Embedding-Modell gleichzeitig im VRAM (wie bisher unter Windows).
+      # Mit 1 würde bei jeder Frage zwischen bge-m3 und qwen2.5 umgeladen.
+      OLLAMA_MAX_LOADED_MODELS: "2"
+      # eine Anfrage nach der anderen: 8 GB VRAM reichen nicht für parallele Antworten
+      OLLAMA_NUM_PARALLEL: "1"
+      # Modelle 30 min im VRAM halten, auch bei Aufrufen ohne eigenes keep_alive (z. B. ablage.py)
+      OLLAMA_KEEP_ALIVE: "30m"
+    volumes:
+      - ollama-modelle:/root/.ollama
+    # Nur für diesen PC (127.0.0.1): So nutzen auch Testlauf und Entwicklung unter Windows dieses Ollama.
+    # Aus dem Netz ist der Port nicht erreichbar.
+    ports:
+      - "127.0.0.1:11434:11434"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  agent:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    image: kam-agent
+    restart: unless-stopped
+    depends_on:
+      ollama:
+        condition: service_healthy
+    # optionale Einstellungen (z. B. HEUTE=2026-11-02 für eine Demo mit festem Stichtag)
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      ABLAGE_DIR: /daten/ablage
+      TZ: Europe/Berlin
+    volumes:
+      - index:/app/data
+      - ablage:/daten/ablage
+    # vorerst nur auf diesem PC erreichbar; der Zugang von außen kommt in Phase 2 über den Tunnel
+    ports:
+      - "127.0.0.1:8510:8510"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8510/_stcore/health')"]
+      interval: 15s
+      timeout: 5s
+      start_period: 120s
+      retries: 5
+
+# Daten liegen in Docker-Volumes in der VM (auf H:) und überstehen einen Neubau der Container
+volumes:
+  ollama-modelle:
+  index:
+  ablage:
