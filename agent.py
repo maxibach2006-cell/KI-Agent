@@ -46,6 +46,7 @@ from typing import Iterator
 import numpy as np
 import ollama
 
+import ablage
 import config
 import prompts
 import verstehen
@@ -536,9 +537,11 @@ def anhang_markdown(treffer: list[dict], widersprueche: list[dict]) -> str:
 # =============================================================================
 
 def antworte(frage: str, user: str = "demo", model: str = config.CHAT_MODEL,
-             verlauf: list[dict] | None = None) -> dict:
+             verlauf: list[dict] | None = None, ablegen: bool = False) -> dict:
     """Komplette Antwort ohne Streaming (für Kommandozeile und Evaluation).
     verlauf: bisherige Runden [{"frage": ..., "antwort": ...}] für Folgefragen.
+    ablegen: Frage und Antwort in die persönliche Ablage einordnen (ablage.py). Standard aus, damit der
+             Testlauf die Ablage des Nutzers nicht mit Testfragen füllt.
 
     app.py ruft dieselben Schritte einzeln auf, um Zwischenstände anzuzeigen und die Antwort zu streamen.
     Rückgabe: dict mit Antworttext, Treffern, Widersprüchen, verstandener Frage, Suchvarianten und Dauer.
@@ -548,13 +551,21 @@ def antworte(frage: str, user: str = "demo", model: str = config.CHAT_MODEL,
     treffer, varianten = suche_verstanden(verstanden, user, model)           # Schritt 1
     widersprueche = pruefe_widersprueche(verstanden, treffer, model)         # Schritt 2
     text = "".join(generiere(verstanden, treffer, widersprueche, model)) + anhang_markdown(treffer, widersprueche)  # Schritt 3 + 4
+    abgelegt = None
+    if ablegen:                                                              # Schritt 5 (optional)
+        try:
+            abgelegt = ablage.ablegen(frage, treffer, text, user, model, verstanden_als=verstanden)
+        except Exception as e:  # die Ablage darf nie die Antwort verhindern
+            abgelegt = {"status": "fehler", "meldung": f"Ablage fehlgeschlagen: {e}"}
     return {"antwort": text, "treffer": treffer, "widersprueche": widersprueche, "verstanden_als": verstanden,
-            "varianten": varianten, "sekunden": time.perf_counter() - start}
+            "varianten": varianten, "ablage": abgelegt, "sekunden": time.perf_counter() - start}
 
 
 if __name__ == "__main__":
     # Aufruf per Kommandozeile: python agent.py "Frage ..."
     frage = " ".join(sys.argv[1:]) or "Welche Konditionen gelten für Hoffmann Maschinenbau?"
-    ergebnis = antworte(frage)
+    ergebnis = antworte(frage, ablegen=config.ABLAGE_AKTIV)
     print(ergebnis["antwort"])
+    if ergebnis["ablage"]:
+        print(f"\n📁 {ergebnis['ablage']['meldung']}")
     print(f"\n({ergebnis['sekunden']:.1f} s)")

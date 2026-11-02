@@ -9,16 +9,18 @@ Funktionsweise von Streamlit (wichtig zum Verständnis dieser Datei):
     @st.cache_resource zwischengespeichert.
 
 Aufbau der Seite:
-    1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch"
+    1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
     3. Bei einer Frage: die Agent-Schritte einzeln aufrufen und Zwischenstände anzeigen
        (verstanden als ..., zusätzlich gesucht nach ..., gestreamte Antwort, Quellen, Textauszüge)
+    4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
 """
 import time
 
 import ollama
 import streamlit as st
 
+import ablage
 import agent
 import config
 import verstehen
@@ -52,6 +54,12 @@ with st.sidebar:
         st.caption(f"Abschnitte im Index von **{user}**: {oeffne_collection(user).count()}")
     if st.button("Neues Gespräch"):  # Folgefragen beziehen sich sonst auf die bisherigen Runden
         st.session_state.verlauf = []
+    # Persönliche Ablage: Ordner je Kunde/Thema, die mit jeder Frage wachsen (ablage.py)
+    ablage_an = st.toggle("Antworten in Ablage einordnen", value=config.ABLAGE_AKTIV,
+                          help=f"Ab der {config.ABLAGE_MIN_FRAGEN}. Frage zu einem Kunden oder Projekt entsteht dafür "
+                               "ein Ordner mit allen Antworten und Quellen.")
+    if user:
+        st.caption(f"📁 Ablage: `{ablage.ablage_pfad(user)}`")
     st.divider()
     st.caption("Alle Daten und das Sprachmodell bleiben lokal auf diesem Rechner. "
                "Es werden nur Daten des angemeldeten Nutzers durchsucht.")
@@ -120,6 +128,15 @@ if frage and user:
             with st.expander(f"[{i}] {t['meta']['quelle']} – {t['meta']['titel']} "
                              f"(Ähnlichkeit {t['aehnlichkeit']:.2f})"):
                 st.text(t["text"])
+
+        # Schritt 5: in die persönliche Ablage einordnen (Fehler dort dürfen die Antwort nicht verhindern)
+        if ablage_an and treffer:
+            with st.spinner("Ordne in die Ablage ein …"):
+                try:
+                    abgelegt = ablage.ablegen(frage, treffer, antwort + quellen, user, model, verstanden_als=verstanden)
+                    st.caption(("📁 " if abgelegt["status"] == "abgelegt" else "📝 ") + abgelegt["meldung"])
+                except Exception as e:
+                    st.caption(f"⚠️ Ablage fehlgeschlagen: {e}")
 
     st.session_state.verlauf.append({"rolle": "assistant", "text": antwort + quellen})
 elif frage:
