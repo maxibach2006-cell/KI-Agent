@@ -486,6 +486,24 @@ const TREE = [
     { s: "zukunft", t: "Themen-Schwellwert kalibrieren", k: "ABLAGE_THEMA_SCHWELLE = 0,8 ist geschätzt.",
       why: "Mit echten Frageserien messen, ab welcher bge-m3-Ähnlichkeit zwei Themenbeschreibungen wirklich dasselbe meinen (vgl. Erfahrung bei den Widersprüchen: Embeddings trennen kurze Beschreibungen schlecht)." },
   ]},
+  { cat: "Server-Betrieb", items: [
+    { s: "gewaehlt", t: "WSL2 als Server-VM", k: "Ubuntu 24.04 als VM „kam-server“, Agent und Ollama laufen darin statt direkt unter Windows.",
+      why: "Windows 11 Home hat keinen Hyper-V-Manager. WSL2 ist eine echte Linux-VM und reicht die GPU über den Windows-Treiber durch. Details: docs/server_einrichtung.md." },
+    { s: "verworfen", t: "VirtualBox-VM", k: "Klassische, vollständig getrennte VM.",
+      why: "Kann die GPU nicht durchreichen. Das 7B-Modell liefe auf der CPU, eine Antwort dauerte Minuten statt Sekunden." },
+    { s: "gewaehlt", t: "Docker Engine in WSL", k: "Ollama und Agent als Container, beschrieben in einer Compose-Datei; GPU über das NVIDIA Container Toolkit.",
+      why: "Näher an einem echten Server-Deployment und auf jedem Rechner reproduzierbar. Docker Desktop wäre ein zusätzliches Windows-Programm mit eigener VM und Lizenzbedingungen." },
+    { s: "irrweg", t: "VM auf Laufwerk D:", k: "D: hat mehr Platz als C: (58 statt 18 GB).",
+      fail: "Die Prüfung mit Get-PhysicalDisk zeigte: D: ist eine mechanische Festplatte. Ollama lädt bei jedem Start ≈ 5 GB Modell, das wäre spürbar langsamer.",
+      fix: "VM auf H: (SATA-SSD, 650 GB frei). Lehre: Laufwerke vor der Wahl auf ihren Typ prüfen, nicht nur auf freien Platz." },
+    { s: "irrweg", t: "Einrichtung per PowerShell-Einzeiler", k: "Installationsbefehle direkt an wsl … bash -c übergeben.",
+      fail: "PowerShell zerlegt mehrzeilige Argumente an wsl.exe, Bash bekam ein zerstückeltes Skript (Ausgabe nur „deb“).",
+      fix: "server/setup_wsl.sh im Repository, Aufruf über /mnt/c/…. Die Einrichtung ist damit dokumentiert und auf einem zweiten Rechner wiederholbar." },
+    { s: "gewaehlt", t: "Zugriff von außen über Cloudflare Tunnel + Access", k: "App-Nutzer erreichen den Server über eine eigene Domain, Anmeldung per Einmalcode.",
+      why: "Keine offenen Ports am Router, private IP bleibt verborgen, HTTPS automatisch. Ohne Anmeldung könnte jeder im Internet GPU und Index nutzen. Auf dem öffentlichen Server nur Demo-Daten." },
+    { s: "zukunft", t: "Ablage auf dem Server", k: "ablage.py schreibt auf dem Server, nicht auf den PC des App-Nutzers.",
+      why: "Eigenes Volume für ABLAGE_DIR und Download der Ablage in der Oberfläche einplanen (docs/server_einrichtung.md, A1)." },
+  ]},
 ];
 
 /* ===================== Simulation ===================== */
