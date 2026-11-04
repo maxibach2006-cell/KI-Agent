@@ -49,8 +49,10 @@ def seed_onenote(graph: GraphClient) -> None:
             abschnitt = graph.post(f"/me/onenote/notebooks/{nb['id']}/sections",
                                    json={"displayName": seite["abschnitt"]})
             abschnitte[seite["abschnitt"]] = abschnitt
-        titel = [p["title"] for p in graph.get_all(f"/me/onenote/sections/{abschnitt['id']}/pages")]
-        if seite["seite"] in titel:
+        seiten = graph.get_all(f"/me/onenote/sections/{abschnitt['id']}/pages")
+        # Frisch angelegte Seiten stehen zunächst ohne Titel in der Liste -> dann zählt das Erstelldatum
+        if any(p["title"] == seite["seite"] or (not p["title"] and p["createdDateTime"][:10] == seite["datum"])
+               for p in seiten):
             continue  # Seite gibt es schon
         # <meta name="created"> setzt das ursprüngliche Erstelldatum -> "alte" Notizen bleiben alt
         seiten_html = (f"<html><head><title>{html.escape(seite['seite'])}</title>"
@@ -87,13 +89,14 @@ def seed_outlook(graph: GraphClient) -> None:
 def seed_kalender(graph: GraphClient) -> None:
     """Termine relativ zur aktuellen Woche anlegen, damit "Was steht nächste Woche an?" Treffer hat."""
     heute = config.heute()
-    vorhanden = {t["subject"] for t in graph.get_all(
+    # Betreff UND Tag vergleichen: Die Termine liegen relativ zur Woche, eine Woche später werden neue gebraucht
+    vorhanden = {(t["subject"], t["start"]["dateTime"][:10]) for t in graph.get_all(
         f"/me/calendarView?startDateTime={heute - timedelta(days=30)}T00:00:00"
-        f"&endDateTime={heute + timedelta(days=60)}T23:59:59&$select=subject&$top=100")}
+        f"&endDateTime={heute + timedelta(days=60)}T23:59:59&$select=subject,start&$top=100")}
     for k in lade_json("kalender.json"):
-        if k["betreff"] in vorhanden:
-            continue
         tag = demo_termin_tag(k).isoformat()
+        if (k["betreff"], tag) in vorhanden:
+            continue
         graph.post("/me/events", json={
             "subject": k["betreff"],
             "body": {"contentType": "html",

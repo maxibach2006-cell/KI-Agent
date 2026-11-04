@@ -3,7 +3,7 @@
 # Das Sprachmodell läuft NICHT hier, sondern im Container "ollama" (siehe docker-compose.yml).
 # Gebaut wird aus dem Projektordner: docker compose -f server/docker-compose.yml build
 # =========================================================================
-FROM python:3.12-slim
+FROM python:3.12.16-slim
 
 # Python-Ausgaben sofort in die Logs schreiben, keine .pyc-Dateien im Container
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -28,7 +28,7 @@ COPY . .
 # Eigener Benutzer statt root: Eine Lücke in der Web-App gäbe so keine Root-Rechte im Container.
 # Die Ordner für Index und Ablage gehören ihm, damit die Volumes beschreibbar sind.
 RUN useradd --create-home --uid 1000 agent \
-    && mkdir -p /app/data /daten/ablage \
+    && mkdir -p /app/data /daten/ablage /daten/token \
     && chown -R agent:agent /app/data /daten
 USER agent
 

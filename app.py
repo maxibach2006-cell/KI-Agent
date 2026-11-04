@@ -11,7 +11,7 @@ Funktionsweise von Streamlit (wichtig zum Verständnis dieser Datei):
 Aufbau der Seite:
     1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
-    3. Bei einer Frage: die Agent-Schritte einzeln aufrufen und Zwischenstände anzeigen
+    3. Bei einer Frage: die Bausteine des Agenten aufrufen und Zwischenstände anzeigen
        (verstanden als ..., zusätzlich gesucht nach ..., gestreamte Antwort, Quellen, Textauszüge)
     4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
 """
@@ -23,7 +23,6 @@ import streamlit as st
 import ablage
 import agent
 import config
-import verstehen
 from ingest import ingest, oeffne_collection
 
 st.set_page_config(page_title="KAM Informations-Agent", page_icon="🔎", layout="wide")
@@ -39,17 +38,30 @@ BEISPIELFRAGEN = [
 # --- 1. Seitenleiste -------------------------------------------------------
 with st.sidebar:
     st.header("Einstellungen")
-    quelle = st.radio("Datenquelle", ["demo", "graph"],
-                      format_func=lambda q: "Demo-Daten (lokal)" if q == "demo" else "Microsoft 365 (Graph)")
-    # Der Nutzer bestimmt, welcher Index durchsucht wird (ein Index pro Nutzer, siehe config.db_path)
-    user = "demo" if quelle == "demo" else st.text_input("Angemeldeter Nutzer (UPN)", value="")
-    modelle = [m.model for m in ollama.list().models]  # alle lokal installierten Ollama-Modelle
-    model = st.selectbox("Sprachmodell", modelle,
-                         index=modelle.index(config.CHAT_MODEL) if config.CHAT_MODEL in modelle else 0)
-    if st.button("Daten neu einlesen"):
-        with st.spinner("Lese Daten ein …"):
-            ingest(quelle)
-        st.success("Index aktualisiert")
+    if config.SERVER_MODUS:
+        # Auf dem Server bestimmt allein die Anmeldung den Nutzer (Cloudflare Access setzt diesen Header).
+        # Keine Eingabe, keine Modellwahl, kein Einlesen: Das steht aus dem Internet niemandem offen.
+        email = st.context.headers.get("Cf-Access-Authenticated-User-Email", "")
+        user, ablage_nutzer, model = config.index_nutzer(email), email or "demo", config.CHAT_MODEL
+        st.caption(f"Angemeldet als **{email or 'Gast'}**")
+    else:
+        quelle = st.radio("Datenquelle", ["demo", "graph"],
+                          format_func=lambda q: "Demo-Daten (lokal)" if q == "demo" else "Microsoft 365 (Graph)")
+        # Der Nutzer bestimmt, welcher Index durchsucht wird (ein Index pro Nutzer, siehe config.db_path)
+        user = "demo" if quelle == "demo" else st.text_input("Angemeldeter Nutzer (UPN)", value="")
+        ablage_nutzer = user
+        # alle installierten Sprachmodelle; das Embedding-Modell kann keine Antworten schreiben
+        modelle = [m.model for m in ollama.list().models if not m.model.startswith(config.EMBED_MODEL)]
+        model = st.selectbox("Sprachmodell", modelle,
+                             index=modelle.index(config.CHAT_MODEL) if config.CHAT_MODEL in modelle else 0)
+        if st.button("Daten neu einlesen"):
+            # Microsoft-Anmeldung per Code: Link und Code erscheinen im Terminal, in dem die App läuft
+            with st.spinner("Lese Daten ein … (bei Microsoft 365 ggf. Anmeldecode im Terminal)"):
+                unvollstaendig = ingest(quelle)
+            if unvollstaendig:
+                st.warning(f"Nicht vollständig gelesen, bisherige Daten bleiben erhalten: {', '.join(unvollstaendig)}")
+            else:
+                st.success("Index aktualisiert")
     if user:
         st.caption(f"Abschnitte im Index von **{user}**: {oeffne_collection(user).count()}")
     if st.button("Neues Gespräch"):  # Folgefragen beziehen sich sonst auf die bisherigen Runden
@@ -58,10 +70,11 @@ with st.sidebar:
     ablage_an = st.toggle("Antworten in Ablage einordnen", value=config.ABLAGE_AKTIV,
                           help=f"Ab der {config.ABLAGE_MIN_FRAGEN}. Frage zu einem Kunden oder Projekt entsteht dafür "
                                "ein Ordner mit allen Antworten und Quellen.")
-    if user:
-        st.caption(f"📁 Ablage: `{ablage.ablage_pfad(user)}`")
+    if ablage_nutzer and not config.SERVER_MODUS:
+        st.caption(f"📁 Ablage: `{ablage.ablage_pfad(ablage_nutzer)}`")
     st.divider()
-    st.caption("Alle Daten und das Sprachmodell bleiben lokal auf diesem Rechner. "
+    ort = "auf dem Server des Projekts" if config.SERVER_MODUS else "lokal auf diesem Rechner"
+    st.caption(f"Alle Daten und das Sprachmodell bleiben {ort}. "
                "Es werden nur Daten des angemeldeten Nutzers durchsucht.")
 
 @st.cache_resource(show_spinner="Lade Sprachmodell …")
@@ -95,30 +108,29 @@ for eintrag in st.session_state.verlauf:
 # --- 3. Neue Frage beantworten -----------------------------------------------
 frage = st.chat_input("Ihre Frage …") or geklickt  # getippte Frage oder geklickte Beispielfrage
 if frage and user:
-    # bisherige Runden (Frage + Antwort) für Folgefragen wie "Und bis wann läuft der?"
-    # [::2] = alle Fragen, [1::2] = alle Antworten -> paarweise zu Runden zusammenfassen
+    # bisherige Runden (Frage + Antwort) für Folgefragen wie "Und bis wann läuft der?".
+    # Nur direkt aufeinanderfolgende Paare: Nach einem Fehler kann eine Frage ohne Antwort im Verlauf stehen.
     eintraege = st.session_state.verlauf
-    runden = [{"frage": f["text"], "antwort": a["text"]}
-              for f, a in zip(eintraege[::2], eintraege[1::2]) if f["rolle"] == "user"]
+    runden = [{"frage": f["text"], "antwort": a["text"]} for f, a in zip(eintraege, eintraege[1:])
+              if f["rolle"] == "user" and a["rolle"] == "assistant"]
     st.session_state.verlauf.append({"rolle": "user", "text": frage})
     with st.chat_message("user"):
         st.markdown(frage)
 
-    # Dieselben Schritte wie agent.antworte(), aber einzeln, um Zwischenstände anzuzeigen
+    # Dieselben Bausteine wie agent.antworte(), aber mit Zwischenständen und gestreamter Antwort
     with st.chat_message("assistant"):
         start = time.perf_counter()
-        with st.spinner("Verstehe die Frage …"):                      # Schritt 0: Folgefrage auflösen
-            verstanden = verstehen.umschreiben(frage, runden, model)
+        hinweis = st.empty()
+        schritte = agent.vorbereite(frage, user, model, runden, melde=hinweis.caption)  # Schritte 0-2
+        hinweis.empty()
+        verstanden, treffer = schritte["verstanden"], schritte["treffer"]
+        widersprueche = schritte["widersprueche"]
         if verstanden != frage:
             st.caption(f"🔁 Verstanden als: *{verstanden}*")
-        with st.spinner("Suche in Ihren Quellen …"):                  # Schritt 1: Suche
-            treffer, varianten = agent.suche_verstanden(verstanden, user, model)
-        if varianten:
-            st.caption("🔎 Zusätzlich gesucht nach: " + " · ".join(f"*{v}*" for v in varianten))
-        with st.spinner("Prüfe Quellen auf Widersprüche …"):          # Schritt 2: Widersprüche
-            widersprueche = agent.pruefe_widersprueche(verstanden, treffer, model)
+        if schritte["varianten"]:
+            st.caption("🔎 Zusätzlich gesucht nach: " + " · ".join(f"*{v}*" for v in schritte["varianten"]))
         antwort = st.write_stream(agent.generiere(verstanden, treffer, widersprueche, model))  # Schritt 3: Antwort
-        quellen = agent.anhang_markdown(treffer, widersprueche)        # Schritt 4: Anhang aus dem Code
+        quellen = agent.anhang_markdown(treffer, widersprueche, antwort, verstanden)  # Schritt 4: Anhang aus dem Code
         st.markdown(quellen)
         dauer = time.perf_counter() - start
         st.caption(f"⏱️ Antwort in {dauer:.1f} s · {len(treffer)} Quellen durchsucht")
@@ -129,14 +141,12 @@ if frage and user:
                              f"(Ähnlichkeit {t['aehnlichkeit']:.2f})"):
                 st.text(t["text"])
 
-        # Schritt 5: in die persönliche Ablage einordnen (Fehler dort dürfen die Antwort nicht verhindern)
+        # Schritt 5: in die persönliche Ablage einordnen
         if ablage_an and treffer:
             with st.spinner("Ordne in die Ablage ein …"):
-                try:
-                    abgelegt = ablage.ablegen(frage, treffer, antwort + quellen, user, model, verstanden_als=verstanden)
-                    st.caption(("📁 " if abgelegt["status"] == "abgelegt" else "📝 ") + abgelegt["meldung"])
-                except Exception as e:
-                    st.caption(f"⚠️ Ablage fehlgeschlagen: {e}")
+                abgelegt = agent.ablage_sicher(frage, treffer, antwort + quellen, ablage_nutzer, model, verstanden)
+            symbol = {"abgelegt": "📁", "fehler": "⚠️"}.get(abgelegt["status"], "📝")
+            st.caption(f"{symbol} {abgelegt['meldung']}")
 
     st.session_state.verlauf.append({"rolle": "assistant", "text": antwort + quellen})
 elif frage:

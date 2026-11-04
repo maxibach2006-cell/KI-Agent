@@ -23,7 +23,7 @@ Gliederung dieser Datei:
     C. Widerspruchsprüfung             (pruefe_widersprueche und Hilfsfunktionen)
     D. Antwort erzeugen                (generiere, aufwaermen)
     E. Vom Code erzeugte Anhänge       (quellenangabe, terminliste_markdown, anhang_markdown)
-    F. Gesamtablauf                    (antworte)
+    F. Gesamtablauf                    (vorbereite, ablage_sicher, antworte)
 
 Ein "Treffer" ist im ganzen Modul ein dict mit:
     text          Abschnittstext (mit Kopfzeile aus ingest.kopfzeile())
@@ -35,7 +35,6 @@ Ein "Treffer" ist im ganzen Modul ein dict mit:
 Beispiel:
     python agent.py "Welche Konditionen gelten für Hoffmann Maschinenbau?"
 """
-import json
 import re
 import sys
 import time
@@ -50,7 +49,7 @@ import ablage
 import config
 import prompts
 import verstehen
-from ingest import oeffne_collection
+from ingest import index_daten, oeffne_collection
 from zeitraum import MONATE, WOCHENTAGE, daten_im_text, erkenne_zeitraum
 
 
@@ -130,7 +129,7 @@ def _ist_ueberblick(frage: str) -> bool:
 # B. Suche
 # =============================================================================
 
-def suche_zeitraum(frage: str, collection, vektor: list[float], von: date, bis: date) -> list[dict]:
+def suche_zeitraum(frage: str, collection, alle: dict, vektor: list[float], von: date, bis: date) -> list[dict]:
     """Zeitfragen ("Was steht nächste Woche an?"): alle Abschnitte mit einem Datum im Zeitraum holen.
     Nennt die Frage einen Namen (z. B. "bei Hoffmann"), bleiben nur Abschnitte, die ihn enthalten.
     Ergebnis chronologisch sortiert.
@@ -138,7 +137,6 @@ def suche_zeitraum(frage: str, collection, vektor: list[float], von: date, bis: 
     Ablauf: 1. nach Datum filtern  2. nach Ähnlichkeit + Kalenderbonus die besten ZEIT_TOP_K auswählen
             3. diese chronologisch sortieren (für die Terminliste)
     """
-    alle = collection.get(include=["metadatas", "documents"])
     namen = _namen(frage, alle["metadatas"])
     ids = [i for i, m, text in zip(alle["ids"], alle["metadatas"], alle["documents"])
            if _im_zeitraum(m, von, bis) and all(n in text.lower() for n in namen)]
@@ -166,22 +164,22 @@ def suche(frage: str, user: str = "demo", top_k: int = config.TOP_K) -> list[dic
         Treffer, beste zuerst. Leere Liste = keine ausreichend passende Quelle
         (dann antwortet der Agent mit "keine passende Quelle gefunden").
     """
-    collection = oeffne_collection(user)
-    if collection.count() == 0:
+    alle = index_daten(user)
+    if not alle["ids"]:
         return []
+    collection = oeffne_collection(user)
     # Frage in denselben Vektorraum übersetzen wie die Abschnitte beim Einlesen
     vektor = ollama.embed(model=config.EMBED_MODEL, input=frage, keep_alive=config.KEEP_ALIVE).embeddings[0]
     if zeitraum := _zeitraum(frage):
-        return suche_zeitraum(frage, collection, vektor, zeitraum[0], zeitraum[1])  # Sonderweg für Zeitfragen
+        return suche_zeitraum(frage, collection, alle, vektor, zeitraum[0], zeitraum[1])  # Sonderweg für Zeitfragen
     ueberblick = _ist_ueberblick(frage)
     if ueberblick:
         top_k = config.UEBERBLICK_TOP_K
 
     # --- Kandidaten: die semantisch ähnlichsten Abschnitte + alle, die viele Fragewörter enthalten ---
-    alle = collection.get(include=["metadatas", "documents"])
     woerter, namen = _woerter(frage), _namen(frage, alle["metadatas"])
     abdeckung = {i: _abdeckung(woerter, text) for i, text in zip(alle["ids"], alle["documents"])}
-    semantisch = collection.query(query_embeddings=[vektor], n_results=min(20, collection.count()))["ids"][0]
+    semantisch = collection.query(query_embeddings=[vektor], n_results=min(20, len(alle["ids"])))["ids"][0]
     stichwort = [i for i, a in abdeckung.items() if a >= 0.5]
 
     # --- Bewertung jedes Kandidaten ---
@@ -201,7 +199,7 @@ def suche(frage: str, user: str = "demo", top_k: int = config.TOP_K) -> list[dic
     # bekannten Namen aus der Frage (z. B. "hoffmann rabatt?"), ODER einen Abschnitt mit mind. der Hälfte der
     # Fragewörter ("die Hamburger" ~ "Hamburg-Billbrook") – Letzteres nur, wenn die Frage keinen Begriff enthält,
     # den es in den Daten gar nicht gibt (z. B. "Siemens"). Sonst: "keine passende Quelle".
-    alles_bekannt = not verstehen.unbekannte_begriffe(frage, " ".join(alle["documents"]).lower())
+    alles_bekannt = not verstehen.unbekannte_begriffe(frage, alle["korpus"])
     gate = any(t["aehnlichkeit"] >= config.MIN_SIMILARITY or
                (t["hat_namen"] and (t["aehnlichkeit"] >= config.KONTEXT_MIN or t["abdeckung"] >= 0.5)) or
                (alles_bekannt and t["abdeckung"] >= 0.5 and t["aehnlichkeit"] >= config.KONTEXT_MIN)
@@ -230,8 +228,7 @@ def suche_verstanden(frage: str, user: str = "demo", model: str = config.CHAT_MO
     treffer = suche(frage, user)
     if _zeitraum(frage) or (treffer and max(t["aehnlichkeit"] for t in treffer) >= config.VARIANTEN_SCHWELLE):
         return treffer, []  # Zeitfragen und klare Treffer brauchen keine Varianten
-    korpus = " ".join(oeffne_collection(user).get(include=["documents"])["documents"]).lower()
-    if verstehen.unbekannte_begriffe(frage, korpus):
+    if verstehen.unbekannte_begriffe(frage, index_daten(user)["korpus"]):
         return treffer, []  # z. B. "Siemens": nicht verwässern, sonst Antwort zu einem anderen Kunden
 
     # Mit jeder Variante erneut suchen und die Ergebnisse zusammenführen.
@@ -270,9 +267,9 @@ def _beleg(wert: str, nr, treffer: list[dict]) -> int | None:
     Rückgabe: Quellennummer (ab 1) oder None, wenn der Wert in keiner Quelle steht.
     """
     try:
-        if _steht_in(wert, treffer[int(nr) - 1]["text"]):
+        if 1 <= int(nr) <= len(treffer) and _steht_in(wert, treffer[int(nr) - 1]["text"]):
             return int(nr)
-    except (ValueError, TypeError, IndexError):
+    except (ValueError, TypeError):
         pass  # Modell hat eine ungültige Nummer geliefert -> unten in allen Quellen suchen
     return next((i for i, t in enumerate(treffer, start=1) if _steht_in(wert, t["text"])), None)
 
@@ -297,10 +294,7 @@ def pruefe_widersprueche(frage: str, treffer: list[dict], model: str = config.CH
         options={"temperature": 0, "num_ctx": config.NUM_CTX},
         keep_alive=config.KEEP_ALIVE,
     )
-    try:
-        gemeldet = json.loads(antwort.message.content).get("widersprueche", [])
-    except json.JSONDecodeError:
-        gemeldet = []
+    gemeldet = [w for w in verstehen.json_wert(antwort, "widersprueche", []) if isinstance(w, dict)]
     gemeldet += _datums_kandidaten(treffer)  # Absicherung, falls das Modell einen Fall übersieht
 
     # --- Stufe 2 und 3: jeden Kandidaten prüfen ---
@@ -382,13 +376,9 @@ def _gleicher_sachverhalt(a: str, text_a: str, b: str, text_b: str, model: str) 
     antwort = ollama.chat(model=model, messages=[{"role": "system", "content": prompts.GLEICH_PROMPT},
                                                  {"role": "user", "content": frage}], format="json",
                           options={"temperature": 0, "num_ctx": config.NUM_CTX}, keep_alive=config.KEEP_ALIVE)
-    try:
-        urteil = json.loads(antwort.message.content)
-    except json.JSONDecodeError:
-        return False
     # Wortüberlappung der beiden Beschreibungen (Jaccard-Index = Schnittmenge / Vereinigungsmenge)
-    wa = _woerter(str(urteil.get("a_betrifft", ""))) - AENDERUNG
-    wb = _woerter(str(urteil.get("b_betrifft", ""))) - AENDERUNG
+    wa = _woerter(verstehen.json_wert(antwort, "a_betrifft", "")) - AENDERUNG
+    wb = _woerter(verstehen.json_wert(antwort, "b_betrifft", "")) - AENDERUNG
     if not wa or not wb or len(wa & wb) / len(wa | wb) < config.GLEICH_SCHWELLE:
         return False
 
@@ -411,10 +401,7 @@ def _beschreibe(wert: str, satz: str, model: str) -> str:
     antwort = ollama.chat(model=model, format="json", options={"temperature": 0, "num_ctx": config.NUM_CTX}, keep_alive=config.KEEP_ALIVE,
                           messages=[{"role": "system", "content": prompts.BESCHREIBE_PROMPT},
                                     {"role": "user", "content": f'Satz: "{satz}"\nWert: "{wert}"'}])
-    try:
-        return str(json.loads(antwort.message.content).get("betrifft", ""))
-    except json.JSONDecodeError:
-        return ""
+    return verstehen.json_wert(antwort, "betrifft", "")
 
 
 # =============================================================================
@@ -443,8 +430,20 @@ def generiere(frage: str, treffer: list[dict], widersprueche: list[dict] | None 
         keep_alive=config.KEEP_ALIVE,
         stream=True,
     )
-    for teil in stream:
-        yield teil["message"]["content"]
+    yield from _ohne_bilder(teil["message"]["content"] for teil in stream)
+
+
+def _ohne_bilder(teile: Iterator[str]) -> Iterator[str]:
+    """Macht aus Markdown-Bildern ("![x](url)") normale Links. Die Antwort beruht auf fremden Mails und Nachrichten:
+    Der Browser würde ein Bild sofort laden, und eine präparierte Quelle könnte so Inhalte in der Bildadresse
+    nach außen senden. "!" am Ende eines Teils wird zurückgehalten, weil "![" über zwei Teile verteilt sein kann."""
+    rest = ""
+    for teil in teile:
+        text = rest + teil
+        rest = "!" if text.endswith("!") else ""
+        yield (text[:-1] if rest else text).replace("![", "[")
+    if rest:
+        yield rest
 
 
 def aufwaermen(model: str = config.CHAT_MODEL) -> None:
@@ -493,9 +492,10 @@ def terminliste_markdown(treffer: list[dict]) -> str:
     zeilen = []
     for nr, t in enumerate(treffer, start=1):
         meta, rumpf = t["meta"], t["text"].split("\n", 1)[-1]
+        # Uhrzeit nur bei Kalenderterminen: In Mails und Notizen gehört sie nicht zwingend zum jeweiligen Datum
+        uhrzeit = re.search(r"(\d{1,2}:\d{2})(?:–(\d{1,2}:\d{2}))? Uhr", rumpf) if meta["quelle"] == "Kalender" else None
+        zeit = "–".join(g for g in uhrzeit.groups() if g) if uhrzeit else "–"
         for tag in t.get("tage", []):
-            uhrzeit = re.search(r"(\d{1,2}:\d{2})(?:–(\d{1,2}:\d{2}))? Uhr", rumpf)  # "09:30–11:00 Uhr"
-            zeit = "–".join(g for g in uhrzeit.groups() if g) if uhrzeit else "–"
             # Art des Eintrags: echter Termin, nur Eingangsdatum der Quelle, oder im Text genanntes Datum
             if meta["quelle"] == "Kalender":
                 art = "Termin"
@@ -512,11 +512,28 @@ def terminliste_markdown(treffer: list[dict]) -> str:
             + "\n".join(z for _, z in zeilen))
 
 
-def anhang_markdown(treffer: list[dict], widersprueche: list[dict]) -> str:
+def unbelegte_daten(antwort: str, frage: str, treffer: list[dict]) -> list[date]:
+    """Vollständige Daten im Antworttext des Modells, die keine Grundlage haben.
+
+    Beleg ist ein Datum in Text oder Metadaten einer Quelle, in der Frage, das heutige Datum und die vom Code
+    berechneten Grenzen des gefragten Zeitraums. Das Modell rechnet relative Angaben ("am Dienstag") teils
+    falsch in ein Kalenderdatum um, und eine Regel im Prompt verhindert das nicht. Deshalb entscheidet der Code.
+    """
+    belegt = {config.heute(), *daten_im_text(frage)}
+    zeitraum = _zeitraum(frage)
+    if zeitraum:
+        belegt |= {zeitraum[0], zeitraum[1]}
+    for t in treffer:
+        belegt |= set(daten_im_text(t["text"] + " " + " ".join(str(w) for w in t["meta"].values())))
+    return [d for d in daten_im_text(antwort) if d not in belegt]
+
+
+def anhang_markdown(treffer: list[dict], widersprueche: list[dict], antwort: str = "", frage: str = "") -> str:
     """Terminliste, Widersprüche und Quellen schreibt der Code, nicht das Modell -> Links und Daten stimmen garantiert.
 
     Die Nummer [n] einer Quelle ist ihre Position in `treffer` – dieselbe Nummerierung, die das Modell
     im Prompt gesehen hat (prompts.build_user_prompt). Verweise im Antworttext passen so zur Liste.
+    antwort/frage: Text des Modells und die Frage dazu. Daten ohne Beleg werden unter "Bitte prüfen" genannt.
     """
     if not treffer:
         return ""
@@ -528,6 +545,10 @@ def anhang_markdown(treffer: list[dict], widersprueche: list[dict]) -> str:
                      f"vs. „{w['wert_b']}“ [{w['quelle_b']}] ({mb['quelle']}, {mb['datum']})\n")
     else:
         text += "- Keine Widersprüche zwischen den gefundenen Quellen festgestellt.\n"
+    unbelegt = unbelegte_daten(antwort, frage, treffer)
+    if unbelegt:
+        liste = ", ".join(d.strftime("%d.%m.%Y") for d in unbelegt)
+        text += f"\n### Bitte prüfen\n- ⚠️ Dieses Datum in der Antwort steht in keiner Quelle: {liste}\n"
     zeilen = [f"- [{i}] {quellenangabe(t['meta'])}" for i, t in enumerate(treffer, start=1)]
     return text + "\n### Quellen\n" + "\n".join(zeilen)
 
@@ -536,6 +557,27 @@ def anhang_markdown(treffer: list[dict], widersprueche: list[dict]) -> str:
 # F. Gesamtablauf
 # =============================================================================
 
+def vorbereite(frage: str, user: str = "demo", model: str = config.CHAT_MODEL, verlauf: list[dict] | None = None,
+               melde=lambda text: None) -> dict:
+    """Schritte 0-2, gemeinsam für antworte() und die Oberfläche. melde(text) zeigt den aktuellen Schritt an.
+    Rückgabe: {"verstanden", "treffer", "varianten", "widersprueche"}."""
+    melde("Verstehe die Frage …")
+    verstanden = verstehen.umschreiben(frage, verlauf or [], model)
+    melde("Suche in Ihren Quellen …")
+    treffer, varianten = suche_verstanden(verstanden, user, model)
+    melde("Prüfe Quellen auf Widersprüche …")
+    widersprueche = pruefe_widersprueche(verstanden, treffer, model)
+    return {"verstanden": verstanden, "treffer": treffer, "varianten": varianten, "widersprueche": widersprueche}
+
+
+def ablage_sicher(frage: str, treffer: list[dict], text: str, user: str, model: str, verstanden: str) -> dict:
+    """Schritt 5: in die persönliche Ablage einordnen. Fehler dort dürfen nie die Antwort verhindern."""
+    try:
+        return ablage.ablegen(frage, treffer, text, user, model, verstanden_als=verstanden)
+    except Exception as e:
+        return {"status": "fehler", "meldung": f"Ablage fehlgeschlagen: {e}"}
+
+
 def antworte(frage: str, user: str = "demo", model: str = config.CHAT_MODEL,
              verlauf: list[dict] | None = None, ablegen: bool = False) -> dict:
     """Komplette Antwort ohne Streaming (für Kommandozeile und Evaluation).
@@ -543,22 +585,17 @@ def antworte(frage: str, user: str = "demo", model: str = config.CHAT_MODEL,
     ablegen: Frage und Antwort in die persönliche Ablage einordnen (ablage.py). Standard aus, damit der
              Testlauf die Ablage des Nutzers nicht mit Testfragen füllt.
 
-    app.py ruft dieselben Schritte einzeln auf, um Zwischenstände anzuzeigen und die Antwort zu streamen.
+    app.py nutzt dieselben Bausteine, streamt die Antwort aber und zeigt Zwischenstände.
     Rückgabe: dict mit Antworttext, Treffern, Widersprüchen, verstandener Frage, Suchvarianten und Dauer.
     """
     start = time.perf_counter()
-    verstanden = verstehen.umschreiben(frage, verlauf or [], model)          # Schritt 0
-    treffer, varianten = suche_verstanden(verstanden, user, model)           # Schritt 1
-    widersprueche = pruefe_widersprueche(verstanden, treffer, model)         # Schritt 2
-    text = "".join(generiere(verstanden, treffer, widersprueche, model)) + anhang_markdown(treffer, widersprueche)  # Schritt 3 + 4
-    abgelegt = None
-    if ablegen:                                                              # Schritt 5 (optional)
-        try:
-            abgelegt = ablage.ablegen(frage, treffer, text, user, model, verstanden_als=verstanden)
-        except Exception as e:  # die Ablage darf nie die Antwort verhindern
-            abgelegt = {"status": "fehler", "meldung": f"Ablage fehlgeschlagen: {e}"}
+    v = vorbereite(frage, user, model, verlauf)                                       # Schritte 0-2
+    verstanden, treffer, widersprueche = v["verstanden"], v["treffer"], v["widersprueche"]
+    antworttext = "".join(generiere(verstanden, treffer, widersprueche, model))       # Schritt 3
+    text = antworttext + anhang_markdown(treffer, widersprueche, antworttext, verstanden)  # Schritt 4
+    abgelegt = ablage_sicher(frage, treffer, text, user, model, verstanden) if ablegen else None  # Schritt 5
     return {"antwort": text, "treffer": treffer, "widersprueche": widersprueche, "verstanden_als": verstanden,
-            "varianten": varianten, "ablage": abgelegt, "sekunden": time.perf_counter() - start}
+            "varianten": v["varianten"], "ablage": abgelegt, "sekunden": time.perf_counter() - start}
 
 
 if __name__ == "__main__":

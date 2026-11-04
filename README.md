@@ -49,6 +49,10 @@ Jede Antwort hat denselben Aufbau (Vorlage in [prompts.py](prompts.py)):
 
 Teil 1–3 schreibt das Sprachmodell. Teil 4 und 5 erzeugt der Code aus den Metadaten, damit Links und Daten nicht erfunden sein können.
 
+**Datumsprüfung:** Das Modell rechnet relative Angaben („am Dienstag“) teils falsch in ein Kalenderdatum um. Der Code vergleicht deshalb jedes vollständige Datum im Antworttext mit den Quellen und nennt fehlende Belege unter „Bitte prüfen“. Test ohne Ollama: `python evaluation/test_datumspruefung.py`
+
+**Fehlerfälle:** Kann eine Quelle beim Einlesen nicht vollständig gelesen werden (z. B. vorübergehender Fehler 401, defekte Datei, gesperrter Kanal), behält sie ihre bisherigen Abschnitte im Index, und die App zeigt eine Warnung. Test ohne Ollama: `python evaluation/test_robustheit.py`
+
 **Widerspruchsprüfung als eigener Schritt:** Ein 7B-Modell übersieht Widersprüche leicht, wenn es gleichzeitig die Antwort schreibt. Deshalb läuft sie getrennt:
 1. **Kandidaten:** Ein kurzer LLM-Aufruf (`format="json"`) meldet mögliche Widersprüche. Zusätzlich schlägt der Code Paare vor: unterschiedliche Daten in zwei Quellen, deren Sätze ein gemeinsames Fachwort haben.
 2. **Belegprüfung (Code):** Beide Werte müssen wörtlich in einer Quelle stehen und sich wirklich unterscheiden.
@@ -105,7 +109,7 @@ streamlit run app.py
 ```bash
 wsl -d kam-server --cd /mnt/c/Projekte/KI-Agent -- docker compose -f server/docker-compose.yml up -d --build
 ```
-Danach ist die App unter http://localhost:8510 erreichbar.
+Danach ist die App unter http://localhost:8510 erreichbar. Im Serverbetrieb (`SERVER_MODUS=1`) kommt der Nutzer aus der Anmeldung, Modellwahl und Einlesen sind ausgeblendet.
 
 ### Persönliche Ablage
 Nach jeder Antwort ordnet der Agent die Frage einem Kunden und einem Thema (Projekt, Verhandlung, Vertrag …) zu und baut daraus eine Ordnerstruktur auf, die mit jeder Frage wächst. Standardort ist `<Benutzerordner>\KAM-Ablage\<nutzer>`, änderbar mit `ABLAGE_DIR` in der `.env`.
@@ -212,6 +216,7 @@ Den Klon nicht in einen OneDrive-Ordner legen, z. B. `C:\Projekte\KI-Agent`. One
 - Vor dem Start: `git switch main` und `git pull`, damit man auf dem neuesten Stand aufsetzt.
 - Fertig: committen, pushen, Pull Request auf GitHub. Der andere schaut kurz drüber und führt zusammen.
 - Größere Umbauten an `agent.py`, `prompts.py` oder `config.py` vorher absprechen, diese Dateien berührt fast jede Änderung.
+- Vor dem Pull Request prüfen: `python -m ruff check .` (einmalig `pip install ruff`) und die Tests ohne Ollama in `evaluation/test_*.py`.
 - Nicht im Repository: `.env`, Index (`data/`), Testergebnisse und Präsentationen (.pptx). Die Präsentationen liegen im geteilten OneDrive-/Teams-Ordner.
 
 ## Grenzen und Ausblick

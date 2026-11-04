@@ -33,13 +33,13 @@ Kontext:
 - Kommuniziere professionell, freundlich und immer auf Deutsch (außer anders gefordert).
 
 Regeln:
-- Hänge an JEDE Aussage die Nummer der Quelle an, z. B. "Der Rabatt beträgt 8 % [2]."
+- Hänge an JEDE Aussage die Nummer der Quelle an, z. B. "Der Preisnachlass beträgt 5 % [2]."
 - Stelle keine Information ohne Quelle als gesichert dar. Erfinde nichts.
 - Steht die Antwort nicht in den Quellen, schreibe das ausdrücklich.
-- Beantworte genau das Gefragte. Belegen die Quellen nur etwas Ähnliches (z. B. Ersatzteile statt
-  Neuteile, ein anderes Jahr, eine andere Person), sage klar, dass es zum Gefragten keine Angabe gibt,
+- Beantworte genau das Gefragte. Belegen die Quellen nur etwas Ähnliches (z. B. ein anderes Produkt,
+  ein anderes Jahr, eine andere Person), sage klar, dass es zum Gefragten keine Angabe gibt,
   und nenne das Ähnliche nur als Hinweis.
-- Verwechsle keine Begriffe: Ein Rabatt ist keine Gutschrift, eine Preisobergrenze ist keine Preiserhöhung.
+- Verwechsle keine Fachbegriffe und übernimm die Begriffe der Quelle.
 - Ordne jede Angabe nur dem Kunden zu, zu dem ihre Quelle gehört (siehe "Ablage" im Quellenkopf).
 - Bei Fragen nach Ansprechpartnern oder Zuständigen: Nenne ALLE in den Quellen genannten aktuellen
   Personen mit ihrer Rolle, nicht nur eine.
@@ -49,7 +49,6 @@ Regeln:
   sondern nenne in der Kurzantwort beide Werte mit Quelle und sage, welche Quelle neuer ist.
 - Keine Vermutungen ("möglicherweise", "könnte bedeuten") über Zusammenhänge, die nicht in den Quellen
   stehen. Bleib beim gefragten Thema und lass Angaben zu anderen Themen weg.
-- Ist nach einer Gutschrift gefragt, nenne sie Gutschrift (nicht Rabatt) – übernimm die Begriffe der Quelle.
 - Schreibe KEINE eigenen Abschnitte "Widersprüche" oder "Quellen"; die werden automatisch angehängt.
 
 {vorlage}"""
@@ -74,7 +73,7 @@ Zu dieser Frage wurde in Ihren Daten (OneNote "MBS 2", Teams, Outlook) **keine p
 Ich gebe daher keine ungesicherte Antwort.
 
 ### Vorschläge für präzisere Rückfragen
-- Nennen Sie den Kundennamen, z. B. "Was wurde mit Hoffmann Maschinenbau zu ... vereinbart?"
+- Nennen Sie den Kundennamen, z. B. "Was wurde mit Firma X zu ... vereinbart?"
 - Grenzen Sie den Zeitraum ein, z. B. "... im Jahr 2019".
 - Nennen Sie die Quelle, z. B. "Was steht in OneNote im Abschnitt ... dazu?"
 """
@@ -95,7 +94,7 @@ def keine_quelle(zeitraum=None) -> str:
             "Ihren Mails, Teams und OneNote **keine Termine oder Einträge gefunden**.\n\n"
             "### Vorschläge für präzisere Rückfragen\n"
             "- Erweitern Sie den Zeitraum, z. B. \"in den nächsten 14 Tagen\" oder \"diesen Monat\".\n"
-            "- Fragen Sie nach einem Kunden, z. B. \"Wann ist der nächste Termin mit Hoffmann?\"\n")
+            "- Fragen Sie nach einem Kunden, z. B. \"Wann ist der nächste Termin mit Firma X?\"\n")
 
 
 def build_system_prompt(heute) -> str:
@@ -107,7 +106,7 @@ def build_system_prompt(heute) -> str:
 # Erste Stufe der Widerspruchsprüfung: Das Modell meldet KANDIDATEN. Ob sie stimmen, prüft danach der Code.
 WIDERSPRUCH_PROMPT = """Du prüfst Quellen auf Widersprüche. Ein Widerspruch liegt vor, wenn zwei Quellen zum SELBEN
 Sachverhalt (z. B. Vertragsende, Termin, Preis, Menge) unterschiedliche Werte nennen – auch wenn eine neuere Quelle die
-ältere ändert. Verschiedene Produkte (z. B. PA-50 und PA-70) oder verschiedene Jahre sind kein Widerspruch.
+ältere ändert. Verschiedene Produkte (z. B. A-100 und B-200) oder verschiedene Jahre sind kein Widerspruch.
 Übernimm die Werte wörtlich aus dem Text der Quellen.
 
 Beispiel: [1] "Laufzeit: 01.01.2024 bis 31.12.2026" und [2] "wir verlängern den Vertrag bis zum 31.03.2027"
@@ -126,12 +125,12 @@ jeder Wert bezieht, dann entscheide. Antworte nur mit JSON {"a_betrifft": "...",
 Beispiele:
 A: "Laufzeit: 01.01.2024 bis 31.12.2026" / B: "wir verlängern den Vertrag bis zum 31.03.2027"
 -> {"a_betrifft": "Vertragsende", "b_betrifft": "Vertragsende (verlängert)", "gleich": true}
-A: "Kick-off am 10.03." / B: "Kick-off auf den 12.03. verschoben"
--> {"a_betrifft": "Datum Kick-off", "b_betrifft": "Datum Kick-off (verschoben)", "gleich": true}
-A: "Preisanpassung jährlich max. +4 %" / B: "Listenpreise steigen 2027 um 3,5 %"
--> {"a_betrifft": "Obergrenze Preisanpassung", "b_betrifft": "Listenpreiserhöhung 2027", "gleich": false}
-A: "Montag 14:00 Forecast-Runde" / B: "Mittwoch 16:00 Abstimmung Supply Chain"
--> {"a_betrifft": "Termin Forecast-Runde", "b_betrifft": "Termin Supply-Chain-Abstimmung", "gleich": false}"""
+A: "Probelauf am 10.03." / B: "Probelauf auf den 12.03. verschoben"
+-> {"a_betrifft": "Datum Probelauf", "b_betrifft": "Datum Probelauf (verschoben)", "gleich": true}
+A: "Wartungspauschale jährlich max. +2 %" / B: "Mietpreise steigen 2030 um 1,5 %"
+-> {"a_betrifft": "Obergrenze Wartungspauschale", "b_betrifft": "Mieterhöhung 2030", "gleich": false}
+A: "Dienstag 10:00 Werksführung" / B: "Freitag 15:00 Jour fixe Einkauf"
+-> {"a_betrifft": "Termin Werksführung", "b_betrifft": "Termin Jour fixe Einkauf", "gleich": false}"""
 
 # Gegenprüfung, getrennter Teil: jeder Satz wird EINZELN beschrieben, damit das Modell die
 # Beschreibung des einen Werts nicht einfach für den anderen kopieren kann.
@@ -141,11 +140,11 @@ Antworte nur mit JSON {"betrifft": "..."}.
 Beispiele:
 Satz: "Laufzeit: 01.01.2024 bis 31.12.2026" / Wert: "31.12.2026" -> {"betrifft": "Enddatum des Vertrags"}
 Satz: "wir verlängern den Vertrag bis zum 31.03.2027" / Wert: "31.03.2027" -> {"betrifft": "Neues Enddatum des Vertrags"}
-Satz: "Kick-off auf den 12.03. verschoben" / Wert: "12.03." -> {"betrifft": "Termin Kick-off"}
-Satz: "Preisanpassung jährlich max. +4 %" / Wert: "+4 %" -> {"betrifft": "Obergrenze Preisanpassung"}
-Satz: "Listenpreise steigen 2027 um 3,5 %" / Wert: "3,5 %" -> {"betrifft": "Listenpreiserhöhung 2027"}
-Satz: "Angebot gültig bis 30.06." / Wert: "30.06." -> {"betrifft": "Gültigkeit des Angebots"}
-Satz: "Können Sie uns bis 31.03. ein Angebot schicken?" / Wert: "31.03." -> {"betrifft": "Frist für Angebotsabgabe"}"""
+Satz: "Probelauf auf den 12.03. verschoben" / Wert: "12.03." -> {"betrifft": "Termin Probelauf"}
+Satz: "Wartungspauschale jährlich max. +2 %" / Wert: "+2 %" -> {"betrifft": "Obergrenze Wartungspauschale"}
+Satz: "Mietpreise steigen 2030 um 1,5 %" / Wert: "1,5 %" -> {"betrifft": "Mieterhöhung 2030"}
+Satz: "Zusage gültig bis 15.09." / Wert: "15.09." -> {"betrifft": "Gültigkeit der Zusage"}
+Satz: "Können Sie uns bis 15.02. eine Zusage schicken?" / Wert: "15.02." -> {"betrifft": "Frist für die Zusage"}"""
 
 
 def build_user_prompt(frage: str, quellen: list[dict], widersprueche: list[dict] | None = None,

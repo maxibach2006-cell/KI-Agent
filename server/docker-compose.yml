@@ -30,6 +30,8 @@ services:
     # Aus dem Netz ist der Port nicht erreichbar.
     ports:
       - "127.0.0.1:11434:11434"
+    networks:
+      - intern
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 10s
@@ -52,22 +54,56 @@ services:
     environment:
       OLLAMA_HOST: http://ollama:11434
       ABLAGE_DIR: /daten/ablage
+      TOKEN_CACHE: /daten/token/token_cache.json
+      # Nutzer nur aus der Anmeldung, keine Modellwahl und kein Einlesen in der Oberfläche
+      SERVER_MODUS: "1"
       TZ: Europe/Berlin
     volumes:
       - index:/app/data
       - ablage:/daten/ablage
+      - token:/daten/token
     # vorerst nur auf diesem PC erreichbar; der Zugang von außen kommt in Phase 2 über den Tunnel
     ports:
       - "127.0.0.1:8510:8510"
+    networks:
+      - intern
+      - tunnel
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8510/_stcore/health')"]
       interval: 15s
       timeout: 5s
-      start_period: 120s
+      # lang wegen des Modell-Downloads beim allerersten Start; danach zählt der erste erfolgreiche Check
+      start_period: 900s
       retries: 5
+
+  # Zugang von außen (Phase 2). Baut nur eine ausgehende Verbindung zu Cloudflare auf, kein Port am Router.
+  # Startet nur mit: docker compose -f server/docker-compose.yml --profile tunnel up -d
+  # Das Ziel (http://agent:8510) und die Adresse stehen im Cloudflare-Dashboard, nicht hier.
+  tunnel:
+    image: cloudflare/cloudflared:2026.10.7
+    restart: unless-stopped
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate run
+    # Token in eigener Datei statt .env: Die .env bekommt auch der Agent-Container, der aus dem Internet
+    # erreichbar ist. Vorlage: server/tunnel.env.example
+    env_file:
+      - path: tunnel.env
+        required: true
+    depends_on:
+      agent:
+        condition: service_healthy
+    # nur im Netz "tunnel": Der Tunnel erreicht den Agenten, aber nicht Ollama
+    networks:
+      - tunnel
+
+networks:
+  intern:
+  tunnel:
 
 # Daten liegen in Docker-Volumes in der VM (auf H:) und überstehen einen Neubau der Container
 volumes:
   ollama-modelle:
   index:
   ablage:
+  token:

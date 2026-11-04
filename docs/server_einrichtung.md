@@ -183,9 +183,29 @@ gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert d
 
 ## Phase 2: Tunnel und Domain (begonnen)
 
-### Stand 02.11.2026
-- Die Domain ist bei **Strato** registriert. Domainname, bisherige Nutzung (Mail, Website) und Cloudflare-Konto
-  sind noch zu klären.
+### Stand 04.11.2026
+- Domain `auremlips.store` bei **Strato**, geplante Adresse `agent.auremlips.store`, Cloudflare-Konto vorhanden.
+- Container `tunnel` ist vorbereitet, aber noch nicht gestartet (kein Token, keine Access-Regel).
+- Nameserver bei Strato auf Cloudflare umgestellt. Die Registry führt jetzt `marge.ns.cloudflare.com` und
+  `uriah.ns.cloudflare.com` (per RDAP geprüft). Bei der ersten Prüfung stand dort noch Strato: Erst die Abfrage bei der
+  Registry zeigte, dass die Änderung noch nicht angekommen war und kein Cache die Ursache ist.
+- Offene Entscheidung: Anmeldung per Mail-Code (E6) oder Microsoft-Anmeldung mit Prüfung der Team-Mitgliedschaft.
+
+### DNS-Bestandsaufnahme vor dem Umzug (öffentliche Abfrage über 1.1.1.1, 04.11.2026)
+Die Domain galt als ungenutzt. Die Abfrage zeigte aber Einträge, die beim Umzug verloren gehen könnten (P6):
+
+| Name | Typ | Wert | Bedeutung |
+|---|---|---|---|
+| `auremlips.store` | NS | `docks14.rzone.de`, `shades18.rzone.de` | Nameserver von Strato |
+| `auremlips.store` | A / AAAA | `217.160.0.224` / `2001:8d8:100f:f000::200` | Webserver, HTTP antwortet (Apache), HTTPS schlägt fehl |
+| `www.auremlips.store` | CNAME | `auremlips.store` | zeigt auf denselben Webserver |
+| `auremlips.store`, `send.auremlips.store` | MX | `feedback-smtp.eu-west-1.amazonses.com` | Rückläufer beim Mailversand über Amazon SES |
+| `resend._domainkey.auremlips.store` | TXT | DKIM-Schlüssel | Mailversand über den Dienst Resend |
+| `_dmarc.auremlips.store` | TXT | `v=DMARC1;p=reject;` | Mail-Richtlinie der Domain |
+| `mail.`, `shop.`, `_amazonses.auremlips.store` | MX | `smtpin.rzone.de` | Mail-Server von Strato, vermutlich ein Sammeleintrag |
+
+Die Liste ist nicht vollständig, weil sich öffentlich nur gezielt nach Namen fragen lässt. Maßgeblich ist die
+DNS-Verwaltung bei Strato.
 
 ### Geplante Reihenfolge
 1. **Bestandsaufnahme bei Strato:** Welche DNS-Einträge gibt es (MX für Mail, A/CNAME für eine Website, TXT für
@@ -203,6 +223,106 @@ gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert d
 | Nr. | Entscheidung | Alternativen | Begründung |
 |---|---|---|---|
 | E15 | **Anmeldung vor Freischaltung:** Die Access-Regel steht, bevor der Tunnel die Adresse erreichbar macht | Tunnel zuerst testen, Anmeldung danach | Sonst wäre die App mit GPU und Index für kurze Zeit ohne Schutz im Internet. Auch für einen Test gibt es keinen Grund dafür. |
+| E16 | **Tunnel-Token in eigener Datei** `server/tunnel.env` | in der `.env` | Die `.env` wird auch an den Agent-Container übergeben, der aus dem Internet erreichbar ist. Eine Lücke in der App gäbe sonst das Token preis. |
+| E17 | **Zwei Docker-Netze:** `intern` (Agent, Ollama) und `tunnel` (Agent, Tunnel) | ein gemeinsames Netz | Der Tunnel-Container erreicht nur den Agenten, nicht Ollama. |
+| E18 | **Tunnel als Compose-Profil**, startet nur mit `--profile tunnel` | startet immer mit | Ohne Token und Access-Regel darf er nicht laufen. So bleibt der Zugang von außen ein bewusster Schritt, und `up -d` allein startet weiter nur die lokale App. |
+
+## Anbindung an Microsoft 365 (Test-Tenant)
+
+### Warum
+Die Graph-Connectoren waren geschrieben, aber noch nie gegen echtes Microsoft 365 gelaufen. Die Teams-Quellen in der
+Demo sind nur Textdateien. Um die Funktion zu zeigen statt sie zu behaupten, läuft sie jetzt gegen einen eigenen
+Test-Tenant mit den fiktiven Daten aus `demo_data/`.
+
+### Stand 04.11.2026
+| Quelle | Anlegen (`seed_graph.py`) | Einlesen (`ingest.py --source graph`) |
+|---|---|---|
+| Teams | 7 Nachrichten | 7 Dokumente |
+| Outlook | 7 Mails | 8 Dokumente (zusätzlich eine Mail, die schon im Postfach lag) |
+| Kalender | 7 Termine | 7 Dokumente |
+| Dateien (SharePoint) | 4 Dateien | 4 Dokumente |
+| OneNote | 10 Seiten erst nach acht Versuchen mit Pausen, dabei 2 Dubletten (P9, P10) | 12 Dokumente, davon 2 Dubletten |
+
+Beleg für Teams: Die Frage nach der Eskalation zur Bestellung 4500-8812 wird aus der Kanalnachricht im Tenant
+beantwortet, die Quelle verlinkt direkt in Teams. Diese erste Antwort dauerte 191 s, die Ursache ist nicht untersucht
+(vermutlich Kaltstart der Modelle).
+
+Beleg für OneNote und Outlook: Die Demo-Frage zum Rahmenvertrag Hoffmann führt beide Quellen zusammen und erkennt den
+Widerspruch 31.03.2027 (OneNote) vs. 30.06.2027 (Outlook), Antwort in 11,7 s. Die Dubletten aus P10 tauchen dabei als
+Quellen ohne Seitentitel auf.
+
+Live-Test: Max schrieb eine neue Nachricht in einen Teams-Kanal, die in keinen Demo-Daten steht („Am Dienstag ist wieder
+Schnitzeltag …“). Nach `ingest.py --source graph` nennt der Agent sie mit Absender und Datum als Quelle, Antwort in 16,1 s.
+Der Weg von Teams bis zur Antwort ist damit belegt. Die Antwort enthielt aber ein erfundenes Datum (P11).
+
+Noch offen: Der Index liegt vorerst unter Windows in `data/`, noch nicht im Agent-Container.
+
+### Datumsprüfung (P11): Testlauf vorher/nachher
+Vollständiger Testlauf ohne Gutachter, 60 Fragen, Demo-Daten, unter Windows gegen das Container-Ollama:
+
+| | vorher | nachher |
+|---|---|---|
+| Regelprüfung | 57/60 | 58/60 |
+| Antworten mit vollständigem Datum | 26 | 25 |
+| Hinweis „Bitte prüfen“ | (0, nachträglich berechnet) | 0 |
+| Zeit pro Frage (Schnitt) | 8,2 s | 6,0 s |
+
+Die Prüfung erzeugte also keinen Fehlalarm. In diesen beiden Läufen erfand das Modell kein Datum, ihre Wirkung belegen
+deshalb der Fall aus dem Tenant und die 13 Prüfungen in `evaluation/test_datumspruefung.py`. Der Unterschied 57/58 stammt
+nicht von der Änderung: Die Frage nach der Kundenliste scheiterte vorher und gelang nachher, vermutlich Streuung des
+Modells. Auch die Zeiten liegen im Rahmen der Streuung. Offen bleiben der Widerspruch bei „Bedarfsanalyse Hannover“ und die
+Folgefrage „Wann treffe ich sie das nächste Mal?“. Ein Lauf mit 14B-Gutachter fehlt noch, ebenso ein eigener Testfall
+im Katalog: Die Demo-Daten enthalten keine Quelle mit relativer Angabe, die Regel „Datum“ gilt aber für alle 60 Fragen.
+
+### Code-Review und Absicherung (04.11.2026)
+Ein Code-Review über die gesamte Codebasis meldete 32 Befunde (Obergrenze, nicht einzeln gegengeprüft). Sie wurden in
+vier Gruppen abgearbeitet:
+
+| Gruppe | Inhalt |
+|---|---|
+| 1 Daten und Vorführung | Ausfall einer Quelle löscht nichts mehr, einzelne Fehler kosten nicht die ganze Quelle, kein Absturz bei unerwartetem JSON oder „KW 60“ (P12) |
+| 2 Sicherheit vor dem Tunnel | Servermodus (E22), Bilder aus Modellantworten entfernt (E23), Token auf eigenem Volume, Nutzernamen eindeutig (E24) |
+| 3 Testergebnisse | Demo-Beispiele aus allen Prompts entfernt (E25) |
+| 4 Performance und Vereinfachung | Index im Speicher bis zum nächsten Einlesen, Outlook mit echter Obergrenze, Teams mit `$expand=replies`, unveränderte Dateien werden nicht neu geladen, gemeinsamer Ablauf für App und `antworte()`, Linter `ruff`, feste Versionen (E12) |
+
+Dazu kleinere Fehler: Gesprächsverlauf nach einem Fehler, OneNote-Abschnittsgruppen, Quellennummer 0, Uhrzeit in der
+Terminliste nur noch bei Kalenderterminen, Kundennamen aus Graph-Pfaden, Dubletten beim Befüllen, allgemeine Fragen ohne
+Kunden werden nicht mehr abgelegt.
+
+**Testlauf vorher/nachher** (60 Fragen, nur Regelprüfung, Demo-Daten):
+
+| Stand | Regelprüfung | Zeit pro Frage |
+|---|---|---|
+| vor dem Review | 58/60 | 6,0 s |
+| nach Gruppe 1 | 58/60 | 6,7 s |
+| alle Gruppen, 1. Lauf | 57/60 | 26,1 s (PC ausgelastet, P13) |
+| alle Gruppen, 2. Lauf | 59/60 | 7,6 s |
+
+Die Prompts ohne Demo-Beispiele schneiden also nicht schlechter ab. Die Unterschiede zwischen 57 und 59 liegen im Rahmen
+der Streuung: Im 1. Lauf schlug zweimal die neue Datumsprüfung an, im 2. Lauf gar nicht. Offen bleibt der nicht erkannte
+Widerspruch bei „Bedarfsanalyse Hannover“.
+
+**Nicht geprüft:**
+- kein Lauf mit 14B-Gutachter (Modell nicht im Container, Absturzrisiko bei 10 GB für die VM)
+- die Anmeldung über den Header von Cloudflare Access (erst mit dem Tunnel testbar, ohne Header gilt „Gast“ mit Demo-Daten)
+- Thread-Antworten über `$expand=replies` gegen echtes Teams (im Tenant gibt es noch keine Antwort, nur nachgebildet getestet)
+- ein echter Fehler 401 aus dem Tenant beim Einlesen (nur nachgebildet getestet)
+
+**Bewusst nicht umgesetzt:** Eine Neuformatierung aller Dateien (`ruff format`) folgt erst, wenn der Branch
+`jonas/steckbrief-vertrag` zusammengeführt ist, sonst entstehen Konflikte in jeder Zeile. Auch in `ablage.py` gibt es
+dadurch Überschneidungen mit diesem Branch. `_woerter` in `agent.py` und `ablage.py` bleibt getrennt, weil die Funktionen
+verschiedene Regeln haben. Ein eigener Testfall für relative Datumsangaben im Testkatalog fehlt noch.
+
+### Entscheidungen
+| Nr. | Entscheidung | Alternativen | Begründung |
+|---|---|---|---|
+| E22 | **Servermodus** (`SERVER_MODUS=1`): Nutzer nur aus dem Header der Anmeldung, keine Modellwahl, kein Einlesen in der Oberfläche; Adresse ohne eigenen Index bekommt Demo-Daten | Eingabefeld behalten, Passwort in der App | Der Port ist nur über den Tunnel erreichbar, den Header setzt Cloudflare Access. Das Einlesen läuft auf dem Server von Hand, weil die Microsoft-Anmeldung dort sonst im Log landet. |
+| E23 | **Markdown-Bilder aus Modellantworten werden zu Links** | Bilder anzeigen, ganze Antwort filtern | Die Antwort beruht auf fremden Mails. Der Browser lädt Bilder sofort, eine präparierte Quelle könnte so Inhalte nach außen senden. |
+| E24 | **Ordnername mit Prüfwert**, sobald der Nutzername Sonderzeichen enthält | bisherige Ersetzung durch „_“ | `a.b@firma.de` und `a_b@firma.de` teilten sonst Index und Ablage. Der Demo-Index behält seinen Namen, Tenant-Indizes werden neu eingelesen. |
+| E25 | **Neutrale Beispiele und Regeln in allen Prompts**, auch die auf die Fangfragen abgestimmten Regeln (Rabatt/Gutschrift) sind entfernt | Beispiele behalten | Vorgabe aus CLAUDE.md. Nur so sagt der Testlauf etwas über fremde Daten aus. Die Begriffspaare in `VARIANTEN_PROMPT` (zu spät → Lieferverzug) bleiben als allgemeine Fachsprache. |
+| E21 | **Unvollständig gelesene Quellen behalten ihre alten Abschnitte** | fehlende Abschnitte immer löschen | Ein fehlendes Dokument kann gelöscht oder nur nicht erreichbar sein. Lieber kurz veraltete Daten als eine verschwundene Quelle. Der Preis: Bei einem Teilfehler bleiben auch wirklich gelöschte Inhalte dieser Quelle bis zum nächsten vollständigen Lauf im Index. |
+| E20 | **Datumsprüfung im Code**, Hinweis unter der Antwort | Regel im Prompt, Antwort nachträglich korrigieren | Eine Prompt-Regel half im Versuch nicht (3 von 3 falsch, vorher 2 von 3). Der Code entscheidet, wie bei den Widersprüchen. Korrigieren geht nicht, weil die Antwort schon gestreamt ist und der Code das richtige Datum nicht kennt. |
+| E19 | **Eigener Test-Tenant** (Business Basic, Testversion) mit fiktiven Daten | nur Demo-Dateien, Dev Proxy, Firmen-Tenant | Nur ein echter Tenant prüft Anmeldung, Rechte und das Verhalten der Dienste. P8 und P9 wären mit Demo-Daten nie aufgefallen. Er ist befristet, deshalb bleiben die Demo-Daten als Rückfallebene für die Vorführung. |
 
 ## Abhängigkeiten zu anderer Arbeit im Repository
 **PR #1 „Persönliche Ablage“ (Branch `jonas/ablage-ordnerstruktur`, Stand 02.11.2026):** Nach jeder Antwort legt
@@ -223,4 +343,12 @@ Kein Konflikt mit diesem Branch, aber Folgen für den Server:
 | P2 | Installationsbefehle, direkt aus PowerShell an `wsl … bash -c` übergeben, liefen nicht; Ausgabe nur „deb“ | PowerShell zerlegt mehrzeilige Argumente und Anführungszeichen beim Aufruf von `wsl.exe`, Bash bekam ein zerstückeltes Skript | Befehle als Datei `server/setup_wsl.sh` ins Repository, Aufruf über `/mnt/c/...`. Zusatznutzen: Einrichtung ist dokumentiert und wiederholbar. Zeilenenden LF sind durch `.gitattributes` gesichert, mit CRLF würde Bash scheitern. |
 | P3 | Beim ersten Start brach der Agent mit `Server disconnected without sending a response` ab, beide Container starteten kurz darauf neu. Ollama meldete danach irreführend „total blobs: 0“ (die Modelle waren aber vorhanden). | Das Systemprotokoll (`journalctl`) zeigte um 20:19:31, dass systemd die **ganze Distribution herunterfuhr**: WSL beendet eine Distribution ≈ 15 s, nachdem das letzte Windows-Terminal sie verlassen hat, auch wenn darin Dienste laufen. Der Startbefehl hatte sich beendet, beim Warten war kein Terminal mehr offen. | `.wslconfig`: `[general] instanceIdleTimeout=-1` und `[wsl2] vmIdleTimeout=-1`. Test: `wsl --shutdown`, Container starten, Terminal schließen, 60 s warten → `kam-server` läuft weiter. Nebenbei bestätigt: Nach einem Start der VM fahren die Container dank `restart: unless-stopped` von selbst hoch. Lehre: Ein „Server“ unter WSL braucht diese Einstellung, sonst lebt er nur, solange ein Fenster offen ist. |
 | P4 | Erste Seite der App hing über eine Minute bei „Lade Sprachmodell …“ | Kaltstart: qwen2.5:7b (4,7 GB) wird beim ersten Aufruf von der virtuellen Festplatte gelesen und auf die GPU geladen (1 min 20 s laut Ollama-Log). Die Anfrage danach (18 s) wartete noch auf die Initialisierung. | Kein Fehler. Ab der zweiten Anfrage 0,2–0,3 s. Für die Demo: Modelle beim Serverstart vorladen (Phase 5). |
+| P8 | Der Datei-Connector übersprang alle Dateien mit einem 404 | Das automatisch angelegte Team „KAM-Pilot“ hat keine SharePoint-Ablage. Dieser eine Fehler brach den ganzen Connector ab. | `connectors/files.py` überspringt nur noch das betroffene Team. Danach: 4 Dateien eingelesen. |
+| P9 | OneNote antwortet unzuverlässig: gültiges Token erhält zeitweise 401 (Code 40001) oder 403 (Code 40007), das Anlegen von Seiten scheitert mit 404 | Vergleichstest: gleiches Token, gleicher Pfad, mal 200, mal 401. Token und Rechte sind also nicht die Ursache. Vermutung: OneNote ist im neuen Tenant noch nicht fertig bereitgestellt (nicht belegt). | `graph_client.py` wiederholt Anfragen bei Code 40001 bis zu fünfmal. Das Anlegen gelang erst nach acht Versuchen mit Pausen. Ob das Lesen dauerhaft zuverlässig ist, muss sich noch zeigen. |
+| P10 | 2 Hoffmann-Seiten doppelt im Notizbuch (12 statt 10) | `seed_graph.py` prüft vor dem Anlegen den Titel. Frisch angelegte Seiten erscheinen in der Liste zunächst ohne Titel, gelten also als fehlend. | Dubletten von Hand in OneNote löschen. Offen: Prüfung in `seed_graph.py` verbessern. |
+| P11 | Der Agent erfand ein Datum: „Schnitzeltag ist Dienstag, 07.11.2026“. In der Quelle steht nur „Am Dienstag“, gemeint wäre ausgehend vom 04.11.2026 der 10.11.2026, und der 07.11.2026 ist ein Samstag. | Das Modell rechnet die relative Angabe selbst um und verrechnet sich. Keine Prüfung im Code erfasst Daten im Antworttext. Versuch mit 3 Läufen je Fassung: bisheriger Prompt 2-mal falsch, Prompt-Variante („relative Angaben aus Quellen wörtlich wiedergeben“) 3-mal falsch, die Variante hilft also nicht. | **Erkannt, nicht verhindert.** `agent.unbelegte_daten()` vergleicht vollständige Daten der Antwort mit Quellen, Frage, heutigem Datum und den berechneten Grenzen des Zeitraums; fehlt der Beleg, nennt der Anhang das Datum unter „Bitte prüfen“. In der App erscheint der Hinweis bei der Schnitzeltag-Frage. Eine ältere Antwort mit erfundenem Termin („Freitag, 10.11.2026“) hätte er ebenfalls erfasst. Grenzen: Das falsche Datum bleibt im Text stehen (die Antwort wird gestreamt), nur vollständige Daten werden geprüft, ein echtes Datum aus einer Quelle am falschen Ort fällt nicht auf. |
+| P13 | Ein Testlauf brauchte 26 s pro Frage statt rund 7 s | Der Code war es nicht: Direkt danach brauchte eine Frage rund 5 s und der nächste volle Lauf 7,6 s. Während des Laufs waren unter Windows nur 0,4 GB RAM frei, die VM lagerte aus, und Ollama belegte 8,1 GB. Nebenbei liefen weitere Programme (u. a. Spiele-Launcher). Die genaue Ursache ist nicht belegt. | Vor Vorführung und Messungen andere Programme schließen. Zeitwerte nur aus ruhigen Läufen vergleichen. |
+| P12 | Fehler aus dem Code-Review: (a) Ein Connector-Ausfall löschte die ganze Quelle aus dem Index. (b) Doppelte Abschnitte brachen das Einlesen ab. (c) Eine defekte Datei oder ein gesperrter Kanal kostete die ganze Quelle. (d) Unerwartetes JSON vom Modell ließ die Antwort abstürzen. (e) „KW 60“ brachte die Frage zum Absturz. | (a) Der Abgleich wertete „fehlt in dieser Lieferung“ als „gelöscht“, und es wurde vor dem Speichern des Neuen gelöscht. (b) Die ID ergibt sich aus Text und Link. (c) Fehler wurden nur je Connector abgefangen. (d) `format="json"` erzwingt gültiges JSON, aber keinen Aufbau. (e) Ungültige Daten wurden nicht abgefangen. | (a) `ingest()` schützt unvollständige Quellen (E21) und löscht erst nach dem Speichern. (b) Gleiche Abschnitte werden einmal gespeichert. (c) Absicherung je Datei, Kanal und Chat über `GraphClient.melde_problem()`. (d) `verstehen.json_wert()` prüft auch den Typ. (e) Unmögliche Zeitangaben gelten als normale Frage. Die App warnt jetzt bei unvollständigem Lesen. |
+| P6 | Domain galt als ungenutzt, im DNS stehen aber Webserver- und Mail-Einträge (Resend/Amazon SES, DMARC) | Herkunft der Einträge nicht geklärt; der Mailversand wird laut Max nicht gebraucht | Vor dem Nameserver-Umzug öffentlich geprüft (Tabelle in „Phase 2“) und mit Max geklärt. Die Resend-/SES-Einträge werden nicht zu Cloudflare übernommen. Lehre: Vor einem DNS-Umzug die Einträge prüfen, auch wenn eine Domain als ungenutzt gilt. |
+| P7 | Nach einem Neustart von Windows war die VM aus (`Stopped`), die App also nicht erreichbar | `instanceIdleTimeout=-1` verhindert nur das Beenden bei Leerlauf. Gestartet wird WSL erst durch den ersten `wsl`-Aufruf. Danach fuhren die Container von selbst hoch und waren nach gut einer Minute „healthy“. | Offen für Phase 5: `start_server.bat` startet die VM, optional per Aufgabenplanung bei der Anmeldung. |
 | P5 | Streamlit zeigt im Log `External URL: http://<öffentliche IP>:8510` | Streamlit ermittelt beim Start die öffentliche IP und zeigt sie nur an | Unkritisch: Der Port ist nur an `127.0.0.1` gebunden und von außen nicht erreichbar. Zugriff von außen erst in Phase 2 über den Tunnel. |
