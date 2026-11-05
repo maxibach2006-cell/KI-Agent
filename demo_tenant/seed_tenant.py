@@ -75,9 +75,11 @@ class Graph:
             if r.status_code in (429, 503, 504):
                 time.sleep(int(r.headers.get("Retry-After", 5 * (versuch + 1))))
                 continue
-            # Neue Konten: der OneNote-Dienst antwortet in den ersten Stunden zeitweise mit 401 (Code 40001)
-            if r.status_code == 401 and "/onenote/" in url and "40001" in r.text:
-                time.sleep(10)
+            # Neue Konten: der OneNote-Dienst antwortet in den ersten Stunden zeitweise mit 401/403 (40001, 40007),
+            # gerade angelegte Abschnitte sind kurz "nicht gefunden" (404, 20102) -> warten und wiederholen
+            if "/onenote/" in url and r.status_code in (401, 403, 404) and any(
+                    c in r.text for c in ("40001", "40007", "20102")):
+                time.sleep(15)
                 continue
             return r
         return r
