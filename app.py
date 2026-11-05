@@ -111,7 +111,7 @@ def einlese_status(email: str, war_aktiv: bool) -> None:
     elif zustand == "wartet" and erstmalig:
         st.info("Anmeldung erfolgreich. Gerade werden die Daten einer anderen Person eingelesen, danach bist du dran.")
     elif zustand == "laeuft" and erstmalig:
-        st.info("Deine Daten werden eingelesen. Das dauert etwa 10 Minuten, du kannst die Seite so lange schließen.")
+        st.info("Deine Daten werden eingelesen. Das dauert meist ein bis zwei Minuten, du kannst die Seite so lange schließen.")
     elif zustand in einlesen.AKTIV and erstmalig:
         st.info("Anmeldung wird vorbereitet …")
     elif zustand in einlesen.AKTIV:
