@@ -319,7 +319,7 @@ verschiedene Regeln haben. Ein eigener Testfall für relative Datumsangaben im T
 ### Entscheidungen
 | Nr. | Entscheidung | Alternativen | Begründung |
 |---|---|---|---|
-| E22 | **Servermodus** (`SERVER_MODUS=1`): Nutzer nur aus dem Header der Anmeldung, keine Modellwahl, kein Einlesen in der Oberfläche; Adresse ohne eigenen Index bekommt Demo-Daten | Eingabefeld behalten, Passwort in der App | Der Port ist nur über den Tunnel erreichbar, den Header setzt Cloudflare Access. Das Einlesen läuft auf dem Server von Hand, weil die Microsoft-Anmeldung dort sonst im Log landet. |
+| E22 | **Servermodus** (`SERVER_MODUS=1`): Nutzer nur aus dem Header der Anmeldung, keine Modellwahl, kein Einlesen in der Oberfläche; Adresse ohne eigenen Index bekommt Demo-Daten | Eingabefeld behalten, Passwort in der App | Der Port ist nur über den Tunnel erreichbar, den Header setzt Cloudflare Access. Das Einlesen läuft auf dem Server von Hand, weil die Microsoft-Anmeldung dort sonst im Log landet. **Der Teil zum Einlesen ist durch E29 abgelöst:** Die App liest jetzt automatisch ein, der Button bleibt ausgeblendet. |
 | E23 | **Markdown-Bilder aus Modellantworten werden zu Links** | Bilder anzeigen, ganze Antwort filtern | Die Antwort beruht auf fremden Mails. Der Browser lädt Bilder sofort, eine präparierte Quelle könnte so Inhalte nach außen senden. |
 | E24 | **Ordnername mit Prüfwert**, sobald der Nutzername Sonderzeichen enthält | bisherige Ersetzung durch „_“ | `a.b@firma.de` und `a_b@firma.de` teilten sonst Index und Ablage. Der Demo-Index behält seinen Namen, Tenant-Indizes werden neu eingelesen. |
 | E25 | **Neutrale Beispiele und Regeln in allen Prompts**, auch die auf die Fangfragen abgestimmten Regeln (Rabatt/Gutschrift) sind entfernt | Beispiele behalten | Vorgabe aus CLAUDE.md. Nur so sagt der Testlauf etwas über fremde Daten aus. Die Begriffspaare in `VARIANTEN_PROMPT` (zu spät → Lieferverzug) bleiben als allgemeine Fachsprache. |
@@ -366,7 +366,9 @@ Modellen: rund 26 W. Dazu kommt der geschätzte Rest des PCs.
 
 Grenzen: Eine Anfrage zählt den gesamten Verbrauch während ihrer Laufzeit, auch den Grundverbrauch und das, was
 andere Programme auf dem PC an der Grafikkarte verursachen. Gemessen wird erst, wenn die App nach einem Start zum
-ersten Mal geöffnet wurde. Das Einlesen im Terminal zählt nicht mit. Die Kosten sieht jeder angemeldete Nutzer.
+ersten Mal geöffnet wurde. Das Einlesen von Hand im Terminal fließt nur in die Messung ein, solange die App misst,
+und wird keinem Nutzer zugeordnet. Läuft ein Einlesen (von Hand oder automatisch, E29) während einer Frage, zählt sein
+Verbrauch bei dieser Frage mit. Die Kosten sieht jeder angemeldete Nutzer.
 
 | Nr. | Entscheidung | Alternativen | Begründung |
 |---|---|---|---|
@@ -385,7 +387,7 @@ Kein Konflikt mit diesem Branch, aber Folgen für den Server:
 |---|---|---|
 | A1 | Auf dem Server landet die Ablage im Dateisystem des Containers, nicht auf dem PC des App-Nutzers. Ohne Volume geht sie beim Neubau des Containers verloren. | Phase 1 erledigt: Volume `ablage` für `ABLAGE_DIR=/daten/ablage`. Offen für Phase 4: Ablage in der Oberfläche anzeigen bzw. als ZIP herunterladen. |
 | A2 | Pro Frage ein zusätzlicher Modell- und Embedding-Aufruf. Auf dem Server warten alle Nutzer in einer gemeinsamen Schlange. | Zusatzzeit im Testlauf messen (steht auch in PR #1 als offen). |
-| A3 | Das Embedding in `ablage._vektor()` setzt kein `keep_alive`, bge-m3 wird dann nach 5 statt 30 Minuten entladen. | Erledigt: `OLLAMA_KEEP_ALIVE=30m` als Standard im Ollama-Container. Hinweis an Jonas für den Betrieb unter Windows. |
+| A3 | Das Embedding in `ablage._vektor()` setzt kein `keep_alive`, bge-m3 wird dann nach 5 statt 30 Minuten entladen. | Erledigt: `OLLAMA_KEEP_ALIVE` als Standard im Ollama-Container, zuerst `30m`, inzwischen `-1m` (dauerhaft geladen). Hinweis an Jonas für den Betrieb unter Windows. |
 | A4 | Nutzername wird zu einem Ordnernamen bereinigt (nur Buchstaben/Ziffern). Wichtig, sobald der Nutzer aus der Cloudflare-Anmeldung (Mail-Adresse) kommt. | Bereits sicher, kein Pfad außerhalb von `ABLAGE_DIR` möglich. |
 
 ## Probleme und Lösungen

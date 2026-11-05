@@ -6,8 +6,8 @@ messen, wie lange Antworten bei gleichzeitigen Fragen dauern. Grundlage sind die
 
 ## Voraussetzungen
 
-1. **Merge-Reihenfolge:** zuerst `jonas/token-pro-nutzer` (Token-Cache je Nutzer, E28), sonst bekommt beim Einlesen
-   der zweite Nutzer die Daten des ersten.
+1. **Testdaten:** `python demo_tenant/seed_tenant.py <kürzel>` muss für jedes Testkonto gelaufen sein (Kürzel in
+   `demo_tenant/kunden.py`), sonst wird ein leeres Konto eingelesen.
 2. **Zugang:** Die Testnutzer sind Mitglied im Team, das Cloudflare Access zulässt (derzeit „Key Account - Kunden“).
    Für Test T6 bleibt **ein** Konto bewusst draußen (Vorschlag: Heinrich Frei).
 3. **Index je Nutzer:** Normalerweise beim ersten Öffnen der App (E29, Tests T9 bis T11). Wer die Wartezeit sparen will,

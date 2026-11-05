@@ -181,7 +181,7 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line)
     <div class="sec-head">
       <span class="eyebrow">Teil 1 · 1D-Simulation</span>
       <h2 id="sim-h">Eine Frage auf der Strecke</h2>
-      <p class="lead">Die Daten werden einmal vorab eingelesen (Phase A). Danach durchläuft jede Frage dieselbe Strecke (Phase B). Wähle eine Beispielfrage und gehe Schritt für Schritt durch. Werte und Zeiten stammen aus den Testläufen.</p>
+      <p class="lead">Die Daten werden vor den Fragen eingelesen (Phase A): lokal per Befehl oder Button, auf dem Server beim ersten Öffnen der App und danach regelmäßig im Hintergrund. Jede Frage durchläuft dieselbe Strecke (Phase B). Wähle eine Beispielfrage und gehe Schritt für Schritt durch. Werte und Zeiten stammen aus den Testläufen.</p>
     </div>
 
     <div class="sim">
@@ -573,7 +573,7 @@ function renderScenarios() {
 function renderTrack() {
   const phaseA = STAGES.filter(s => s.phase === "A").length;
   $("#track").innerHTML =
-    `<div class="phase-band" style="grid-column: 1 / span ${phaseA}">Phase A · Einlesen (einmalig)</div>` +
+    `<div class="phase-band" style="grid-column: 1 / span ${phaseA}">Phase A · Einlesen (vor den Fragen)</div>` +
     `<div class="phase-band" style="grid-column: ${phaseA + 1} / span ${STAGES.length - phaseA}">Phase B · pro Frage</div>` +
     STAGES.map((s, i) => `<button class="stop" type="button" data-i="${i}" style="grid-column:${i + 1}"
       aria-label="Schritt ${s.nr}: ${s.name}"><span class="dot">${s.nr}</span><span class="lbl">${s.name}</span></button>`).join("");

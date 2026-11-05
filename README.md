@@ -113,7 +113,9 @@ streamlit run app.py
 ```bash
 wsl -d kam-server --cd /mnt/c/Projekte/KI-Agent -- docker compose -f server/docker-compose.yml up -d --build
 ```
-Danach ist die App unter http://localhost:8510 erreichbar. Im Serverbetrieb (`SERVER_MODUS=1`) kommt der Nutzer aus der Anmeldung, Modellwahl und Einlesen sind ausgeblendet.
+Danach ist die App unter http://localhost:8510 erreichbar. Im Serverbetrieb (`SERVER_MODUS=1`) kommt der Nutzer aus der Anmeldung, und die Modellwahl und der Button „Daten neu einlesen“ sind ausgeblendet.
+
+Eingelesen wird dort automatisch ([einlesen.py](einlesen.py)): Beim ersten Öffnen der App gibt der Nutzer mit Link und Code einmal den Zugriff auf seine Microsoft-365-Daten frei, bis zum Abschluss gibt es keinen Chat. Danach frischt die App die Daten bei Bedarf im Hintergrund auf, höchstens alle 8 Stunden (`EINLESEN_ALLE_STUNDEN`). Mit `AUTO_EINLESEN=0` oder ohne `CLIENT_ID` gibt es nur die Demo-Daten und das Einlesen von Hand. Test ohne Ollama: `python evaluation/test_einlesen.py`
 
 ### Persönliche Ablage
 Nach jeder Antwort ordnet der Agent die Frage einem Kunden und einem Thema (Projekt, Verhandlung, Vertrag …) zu und baut daraus eine Ordnerstruktur auf, die mit jeder Frage wächst. Standardort ist `<Benutzerordner>\KAM-Ablage\<nutzer>`, änderbar mit `ABLAGE_DIR` in der `.env`.
@@ -191,11 +193,14 @@ Die Demo-Kalendertermine liegen relativ zum heutigen Tag (letzte, diese und näc
 | [parsers.py](parsers.py) | Text aus HTML, .msg, .eml, .docx, .pdf |
 | [local_loader.py](local_loader.py) | Demo-Daten im selben Format |
 | [ingest.py](ingest.py) | Abschnitte bilden, Embeddings, Index |
+| [einlesen.py](einlesen.py) | Server: Einlesen im Hintergrund beim Öffnen der App, ein Nutzer nach dem anderen |
 | [agent.py](agent.py) | Suche, Antwort, Quellenliste |
 | [ablage.py](ablage.py) | persönliche Ablage: Ordner je Kunde/Thema, wächst mit jeder Frage |
 | [steckbrief.py](steckbrief.py) | Steckbrief je Vertrag (_Stand.md): aktueller Stand mit Quellen und Fristen |
 | [app.py](app.py) | Streamlit-Oberfläche |
+| [strom.py](strom.py) | Strom-Tracker: Verbrauch je Antwort und Summe in Euro |
 | [seed_graph.py](seed_graph.py) | Test-Tenant mit Demo-Daten befüllen |
+| [demo_tenant/](demo_tenant) | fiktive Testdaten für mehrere Nutzer im Tenant KAMPilot |
 | [evaluation/](evaluation) | Testfragen und Messung |
 
 **Empfohlene Lesereihenfolge für den Code:** Jede Datei beginnt mit einem Kopfkommentar zu ihrer Rolle im System.
@@ -232,5 +237,5 @@ Den Klon nicht in einen OneDrive-Ordner legen, z. B. `C:\Projekte\KI-Agent`. One
 
 ## Grenzen und Ausblick
 - Die Qualität hängt vom 7B-Modell ab. Mit mehr VRAM liefert z. B. `qwen2.5:14b` bessere Zusammenfassungen (in der Seitenleiste umschaltbar).
-- Neue Daten muss man aktuell per „Daten neu einlesen“ übernehmen. Möglich wäre ein automatischer Abgleich über Graph-Delta-Abfragen.
+- Neue Daten muss man lokal per „Daten neu einlesen“ übernehmen. Der Server frischt höchstens alle 8 Stunden auf und fragt dabei alle Quellen erneut ab. Möglich wäre ein Abgleich über Graph-Delta-Abfragen.
 - Bilder und handschriftliche Notizen in OneNote werden nicht ausgewertet.
