@@ -118,28 +118,56 @@ section { display: grid; gap: 20px; }
 .filter { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; cursor: pointer; border: 1px solid var(--line);
   background: var(--surface); color: var(--ink); }
 .filter[aria-pressed="true"] { border-color: var(--ink); font-weight: 600; }
-.tree, .tree ul { list-style: none; margin: 0; padding: 0; }
-.tree > li { margin-bottom: 14px; }
-.root-node { font-family: var(--font-display); font-size: 18px; font-weight: 700; padding: 10px 0 6px; }
-.tree ul { margin-left: 14px; padding-left: 18px; border-left: 2px solid var(--line); display: grid; gap: 8px; }
-.tree ul > li { position: relative; }
-.tree ul > li::before { content: ""; position: absolute; left: -18px; top: 20px; width: 14px; border-top: 2px solid var(--line); }
-.cat-btn { font: inherit; font-family: var(--font-display); font-size: 16px; font-weight: 500; background: none; border: 0;
-  color: var(--ink); cursor: pointer; padding: 8px 0; display: flex; gap: 10px; align-items: center; }
-.cat-btn .count { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-weight: 400; }
-.cat-btn .caret { display: inline-block; transition: transform .2s; color: var(--muted); }
-.cat-btn[aria-expanded="false"] .caret { transform: rotate(-90deg); }
-.node { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.node.irrweg { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
-.node-btn { width: 100%; font: inherit; text-align: left; background: none; border: 0; color: var(--ink); cursor: pointer;
-  padding: 10px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
-.node-btn .t { font-weight: 600; }
-.node-btn .s { grid-column: 1 / -1; color: var(--muted); font-size: 13.5px; }
-.node-body { padding: 0 14px 14px; display: grid; gap: 10px; font-size: 14px; }
-.node-body h4 { margin: 0; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
-.node-body .fix { border-left: 3px solid var(--ok); padding-left: 10px; }
-.node-body .fail { border-left: 3px solid var(--bad); padding-left: 10px; }
-.node-body .metric { font-family: var(--font-mono); font-size: 12.5px; background: var(--bg); border-radius: 6px; padding: 6px 10px; }
+.baum-steuerung { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 20px; }
+.summe { color: var(--muted); font-size: 14px; max-width: none; }
+.summe b { color: var(--ink); font-weight: 600; }
+.baum-rahmen { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.baum { position: relative; }
+.baum svg { position: absolute; inset: 0; pointer-events: none; }
+.baum svg path { fill: none; stroke: var(--track); stroke-width: 1.5; }
+.knoten { position: absolute; font: inherit; color: var(--ink); text-align: left; cursor: pointer; background: var(--bg);
+  border: 1px solid var(--line); border-radius: 9px; padding: 5px 9px; font-size: 12.5px; line-height: 1.3; display: flex;
+  flex-direction: column; justify-content: center; gap: 3px; overflow: hidden; }
+.knoten:hover { border-color: var(--accent); }
+.knoten:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.knoten.gewaehlt-jetzt { box-shadow: 0 0 0 2px var(--accent); }
+.knoten .kopf { display: flex; justify-content: space-between; align-items: center; gap: 6px; min-width: 0; }
+.knoten .name { font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.knoten .pfeil { color: var(--muted); font-size: 11px; flex: none; }
+.knoten .fein { color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.k-wurzel { background: var(--accent); border-color: var(--accent); color: var(--bg); cursor: default; font-family: var(--font-display); }
+.k-wurzel .name { -webkit-line-clamp: 3; }
+.k-version { background: var(--surface); border-color: var(--accent); }
+.k-version .name, .k-bereich .name { -webkit-line-clamp: 1; }
+.k-version .nr { font-family: var(--font-mono); color: var(--accent); font-weight: 500; }
+.k-version.plan { border-style: dashed; border-color: var(--future); }
+.k-version.plan .nr { color: var(--future); }
+.k-version.leer { opacity: .55; }
+.balken { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.balken i { display: block; height: 100%; background: var(--accent); }
+.zahlen { display: flex; gap: 4px; flex-wrap: nowrap; }
+.zahlen span { font-family: var(--font-mono); font-size: 10.5px; padding: 0 5px; border-radius: 999px; line-height: 15px; }
+.k-eintrag { border-left-width: 4px; background: var(--surface); }
+.k-eintrag.gewaehlt { border-left-color: var(--ok); }
+.k-eintrag.verworfen { border-left-color: var(--no); }
+.k-eintrag.irrweg { border-left-color: var(--bad); }
+.k-eintrag.zukunft { border-left-color: var(--future); }
+.k-eintrag .name { font-weight: 500; }
+.detail { position: sticky; bottom: 12px; z-index: 5; background: var(--surface); border: 1px solid var(--accent); border-radius: 14px;
+  padding: 14px 18px; display: grid; gap: 10px; font-size: 14px; max-height: 45vh; overflow-y: auto; box-shadow: 0 8px 28px rgb(0 0 0 / .18); }
+.detail[hidden] { display: none; }
+.detail-kopf { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.detail-kopf h3 { flex: 1 1 240px; font-weight: 700; }
+.detail-ort { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.detail h4 { margin: 0 0 2px; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
+.detail p { max-width: 80ch; }
+.detail .fix { border-left: 3px solid var(--ok); padding-left: 10px; }
+.detail .fail { border-left: 3px solid var(--bad); padding-left: 10px; }
+.detail .metric { font-family: var(--font-mono); font-size: 12.5px; background: var(--bg); border-radius: 6px; padding: 6px 10px; }
+.bezug { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.bezug button, .zu-btn { font: inherit; font-size: 13px; cursor: pointer; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; }
+.bezug button:hover, .zu-btn:hover { border-color: var(--accent); }
+.detail a { color: var(--accent); }
 
 /* ---------- Lernkurve ---------- */
 .curves { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
@@ -209,11 +237,16 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line)
   <section aria-labelledby="tree-h">
     <div class="sec-head">
       <span class="eyebrow">Teil 2 · Entscheidungsbaum</span>
-      <h2 id="tree-h">Was entschieden wurde und warum</h2>
-      <p class="lead">Jeder Ast ist ein Bereich des Systems. Ein Klick auf eine Entscheidung zeigt die Begründung. Bei Irrwegen steht dabei, was schiefging, woran es erkannt wurde und wie korrigiert wurde.</p>
+      <h2 id="tree-h">Wie das System gewachsen ist</h2>
+      <p class="lead">Von links nach rechts: Version, Bereich, Entscheidung und die Wege, die dabei verworfen wurden. Der Balken zeigt den Umfang einer Version. Ein Klick klappt auf und zeigt die Begründung.</p>
     </div>
-    <div class="filters" role="group" aria-label="Nach Status filtern" id="filters"></div>
-    <ul class="tree" id="tree"></ul>
+    <p class="summe" id="summe"></p>
+    <div class="baum-steuerung">
+      <div class="filters" role="group" aria-label="Nach Status filtern" id="filters"></div>
+      <div class="filters" role="group" aria-label="Ansicht wählen" id="ansichten"></div>
+    </div>
+    <div class="baum-rahmen"><div class="baum" id="baum"></div></div>
+    <aside class="detail" id="detail" aria-live="polite" hidden></aside>
   </section>
 
   <!-- ===================== LERNKURVE ===================== -->
@@ -334,229 +367,281 @@ const SCENARIOS = [
 ];
 
 /* ===================== Daten: Entscheidungsbaum ===================== */
+/* Eine Version je Merge in main. Umfang aus Git, ohne erzeugte Daten (demo_data/, demo_tenant/ausgabe/).
+   Neuer Pull Request: hier eine Zeile ergänzen und die TREE-Einträge mit v (Version) und ggf. zu (gewählte Lösung) versehen. */
+const VERSIONEN = [
+  { v: "0.1", titel: "Lokaler Agent", datum: "02.11.", wer: "Max", pr: null, commit: "fbcf14b", commits: 1, dateien: 31, plus: 3572, minus: 0,
+    text: "Der gesamte erste Stand: Suche, Widersprüche, Zeitfragen, Oberfläche und Testlauf. Die Entwicklung davor steckt in einem einzigen Commit, deshalb sammeln sich hier viele Irrwege." },
+  { v: "0.2", titel: "Persönliche Ablage", datum: "02.11.", wer: "Jonas", pr: 1, commit: "125f19f", commits: 2, dateien: 8, plus: 694, minus: 4,
+    text: "Ordner je Kunde und Thema, die mit jeder Frage wachsen." },
+  { v: "0.3", titel: "Server und Zugang", datum: "05.11.", wer: "Max", pr: 2, commit: "b0f4484", commits: 5, dateien: 34, plus: 1755, minus: 204,
+    text: "WSL2, Docker, Test-Tenant, Cloudflare und Strom-Tracker, dazu die Korrekturen aus dem Code-Review." },
+  { v: "0.4", titel: "Token je Nutzer", datum: "05.11.", wer: "Jonas", pr: 3, commit: "6041c21", commits: 2, dateien: 10, plus: 179, minus: 16,
+    text: "Mehrere Nutzer können einlesen, ohne dass Daten vertauscht werden." },
+  { v: "0.5", titel: "Steckbrief je Vertrag", datum: "05.11.", wer: "Jonas", pr: 4, commit: "e8241e1", commits: 1, dateien: 6, plus: 508, minus: 37,
+    text: "Der Themenordner zeigt den aktuellen Stand eines Vertrags mit Quellen und Fristen." },
+  { v: "0.6", titel: "Testdaten im Tenant", datum: "05.11.", wer: "Jonas", pr: 5, commit: "100dd4b", commits: 4, dateien: 5, plus: 1050, minus: 0,
+    text: "Fiktive Daten für alle Testkonten. Die Zeilen enthalten nur die Skripte, nicht die erzeugten Dateien." },
+  { v: "0.7", titel: "Einlesen beim Öffnen", datum: "05.11.", wer: "Max", pr: 6, commit: "a1af556", commits: 1, dateien: 12, plus: 404, minus: 21,
+    text: "Die App liest beim ersten Öffnen selbst ein und frischt die Daten danach regelmäßig auf." },
+  { v: "0.8", titel: "Kundenprüfung", datum: "05.11.", wer: "Max", pr: 7, commit: "3ddfb6e", commits: 1, dateien: 8, plus: 232, minus: 1,
+    text: "Quellen anderer Kunden gelangen nicht mehr in die Antwort. Tenant-Lauf 9/13 auf 12/13." },
+  { v: "0.9", titel: "Doku und C4", datum: "05.11.", wer: "Max", pr: 8, commit: "8c81257", commits: 2, dateien: 5, plus: 96, minus: 9,
+    text: "Doku an das automatische Einlesen angepasst, Server-Aufbau für Laien erklärt." },
+  { v: "0.10", titel: "Entscheidungsbaum", datum: "05.11.", wer: "Max", pr: null, commit: null, commits: null, dateien: null, plus: null, minus: null,
+    text: "Diese Darstellung: ein Baum aus Versionen und Entscheidungen. Noch nicht in main." },
+  { v: "next", titel: "Nächste Schritte", geplant: true, text: "Offene Ideen, noch keiner Version zugeordnet." },
+];
+
 const TREE = [
   { cat: "Grundansatz", items: [
-    { s: "gewaehlt", t: "RAG statt Fine-Tuning", k: "Daten im lokalen Suchindex, das Modell bekommt pro Frage die passenden Quellen.",
+    { v: "0.1", s: "gewaehlt", t: "RAG statt Fine-Tuning", k: "Daten im lokalen Suchindex, das Modell bekommt pro Frage die passenden Quellen.",
       why: "Die Daten ändern sich laufend, und jede Aussage braucht eine Quelle. Fine-Tuning kann beides nicht: Wissen ist danach fest eingebacken und nicht belegbar. RAG funktioniert ohne Training und zeigt immer, woher eine Aussage stammt." },
-    { s: "verworfen", t: "Fine-Tuning des Sprachmodells", k: "Modell auf Kundendaten nachtrainieren.",
+    { v: "0.1", zu: "RAG statt Fine-Tuning", s: "verworfen", t: "Fine-Tuning des Sprachmodells", k: "Modell auf Kundendaten nachtrainieren.",
       why: "Keine Quellenangaben möglich, neues Training bei jeder neuen Mail, für 8 GB VRAM aufwendig und eine Halluzinationsgefahr bei Details. Widerspricht der Pflicht „keine Information ohne Quelle“." },
-    { s: "verworfen", t: "Frameworks wie LangChain / LlamaIndex", k: "Fertige RAG-Bausteine statt eigenem Code.",
+    { v: "0.1", zu: "RAG statt Fine-Tuning", s: "verworfen", t: "Frameworks wie LangChain / LlamaIndex", k: "Fertige RAG-Bausteine statt eigenem Code.",
       why: "Vorgabe: einfach verständlicher Code. Eigener Code mit ollama + chromadb ist in wenigen Dateien nachvollziehbar, jeder Schritt lässt sich in der Arbeit erklären und gezielt verbessern. Das war später entscheidend, z. B. für Widerspruchsprüfung und Zeitfragen." },
-    { s: "gewaehlt", t: "Alles lokal (Ollama)", k: "Sprachmodell, Embeddings und Datenbank laufen auf dem eigenen Rechner.",
+    { v: "0.1", s: "gewaehlt", t: "Alles lokal (Ollama)", k: "Sprachmodell, Embeddings und Datenbank laufen auf dem eigenen Rechner.",
       why: "Kundendaten verlassen den Rechner nicht. Das ist das stärkste Datenschutzargument gegenüber der Copilot-Lösung." },
   ]},
   { cat: "Modelle", items: [
-    { s: "gewaehlt", t: "qwen2.5:7b als Sprachmodell", k: "ca. 4,7 GB, läuft vollständig auf der RTX 2070 Super (8 GB).",
+    { v: "0.1", s: "gewaehlt", t: "qwen2.5:7b als Sprachmodell", k: "ca. 4,7 GB, läuft vollständig auf der RTX 2070 Super (8 GB).",
       why: "Bestes Verhältnis aus Deutsch-Qualität und Platz im Grafikspeicher. Gemessen: ca. 68 Token/s." },
-    { s: "verworfen", t: "qwen2.5:14b als Sprachmodell", k: "War bereits installiert.",
+    { v: "0.1", zu: "qwen2.5:7b als Sprachmodell", s: "verworfen", t: "qwen2.5:14b als Sprachmodell", k: "War bereits installiert.",
       why: "9 GB sind mehr als die 8 GB VRAM: Ein Teil läuft auf der CPU, das ist deutlich langsamer. Er wird nur noch als Gutachter im Testlauf genutzt, dort spielt die Geschwindigkeit keine Rolle." },
-    { s: "gewaehlt", t: "bge-m3 für Embeddings", k: "Mehrsprachiges Embedding-Modell.",
+    { v: "0.1", s: "gewaehlt", t: "bge-m3 für Embeddings", k: "Mehrsprachiges Embedding-Modell.",
       why: "Funktioniert gut mit deutschen Fachtexten und ist klein (ca. 0,7 GB im VRAM)." },
-    { s: "zukunft", t: "Größeres Modell bei mehr VRAM", k: "z. B. 14B vollständig auf der GPU.",
+    { v: "next", s: "zukunft", t: "Größeres Modell bei mehr VRAM", k: "z. B. 14B vollständig auf der GPU.",
       why: "Die verbleibenden Fehler (unvollständige Aufzählungen, gelegentlich vertauschte Kunden) sind typische Grenzen eines 7B-Modells." },
   ]},
   { cat: "Datenzugang", items: [
-    { s: "gewaehlt", t: "Microsoft Graph, delegierte Anmeldung", k: "Device-Code-Login, nur lesende Rechte.",
+    { v: "0.1", s: "gewaehlt", t: "Microsoft Graph, delegierte Anmeldung", k: "Device-Code-Login, nur lesende Rechte.",
       why: "Graph liefert technisch nur die Daten, auf die der Nutzer Zugriff hat. Die Grenze „nur eigene Daten“ muss also nicht selbst programmiert werden." },
-    { s: "gewaehlt", t: "Demo-Daten als Fallback", k: "Dieselbe Pipeline mit lokalen Dateien.",
+    { v: "0.1", s: "gewaehlt", t: "Demo-Daten als Fallback", k: "Dieselbe Pipeline mit lokalen Dateien.",
       why: "Die Demo funktioniert ohne Tenant und ohne Internet, sodass die Präsentation nicht ausfallen kann." },
-    { s: "verworfen", t: "DHBW-Tenant", k: "Mit dem Hochschulkonto testen.",
+    { v: "0.1", zu: "Test mit eigenem Tenant", s: "verworfen", t: "DHBW-Tenant", k: "Mit dem Hochschulkonto testen.",
       why: "Keine Admin-Rechte (Kanalnachrichten brauchen Admin-Freigabe) und echte persönliche Daten. Stattdessen ein eigener Test-Tenant." },
-    { s: "verworfen", t: ".msg-Dateien selbst erzeugen", k: "Demo-Mails als Outlook-.msg.",
+    { v: "0.1", zu: "Demo-Daten als Fallback", s: "verworfen", t: ".msg-Dateien selbst erzeugen", k: "Demo-Mails als Outlook-.msg.",
       why: "In Python nicht zuverlässig erzeugbar. Die Demo nutzt .eml, .msg wird beim Einlesen genauso unterstützt (extract-msg)." },
-    { s: "irrweg", t: "Teams-Nachrichten rückdatieren", k: "Demo-Nachrichten mit altem Datum anlegen.",
+    { v: "0.1", zu: "Demo-Daten als Fallback", s: "irrweg", t: "Teams-Nachrichten rückdatieren", k: "Demo-Nachrichten mit altem Datum anlegen.",
       fail: "Teams-Nachrichten lassen sich per Graph nicht rückdatieren, sie hätten alle das Datum „heute“.",
       fix: "Das Seed-Skript schreibt „[Datum – Absender]“ in den Text, der Teams-Connector liest es wieder aus." },
-    { s: "irrweg", t: "Demo-Termine „X Tage ab heute“", k: "Kalender relativ zum heutigen Tag.",
+    { v: "0.1", zu: "Demo-Daten als Fallback", s: "irrweg", t: "Demo-Termine „X Tage ab heute“", k: "Kalender relativ zum heutigen Tag.",
       fail: "„Nächste Woche“ traf je nach Wochentag andere Termine. Bei einem Start am Montag wäre „+5 Tage“ noch diese Woche gewesen.",
       fix: "Termine werden über Woche und Wochentag festgelegt (z. B. „nächste Woche, Dienstag“)." },
-    { s: "gewaehlt", t: "Test mit eigenem Tenant", k: "OneNote, Teams, Outlook, Kalender und Dateien laufen gegen echtes Microsoft 365.",
+    { v: "0.3", s: "gewaehlt", t: "Test mit eigenem Tenant", k: "OneNote, Teams, Outlook, Kalender und Dateien laufen gegen echtes Microsoft 365.",
       why: "Nur ein echter Tenant prüft Anmeldung, Rechte und das Verhalten der Dienste. Dev Proxy hätte nur den Code geprüft. Details: docs/server_einrichtung.md." },
-    { s: "irrweg", t: "Ein Fehler beendet den ganzen Datei-Connector", k: "Laufwerke aller Teams in einem Durchgang abfragen.",
+    { v: "0.3", zu: "Test mit eigenem Tenant", s: "irrweg", t: "Ein Fehler beendet den ganzen Datei-Connector", k: "Laufwerke aller Teams in einem Durchgang abfragen.",
       fail: "Das automatisch angelegte Team „KAM-Pilot“ hat keine SharePoint-Ablage. Der 404 übersprang alle Dateien, auch die der übrigen Teams.",
       fix: "Nur das betroffene Team wird übersprungen. Mit Demo-Daten wäre das nie aufgefallen." },
-    { s: "gewaehlt", t: "Servermodus", k: "Nutzer nur aus der Anmeldung, keine Modellwahl, kein Einlese-Button in der Oberfläche.",
+    { v: "0.3", s: "gewaehlt", t: "Servermodus", k: "Nutzer nur aus der Anmeldung, keine Modellwahl, kein Einlese-Button in der Oberfläche.",
       why: "Bisher ließ sich der Nutzername eintippen. Aus dem Internet käme so jeder an fremde Indizes. Ohne Anmeldung gibt es nur die Demo-Daten." },
-    { s: "gewaehlt", t: "Einlesen beim ersten Öffnen der App", k: "Einmalige Freigabe per Code auf der eigenen Seite, danach alle 8 Stunden im Hintergrund, immer nur ein Nutzer gleichzeitig.",
+    { v: "0.7", s: "gewaehlt", t: "Einlesen beim ersten Öffnen der App", k: "Einmalige Freigabe per Code auf der eigenen Seite, danach alle 8 Stunden im Hintergrund, immer nur ein Nutzer gleichzeitig.",
       why: "Die Cloudflare-Anmeldung gibt dem Agenten keinen Zugriff auf Microsoft 365. Der Code steht nicht im Log, nur beim betroffenen Nutzer. Bis zum ersten Abschluss gibt es keinen Chat, damit Antworten aus Demo-Daten nicht wie eigene aussehen." },
-    { s: "verworfen", t: "Einlesen nur von Hand auf dem Server", k: "Für jeden Nutzer ein Befehl im Container, der Nutzer steht daneben und gibt den Code ein.",
+    { v: "0.7", zu: "Einlesen beim ersten Öffnen der App", s: "verworfen", t: "Einlesen nur von Hand auf dem Server", k: "Für jeden Nutzer ein Befehl im Container, der Nutzer steht daneben und gibt den Code ein.",
       why: "Reichte für einen Nutzer. Bei mehreren Nutzern müsste der Betreiber jede Anmeldung begleiten. Der Befehl bleibt als Ausweg bestehen." },
-    { s: "irrweg", t: "Beispiele aus den Demo-Daten in Prompts", k: "Few-Shot-Beispiele mit Hoffmann, Brenner, „Listenpreise steigen 2027“.",
+    { v: "0.3", s: "irrweg", t: "Beispiele aus den Demo-Daten in Prompts", k: "Few-Shot-Beispiele mit Hoffmann, Brenner, „Listenpreise steigen 2027“.",
       fail: "Verstieß gegen die eigene Projektregel. Das Modell kann Beispiele in Antworten übernehmen, die Testergebnisse wären dann geschönt. Gefunden im Code-Review.",
       fix: "Alle Prompts nutzen neutrale Beispiele wie „Firma X“. Testlauf danach 59/60 (vorher 58/60), die Ergebnisse waren also nicht erkennbar geschönt." },
-    { s: "irrweg", t: "Abgleich: Was fehlt, gilt als gelöscht", k: "Abschnitte, die beim Einlesen nicht mehr geliefert werden, aus dem Index entfernen.",
+    { v: "0.3", s: "irrweg", t: "Abgleich: Was fehlt, gilt als gelöscht", k: "Abschnitte, die beim Einlesen nicht mehr geliefert werden, aus dem Index entfernen.",
       fail: "Ein vorübergehender Fehler (z. B. OneNote 401) ließ die Quelle fehlen, und der Abgleich löschte sie komplett aus dem Index. Gefunden im Code-Review.",
       fix: "Unvollständig gelesene Quellen behalten ihre Abschnitte, und gelöscht wird erst, wenn das Neue gespeichert ist. Einzelne defekte Dateien oder gesperrte Kanäle kosten nicht mehr die ganze Quelle." },
-    { s: "irrweg", t: "Erfundene Daten per Prompt-Regel verhindern", k: "„Relative Angaben aus Quellen wörtlich wiedergeben“.",
+    { v: "0.3", s: "irrweg", t: "Erfundene Daten per Prompt-Regel verhindern", k: "„Relative Angaben aus Quellen wörtlich wiedergeben“.",
       fail: "Aus „am Dienstag“ machte das Modell „Dienstag, 07.11.2026“, einen Samstag. Mit der Regel war das Datum in 3 von 3 Läufen falsch, ohne sie in 2 von 3.",
       fix: "agent.unbelegte_daten() vergleicht die Daten der Antwort mit den Quellen, der Anhang nennt fehlende Belege unter „Bitte prüfen“. Das Modell schreibt, der Code prüft. Das falsche Datum bleibt im Text, wird aber markiert." },
-    { s: "irrweg", t: "OneNote im neuen Tenant ohne Wiederholung ansprechen", k: "Jede Anfrage nur einmal senden.",
+    { v: "0.3", zu: "Test mit eigenem Tenant", s: "irrweg", t: "OneNote im neuen Tenant ohne Wiederholung ansprechen", k: "Jede Anfrage nur einmal senden.",
       fail: "Die API antwortete mit gültigem Token mal 200, mal 401 oder 403, Seiten scheiterten zeitweise mit 404. Vergleichstest: gleiches Token, gleicher Pfad, unterschiedliche Antwort.",
       fix: "Wiederholung bei Code 40001 im Graph-Client, Anlegen mit Pausen. Neue Falle dabei: Frische Seiten stehen ohne Titel in der Liste, die Dublettenprüfung übersah sie, 2 Seiten entstanden doppelt." },
-    { s: "zukunft", t: "Blindtest mit fremden Daten", k: "Ein unabhängiger Datensatz gegen Überanpassung.",
-      why: "Prompts und Schwellwerte sind auf die eigenen Demo-Daten abgestimmt." },
-    { s: "zukunft", t: "Delta-Abfragen", k: "Nur Änderungen statt allem neu einlesen.",
+    { v: "next", s: "zukunft", t: "Delta-Abfragen", k: "Nur Änderungen statt allem neu einlesen.",
       why: "Bei großen Postfächern spart das viel Zeit, Graph bietet dafür Delta-Endpunkte." },
+    { v: "0.4", s: "gewaehlt", t: "Token-Cache je Nutzer", k: "Eigene Token-Datei je Konto, Einlesen mit --nutzer, das angemeldete Konto wird geprüft.",
+      why: "Mehrere Nutzer lesen auf demselben Server ein. Ein falsches Konto wird abgelehnt, ohne --nutzer und mit mehreren Konten bricht das Einlesen ab. Details: E28 in docs/server_einrichtung.md." },
+    { v: "0.4", zu: "Token-Cache je Nutzer", s: "irrweg", t: "Immer das erste Konto im Token-Cache", k: "GraphClient nahm das erste gespeicherte Konto.",
+      fail: "Las der Server erst für A und dann für B ein, bekam B still die Daten von A.",
+      fix: "Nur noch das Token des erwarteten Kontos, dazu eine doppelte Prüfung vor dem Schreiben in den Index." },
+    { v: "0.4", zu: "Token-Cache je Nutzer", s: "verworfen", t: "Gemeinsamer Cache, TOKEN_CACHE je Lauf umsetzen", k: "Die Datei vor jedem Einlesen von Hand umstellen.",
+      why: "Bleibt Handarbeit: Ein vergessenes Umstellen würde wieder fremde Daten einlesen." },
   ]},
   { cat: "Suche", items: [
-    { s: "gewaehlt", t: "Kundenprüfung im Code", k: "Nennt die Frage einen Kunden, fallen Abschnitte weg, die nur einen anderen Kunden nennen. Abschnitte ohne Kundennamen bleiben.",
+    { v: "0.8", s: "gewaehlt", t: "Kundenprüfung im Code", k: "Nennt die Frage einen Kunden, fallen Abschnitte weg, die nur einen anderen Kunden nennen. Abschnitte ohne Kundennamen bleiben.",
       why: "Die Kundennamen stammen aus der Ablage, die Entscheidung trifft der Code. Eine Regel im Prompt wäre beim 7B-Modell nicht verlässlich." },
-    { s: "irrweg", t: "Nur Abschnitte zulassen, die den Kunden nennen", k: "Erste Fassung der Kundenprüfung: Jede Quelle muss den genannten Kunden enthalten.",
+    { v: "0.8", zu: "Kundenprüfung im Code", s: "irrweg", t: "Nur Abschnitte zulassen, die den Kunden nennen", k: "Erste Fassung der Kundenprüfung: Jede Quelle muss den genannten Kunden enthalten.",
       fail: "Warf auch die Chat-Nachricht zum Wechsel im Einkauf weg, weil sie die Firma nicht nennt. Das Modell antwortete dann mit dem alten Ansprechpartner. Aufgefallen im Testlauf auf dem Tenant.",
       fix: "Aussortiert wird nur noch, was erkennbar zu einem anderen Kunden gehört." },
-    { s: "irrweg", t: "Testlauf nur auf den Demo-Daten", k: "60 Fragen, 56 bestanden, trotzdem nannte der Agent im Tenant den Vertrag eines anderen Kunden als Antwort.",
+    { v: "0.8", zu: "Kundenprüfung im Code", s: "irrweg", t: "Testlauf nur auf den Demo-Daten", k: "60 Fragen, 56 bestanden, trotzdem nannte der Agent im Tenant den Vertrag eines anderen Kunden als Antwort.",
       fail: "Die Demo-Daten haben kaum ähnliche Kunden. Die Verwechslung fiel erst mit 20 Kunden und ähnlichen Verträgen auf.",
       fix: "Zusätzlicher Lauf auf den Indizes der Testkonten: evaluation/tenant_lauf.py." },
-    { s: "gewaehlt", t: "Hybride Suche", k: "Ähnlichkeit (Embedding) + Anteil gefundener Fragewörter + bekannte Namen.",
+    { v: "0.1", s: "gewaehlt", t: "Hybride Suche", k: "Ähnlichkeit (Embedding) + Anteil gefundener Fragewörter + bekannte Namen.",
       why: "„hoffmann rabatt?“ und „Wer ist Jens Albrecht?“ fand die reine Ähnlichkeitssuche nicht. Die Stichwortsuche allein versteht dafür keine Umschreibungen.",
       metric: "Testlauf: 30/46 → 43/46 nach Einführung" },
-    { s: "irrweg", t: "Sperre nur über Ähnlichkeit", k: "Schwellwert 0,45, später 0,56.",
+    { v: "0.1", zu: "Hybride Suche", s: "irrweg", t: "Sperre nur über Ähnlichkeit", k: "Schwellwert 0,45, später 0,56.",
       fail: "Bei 0,45 bekam „Konditionen mit Siemens Energy“ Treffer. Bei 0,56 fielen kurze Fragen und Namen durch („Wer ist Jens Albrecht?“ → keine Quelle).",
       fix: "Die Sperre öffnet zusätzlich bei bekannten Namen oder bei vielen gefundenen Fragewörtern, aber nur, wenn die Frage keinen unbekannten Begriff enthält." },
-    { s: "irrweg", t: "Vielfalt: max. 2 Abschnitte pro Ort", k: "Damit Überblicksfragen nicht nur einen Kunden abdecken.",
+    { v: "0.1", zu: "Hybride Suche", s: "irrweg", t: "Vielfalt: max. 2 Abschnitte pro Ort", k: "Damit Überblicksfragen nicht nur einen Kunden abdecken.",
       fail: "Bei „Fasse Brenner zusammen“ wurden die Sonderkonditionen verdrängt. Alle Mails haben den Ort „Postfach“, damit kamen nie mehr als zwei Mails durch.",
       fix: "Vielfalt gilt nur bei Überblicksfragen ohne Namen: erst der beste Abschnitt jedes Ortes, dann wird aufgefüllt." },
-    { s: "irrweg", t: "Kundenliste aus Einzelabschnitten", k: "„Welche Kunden betreue ich?“",
+    { v: "0.1", zu: "Hybride Suche", s: "irrweg", t: "Kundenliste aus Einzelabschnitten", k: "„Welche Kunden betreue ich?“",
       fail: "NordWerk fehlte. Danach mischte das Modell Fakten verschiedener Kunden (Brenner-Umsatz bei Hoffmann).",
       fix: "Ein automatisches Inhaltsverzeichnis der Ablage, eine Zeile pro Kunde. Die eigentliche Ursache: Im Quellenkopf fehlte der Ablageort, jetzt steht dort „Ablage: MBS 2 / Brenner …“." },
-    { s: "gewaehlt", t: "OneNote-Bonus", k: "+0,05 auf die Ähnlichkeit für „MBS 2“.",
+    { v: "0.1", s: "gewaehlt", t: "OneNote-Bonus", k: "+0,05 auf die Ähnlichkeit für „MBS 2“.",
       why: "Laut ursprünglichem Copilot-Prompt hat OneNote Vorrang. Der kleine Bonus ändert die Reihenfolge nur bei knappen Fällen." },
-    { s: "zukunft", t: "BM25 / skalierbare Stichwortsuche", k: "Heute wird pro Frage der ganze Korpus durchgezählt.",
+    { v: "next", s: "zukunft", t: "BM25 / skalierbare Stichwortsuche", k: "Heute wird pro Frage der ganze Korpus durchgezählt.",
       why: "Für einige tausend Abschnitte reicht das. Bei echten Postfächern braucht es einen richtigen Stichwortindex." },
   ]},
   { cat: "Zeitfragen", items: [
-    { s: "gewaehlt", t: "Regelbasierte Zeitraum-Erkennung", k: "„nächste Woche“, „KW 47“, „im November“ → Von–Bis-Datum.",
+    { v: "0.1", s: "gewaehlt", t: "Regelbasierte Zeitraum-Erkennung", k: "„nächste Woche“, „KW 47“, „im November“ → Von–Bis-Datum.",
       why: "Embeddings können nicht rechnen. Regeln sind hier zuverlässiger und in Millisekunden fertig." },
-    { s: "gewaehlt", t: "Terminliste aus dem Code", k: "Chronologische Tabelle aus den Metadaten.",
+    { v: "0.1", s: "gewaehlt", t: "Terminliste aus dem Code", k: "Chronologische Tabelle aus den Metadaten.",
       why: "Bei „Termine im November“ nannte das Modell 3 von 7 Einträgen. Der Code lässt nichts weg." },
-    { s: "irrweg", t: "Kein Kalender, kein „heute“", k: "Erste Version.",
+    { v: "0.1", zu: "Regelbasierte Zeitraum-Erkennung", s: "irrweg", t: "Kein Kalender, kein „heute“", k: "Erste Version.",
       fail: "„Welche Termine habe ich nächste Woche?“ → keine Quelle. Es fehlten der Kalender, das heutige Datum und eine Zeitlogik.",
       fix: "Kalender als Quelle, Datum im System-Prompt, zeitraum.py und Datumssuche." },
-    { s: "irrweg", t: "Stichwortfilter über Großschreibung", k: "„bei Hoffmann“ → nur Hoffmann-Termine.",
+    { v: "0.1", zu: "Regelbasierte Zeitraum-Erkennung", s: "irrweg", t: "Stichwortfilter über Großschreibung", k: "„bei Hoffmann“ → nur Hoffmann-Termine.",
       fail: "„in den nächsten 14 Tagen“: „Tagen“ galt als Stichwort und filterte alle Termine weg.",
       fix: "Als Filter zählen nur Namen, die in Titeln, Orten oder Absendern vorkommen." },
   ]},
   { cat: "Widersprüche", items: [
-    { s: "irrweg", t: "Widerspruch im Antwort-Prompt", k: "Das Modell soll Widersprüche nebenbei melden.",
+    { v: "0.1", zu: "Code-Kandidaten + Belegprüfung", s: "irrweg", t: "Widerspruch im Antwort-Prompt", k: "Das Modell soll Widersprüche nebenbei melden.",
       fail: "Das 7B-Modell übernahm stillschweigend einen Wert und schrieb „Keine Widersprüche“.",
       fix: "Ein eigener Prüfschritt vor der Antwort (JSON)." },
-    { s: "irrweg", t: "Ja/Nein-Urteil des Modells", k: "„Betreffen beide Werte dieselbe Sache?“",
+    { v: "0.1", zu: "Code-Kandidaten + Belegprüfung", s: "irrweg", t: "Ja/Nein-Urteil des Modells", k: "„Betreffen beide Werte dieselbe Sache?“",
       fail: "Das Modell sagte bei echten Fällen „nein“, obwohl seine eigene Beschreibung „Enddatum“ / „Neues Enddatum“ lautete.",
       fix: "Nur die Beschreibungen werden genutzt, der Code vergleicht die Wörter." },
-    { s: "irrweg", t: "Beschreibungen in einem Aufruf", k: "Beide Sätze sichtbar, beide beschreiben lassen.",
+    { v: "0.1", zu: "Code-Kandidaten + Belegprüfung", s: "irrweg", t: "Beschreibungen in einem Aufruf", k: "Beide Sätze sichtbar, beide beschreiben lassen.",
       fail: "Das Modell kopierte die Beschreibung: „Bitte Angebot bis 31.03. schicken“ wurde zu „Gültigkeitsende des Angebots“, ein Fehlalarm.",
       fix: "Zweistufig: gemeinsame Beschreibung und zusätzlich getrennte Beschreibung, das Hauptwort muss übereinstimmen.",
       metric: "Widerspruchstest: 46/46 ohne Fehlalarm, beide echten erkannt" },
-    { s: "verworfen", t: "Bedeutungsvergleich per Embedding", k: "Beschreibungen mit bge-m3 vergleichen.",
+    { v: "0.1", zu: "Code-Kandidaten + Belegprüfung", s: "verworfen", t: "Bedeutungsvergleich per Embedding", k: "Beschreibungen mit bge-m3 vergleichen.",
       why: "Getestet: Das falsche Paar „Frist Angebotsabgabe / Gültigkeit Angebot“ erreichte 0,72, das echte „Kick-off-Termin / Neuer Termin“ nur 0,50. Die Trennung war unbrauchbar." },
-    { s: "gewaehlt", t: "Code-Kandidaten + Belegprüfung", k: "Verschiedene Daten mit gemeinsamem Fachwort, Werte müssen wörtlich in der Quelle stehen.",
+    { v: "0.1", s: "gewaehlt", t: "Code-Kandidaten + Belegprüfung", k: "Verschiedene Daten mit gemeinsamem Fachwort, Werte müssen wörtlich in der Quelle stehen.",
       why: "Fängt Fälle ab, die das Modell übersieht, und verwirft erfundene Werte. Bei „01.04.2023 bis 31.03.2027“ zählt nur das Enddatum." },
-    { s: "irrweg", t: "„Widerspruch in der Kurzantwort erwähnen“", k: "Anweisung an das Antwortmodell.",
+    { v: "0.1", zu: "Code-Kandidaten + Belegprüfung", s: "irrweg", t: "„Widerspruch in der Kurzantwort erwähnen“", k: "Anweisung an das Antwortmodell.",
       fail: "Der Vertrags-Widerspruch tauchte bei jeder Hoffmann-Frage auf, sogar bei „Um wie viel steigen die Listenpreise?“, mit Spekulationen.",
       fix: "Nur erwähnen, wenn der Widerspruch das Gefragte betrifft. Dazu ein Spekulationsverbot im Prompt." },
   ]},
   { cat: "Frageverständnis", items: [
-    { s: "gewaehlt", t: "Folgefragen umschreiben", k: "Mit den letzten 3 Runden eine eigenständige Frage bilden.",
+    { v: "0.1", s: "gewaehlt", t: "Folgefragen umschreiben", k: "Mit den letzten 3 Runden eine eigenständige Frage bilden.",
       why: "Standardverfahren für Chat-RAG. Ein Aufruf mit ca. 0,5 s, die Oberfläche zeigt „Verstanden als …“.",
       metric: "Umschreiben 5/5 · Dialogtests 6/7 (Rest war ein zu strenger Test)" },
-    { s: "gewaehlt", t: "Suchvarianten nur bei schwachen Treffern", k: "Fachsprache statt Umgangssprache.",
+    { v: "0.1", s: "gewaehlt", t: "Suchvarianten nur bei schwachen Treffern", k: "Fachsprache statt Umgangssprache.",
       why: "Spart Zeit bei klaren Fragen. Bei unbekannten Begriffen wie „Siemens“ wird nicht erweitert, weil sonst die Antwort zu einem anderen Kunden käme." },
-    { s: "irrweg", t: "Beispiel „die Hamburger“ im Prompt", k: "Konkretes Beispiel für die Umformulierung.",
+    { v: "0.1", zu: "Suchvarianten nur bei schwachen Treffern", s: "irrweg", t: "Beispiel „die Hamburger“ im Prompt", k: "Konkretes Beispiel für die Umformulierung.",
       fail: "Das Modell schrieb „Kunde in Hamburg“ auch in fremde Fragen. Das Ergebnis 11/12 war dadurch geschönt.",
       fix: "Neutrale Beispiele und das Verbot, Orte oder Kunden hinzuzufügen. Ehrliches Ergebnis zunächst 10/12, nach Anpassung der Sperre 11/12." },
-    { s: "irrweg", t: "„sie“ = falsche Person", k: "„Wann treffe ich sie das nächste Mal?“",
+    { v: "0.1", zu: "Folgefragen umschreiben", s: "irrweg", t: "„sie“ = falsche Person", k: "„Wann treffe ich sie das nächste Mal?“",
       fail: "Es wurde Frank Matthiesen eingesetzt. Ursache war die Vorantwort, die nur ihn nannte und Sabine Ehlers wegließ.",
       fix: "Regel: bei Fragen nach Ansprechpartnern alle Personen mit Rolle nennen." },
   ]},
   { cat: "Ausgabe & Oberfläche", items: [
-    { s: "gewaehlt", t: "Einheitliches Ausgabekonzept", k: "Kurzantwort · Details mit [n] · Rückfragen · Widersprüche · Quellen.",
+    { v: "0.1", s: "gewaehlt", t: "Einheitliches Ausgabekonzept", k: "Kurzantwort · Details mit [n] · Rückfragen · Widersprüche · Quellen.",
       why: "Teilziel der Aufgabe. Quellen und Widersprüche schreibt der Code, damit sie nicht erfunden sein können." },
-    { s: "gewaehlt", t: "Streamlit-Chat", k: "Browser-Oberfläche mit Quellen zum Aufklappen und Antwortzeit.",
+    { v: "0.1", s: "gewaehlt", t: "Streamlit-Chat", k: "Browser-Oberfläche mit Quellen zum Aufklappen und Antwortzeit.",
       why: "In wenigen Zeilen eine präsentierbare Demo, mit Beispielfragen als Knöpfen." },
-    { s: "irrweg", t: "Start über Terminal-Befehle", k: "„streamlit run app.py“",
+    { v: "0.1", zu: "Streamlit-Chat", s: "irrweg", t: "Start über Terminal-Befehle", k: "„streamlit run app.py“",
       fail: "„No module named chromadb“: Das Terminal nutzte das falsche Python. Der README-Befehl mit %USERPROFILE% legte in PowerShell einen 614-MB-Ordner im Projekt an.",
       fix: "start_demo.bat nutzt immer die richtige Umgebung, die README nennt die PowerShell-Schreibweise." },
-    { s: "zukunft", t: "Desktop-App statt localhost", k: "A: Streamlit im Programmfenster (pywebview). B: echte App mit PySide6 als .exe.",
+    { v: "next", s: "zukunft", t: "Desktop-App statt localhost", k: "A: Streamlit im Programmfenster (pywebview). B: echte App mit PySide6 als .exe.",
       why: "Ein eigenes Programm wirkt in der Abgabe überzeugender. Ollama läuft weiterhin unsichtbar im Hintergrund." },
-    { s: "zukunft", t: "Teams-App / Bot", k: "Der Agent direkt in Teams, wie Copilot.",
+    { v: "next", s: "zukunft", t: "Teams-App / Bot", k: "Der Agent direkt in Teams, wie Copilot.",
       why: "Passt zur Geschichte, braucht aber eine Bot-Registrierung und einen erreichbaren Endpunkt für das lokale Modell. Eher etwas für den Ausblick." },
   ]},
   { cat: "Test & Betrieb", items: [
-    { s: "gewaehlt", t: "Doppelte Prüfung", k: "Regelprüfung im Code + 14B-Modell als Gutachter.",
+    { v: "0.1", s: "gewaehlt", t: "Doppelte Prüfung", k: "Regelprüfung im Code + 14B-Modell als Gutachter.",
       why: "Die Regeln sind objektiv (Fakten, Quellen, Format). Der Gutachter bewertet den Inhalt. Beide finden unterschiedliche Fehler." },
-    { s: "irrweg", t: "Agent und Gutachter gleichzeitig", k: "7B + 14B parallel geladen.",
+    { v: "0.1", zu: "Doppelte Prüfung", s: "irrweg", t: "Agent und Gutachter gleichzeitig", k: "7B + 14B parallel geladen.",
       fail: "Der Arbeitsspeicher lief voll, der PC stürzte ab (Kernel-Power 41).",
       fix: "Die Modelle laufen nacheinander, vor dem Gutachter wird alles entladen, dazu ein RAM-Check. Jedes Gutachten wird sofort gespeichert, damit ein Lauf nach einem Abbruch fortgesetzt werden kann." },
-    { s: "irrweg", t: "7B-Modell als Gutachter", k: "Ersatz bei wenig Speicher.",
+    { v: "0.1", zu: "Doppelte Prüfung", s: "irrweg", t: "7B-Modell als Gutachter", k: "Ersatz bei wenig Speicher.",
       fail: "Es bewertete Rückfragen und Terminlisten als „Halluzination“, die Begründungen widersprachen sich selbst.",
       fix: "Der Gutachter ist ein größeres Modell als der Agent. Der 7B dient nur noch als Notlösung, mit Hinweis im Bericht." },
-    { s: "irrweg", t: "Gutachter ohne Datum", k: "14B-Prüfung der Zeitfragen.",
+    { v: "0.1", zu: "Doppelte Prüfung", s: "irrweg", t: "Gutachter ohne Datum", k: "14B-Prüfung der Zeitfragen.",
       fail: "„Der 13.11. ist nicht übernächste Woche“: Ohne das heutige Datum konnte er nicht rechnen. 5 von 8 Beanstandungen waren Fehlurteile.",
       fix: "Datum und Wochenbereich im Gutachter-Prompt, Bewertung der gesamten Antwort statt nur der Kurzantwort." },
-    { s: "irrweg", t: "Uneinheitliches Kontextfenster", k: "Kurze Prüfaufrufe ohne num_ctx.",
+    { v: "0.1", s: "irrweg", t: "Uneinheitliches Kontextfenster", k: "Kurze Prüfaufrufe ohne num_ctx.",
       fail: "Ollama lud das Modell bei jedem Wechsel neu, die Antwortzeit stieg auf 30–60 s.",
       fix: "Alle Aufrufe mit demselben Kontextfenster, dazu Vorladen beim App-Start und ein Zwischenspeicher für Widerspruchsprüfungen.",
       metric: "33 s → 4–7 s pro Frage" },
-    { s: "irrweg", t: "Testlauf parallel zur App", k: "Gesamttest im Hintergrund, während die App lief.",
+    { v: "0.1", s: "irrweg", t: "Testlauf parallel zur App", k: "Gesamttest im Hintergrund, während die App lief.",
       fail: "Die App war extrem langsam, weil beide um die Grafikkarte konkurrierten.",
       fix: "Regel: Testlauf und App nie gleichzeitig." },
-    { s: "zukunft", t: "Blindtest mit fremden Daten", k: "Ein unabhängig erzeugter Datensatz mit Antwortschlüssel.",
+    { v: "next", s: "zukunft", t: "Blindtest mit fremden Daten", k: "Ein unabhängig erzeugter Datensatz mit Antwortschlüssel.",
       why: "Prompts und Schwellwerte sind auf die eigenen Demo-Daten abgestimmt. Ein Blindtest zeigt, ob der Agent auch fremde Daten versteht." },
+    { v: "0.6", s: "gewaehlt", t: "Testdaten für 20 Kunden und 9 Nutzer", k: "Fiktive Kunden mit unordentlichen Ordnern, Mails, Terminen, Teams und Chats im Tenant KAMPilot.",
+      why: "Nutzer sind über gemeinsame Kunden verbunden, absichtliche Fallen wie Angebote v1/v2/v3 prüfen den Agenten. demo_data/ bleibt unverändert." },
+    { v: "0.6", zu: "Testdaten für 20 Kunden und 9 Nutzer", s: "irrweg", t: "OneNote bei neuen Konten ohne Wiederholung befüllen", k: "Jede Seite nur einmal anlegen.",
+      fail: "Bei frisch angelegten Konten schlug das Befüllen von OneNote zeitweise fehl.",
+      fix: "seed_tenant.py wiederholt vorübergehende Fehler, dazu die Optionen --nur-onenote und --ohne-onenote." },
+    { v: "next", s: "zukunft", t: "Erzeugte Testdaten aus dem Repository nehmen", k: "demo_tenant/ausgabe/ liegt noch mit 199 Dateien im Repository.",
+      why: "Der Ordner lässt sich jederzeit neu erzeugen und steht inzwischen in .gitignore. Das Entfernen ist noch mit Jonas abzusprechen." },
   ]},
   { cat: "Persönliche Ablage", items: [
-    { s: "gewaehlt", t: "Ordner je Kunde > Thema", k: "Nach jeder Antwort ordnet ablage.py die Frage ein und legt Antwort und Quellen ab.",
+    { v: "0.2", s: "gewaehlt", t: "Ordner je Kunde > Thema", k: "Nach jeder Antwort ordnet ablage.py die Frage ein und legt Antwort und Quellen ab.",
       why: "Wer mehrmals zum selben Kunden, Projekt oder zur selben Verhandlung fragt, baut so ohne eigenen Aufwand eine geordnete Ablage auf. Zwei Ebenen reichen: Unterhalb des Kunden liegen Projekte, Verhandlungen und Verträge, alles Übrige in _Allgemein." },
-    { s: "gewaehlt", t: "Modell beschreibt, Code ordnet zu", k: "Das 7B-Modell nennt Kunde und Thema (JSON), der Code entscheidet über „bekannt oder neu“.",
+    { v: "0.2", s: "gewaehlt", t: "Modell beschreibt, Code ordnet zu", k: "Das 7B-Modell nennt Kunde und Thema (JSON), der Code entscheidet über „bekannt oder neu“.",
       why: "Gleiche Lehre wie bei den Widersprüchen: Ja/Nein-Urteile des 7B-Modells sind unzuverlässig. Der Code vergleicht Namen ohne Rechtsform, trennt Themen mit verschiedenen Vertragsnummern und nutzt erst danach die Embedding-Ähnlichkeit. Ein Kunde, der weder in der Frage noch in den Quellen vorkommt, wird verworfen." },
-    { s: "gewaehlt", t: "Kunde ohne Namen in der Frage nur bei eindeutigen Quellen", k: "Mindestens die Hälfte der Quellen muss zum Kunden gehören.",
+    { v: "0.2", s: "gewaehlt", t: "Kunde ohne Namen in der Frage nur bei eindeutigen Quellen", k: "Mindestens die Hälfte der Quellen muss zum Kunden gehören.",
       why: "Bei „Warum kamen die Steuerungen zu spät?“ leitet das Modell den Kunden aus den Quellen ab. Stammen die Quellen von mehreren Kunden, greift ein 7B-Modell leicht den falschen heraus. Dann lieber nicht ablegen als falsch ablegen. Allgemeine Fragen ohne Kunden- und Projektbezug werden ebenfalls nicht abgelegt." },
-    { s: "gewaehlt", t: "Ordner erst ab der 2. Frage", k: "Die erste Frage wird nur im Register vorgemerkt und beim Anlegen nachgetragen.",
+    { v: "0.2", s: "gewaehlt", t: "Ordner erst ab der 2. Frage", k: "Die erste Frage wird nur im Register vorgemerkt und beim Anlegen nachgetragen.",
       why: "Verhindert Ordner-Wildwuchs durch einmalige Fragen. Einzelne Themen liegen in _Allgemein und ziehen in einen eigenen Ordner um, sobald es eine zweite Frage dazu gibt." },
-    { s: "gewaehlt", t: "Quellen als Kopie oder Auszug", k: "Lokale Dateien werden kopiert, alles andere als Textauszug mit Link (.url) zum Original.",
+    { v: "0.2", s: "gewaehlt", t: "Quellen als Kopie oder Auszug", k: "Lokale Dateien werden kopiert, alles andere als Textauszug mit Link (.url) zum Original.",
       why: "OneNote, Mails, Teams und Kalender liegen nicht als Datei vor. Ein Download über Graph bei jeder Frage wäre langsam und bräuchte eine aktive Anmeldung. Der Auszug enthält genau die Stellen, auf die sich die Antwort stützt." },
-    { s: "gewaehlt", t: "Steckbrief je Vertrag", k: "_Stand.md mit Laufzeit, Rabatt, Zahlungsziel … und Fristen, wächst mit jeder Frage.",
+    { v: "0.5", s: "gewaehlt", t: "Steckbrief je Vertrag", k: "_Stand.md mit Laufzeit, Rabatt, Zahlungsziel … und Fristen, wächst mit jeder Frage.",
       why: "Der Themenordner zeigt so den aktuellen Stand statt nur alter Antworten. Das Modell nennt Feld, Wert und Quellennummer; der Code prüft jeden Wert gegen die Originalquelle (alle Zahlen/Daten in einer Zeile mit einem Schlüsselwort des Felds) und verwirft sonst. So landet z. B. ein Rabatt nicht im Feld Zahlungsziel. Zuerst nur Verträge, weil dort die Felder klar sind." },
-    { s: "gewaehlt", t: "Datum der Quelle entscheidet", k: "Neuere Quelle ersetzt den Wert, ältere ändert nichts, gleich alt mit anderem Wert = Widerspruch.",
+    { v: "0.5", s: "gewaehlt", t: "Datum der Quelle entscheidet", k: "Neuere Quelle ersetzt den Wert, ältere ändert nichts, gleich alt mit anderem Wert = Widerspruch.",
       why: "Wann jemand fragt, sagt nichts darüber, welcher Wert gilt. Entscheidend ist, wie aktuell die Quelle ist. Alte Werte bleiben unter „Änderungen“ nachvollziehbar." },
-    { s: "verworfen", t: "Steckbrief als Quelle für Antworten", k: "Den Steckbrief mit in den Suchindex aufnehmen.",
+    { v: "0.5", zu: "Steckbrief je Vertrag", s: "verworfen", t: "Steckbrief als Quelle für Antworten", k: "Den Steckbrief mit in den Suchindex aufnehmen.",
       why: "Der Agent würde eigene Zusammenfassungen und damit eigene Fehler als Beleg wiederverwenden. Belegt wird nur mit Originalquellen; der Steckbrief verlinkt sie und legt sie im Ordner Quellen/ ab." },
-    { s: "zukunft", t: "Steckbriefe für Verhandlungen, Projekte, Reklamationen", k: "Eigene Feldlisten je Art.",
+    { v: "next", s: "zukunft", t: "Steckbriefe für Verhandlungen, Projekte, Reklamationen", k: "Eigene Feldlisten je Art.",
       why: "Gleicher Ablauf, andere Felder (Status, Angebot, Forderung, nächster Schritt, Meilensteine …). Erst sinnvoll, wenn die Vertrags-Version mit echten Fragen geprüft ist." },
-    { s: "zukunft", t: "Themen-Schwellwert kalibrieren", k: "ABLAGE_THEMA_SCHWELLE = 0,8 ist geschätzt.",
+    { v: "next", s: "zukunft", t: "Themen-Schwellwert kalibrieren", k: "ABLAGE_THEMA_SCHWELLE = 0,8 ist geschätzt.",
       why: "Mit echten Frageserien messen, ab welcher bge-m3-Ähnlichkeit zwei Themenbeschreibungen wirklich dasselbe meinen (vgl. Erfahrung bei den Widersprüchen: Embeddings trennen kurze Beschreibungen schlecht)." },
   ]},
   { cat: "Server-Betrieb", items: [
-    { s: "gewaehlt", t: "WSL2 als Server-VM", k: "Ubuntu 24.04 als VM „kam-server“, Agent und Ollama laufen darin statt direkt unter Windows.",
+    { v: "0.3", s: "gewaehlt", t: "WSL2 als Server-VM", k: "Ubuntu 24.04 als VM „kam-server“, Agent und Ollama laufen darin statt direkt unter Windows.",
       why: "Windows 11 Home hat keinen Hyper-V-Manager. WSL2 ist eine echte Linux-VM und reicht die GPU über den Windows-Treiber durch. Details: docs/server_einrichtung.md." },
-    { s: "verworfen", t: "VirtualBox-VM", k: "Klassische, vollständig getrennte VM.",
+    { v: "0.3", zu: "WSL2 als Server-VM", s: "verworfen", t: "VirtualBox-VM", k: "Klassische, vollständig getrennte VM.",
       why: "Kann die GPU nicht durchreichen. Das 7B-Modell liefe auf der CPU, eine Antwort dauerte Minuten statt Sekunden." },
-    { s: "gewaehlt", t: "Docker Engine in WSL", k: "Ollama und Agent als Container, beschrieben in einer Compose-Datei; GPU über das NVIDIA Container Toolkit.",
+    { v: "0.3", s: "gewaehlt", t: "Docker Engine in WSL", k: "Ollama und Agent als Container, beschrieben in einer Compose-Datei; GPU über das NVIDIA Container Toolkit.",
       why: "Näher an einem echten Server-Deployment und auf jedem Rechner reproduzierbar. Docker Desktop wäre ein zusätzliches Windows-Programm mit eigener VM und Lizenzbedingungen." },
-    { s: "irrweg", t: "VM auf Laufwerk D:", k: "D: hat mehr Platz als C: (58 statt 18 GB).",
+    { v: "0.3", zu: "WSL2 als Server-VM", s: "irrweg", t: "VM auf Laufwerk D:", k: "D: hat mehr Platz als C: (58 statt 18 GB).",
       fail: "Die Prüfung mit Get-PhysicalDisk zeigte: D: ist eine mechanische Festplatte. Ollama lädt bei jedem Start ≈ 5 GB Modell, das wäre spürbar langsamer.",
       fix: "VM auf H: (SATA-SSD, 650 GB frei). Lehre: Laufwerke vor der Wahl auf ihren Typ prüfen, nicht nur auf freien Platz." },
-    { s: "irrweg", t: "Einrichtung per PowerShell-Einzeiler", k: "Installationsbefehle direkt an wsl … bash -c übergeben.",
+    { v: "0.3", zu: "WSL2 als Server-VM", s: "irrweg", t: "Einrichtung per PowerShell-Einzeiler", k: "Installationsbefehle direkt an wsl … bash -c übergeben.",
       fail: "PowerShell zerlegt mehrzeilige Argumente an wsl.exe, Bash bekam ein zerstückeltes Skript (Ausgabe nur „deb“).",
       fix: "server/setup_wsl.sh im Repository, Aufruf über /mnt/c/…. Die Einrichtung ist damit dokumentiert und auf einem zweiten Rechner wiederholbar." },
-    { s: "gewaehlt", t: "Ein Ollama, im Container", k: "Windows-Ollama abgeschaltet, Container-Ollama nur für diesen PC freigegeben (127.0.0.1:11434).",
+    { v: "0.3", s: "gewaehlt", t: "Ein Ollama, im Container", k: "Windows-Ollama abgeschaltet, Container-Ollama nur für diesen PC freigegeben (127.0.0.1:11434).",
       why: "Zwei Ollama-Instanzen würden sich die 8 GB VRAM teilen. Testlauf und Entwicklung unter Windows nutzen über den Port dasselbe Ollama. Kein Python-Code geändert: OLLAMA_HOST und Startparameter genügen." },
-    { s: "irrweg", t: "OLLAMA_MAX_LOADED_MODELS=1", k: "Erster Plan, um die Regel „nie zwei große Modelle“ im Server zu erzwingen.",
+    { v: "0.3", zu: "Ein Ollama, im Container", s: "irrweg", t: "OLLAMA_MAX_LOADED_MODELS=1", k: "Erster Plan, um die Regel „nie zwei große Modelle“ im Server zu erzwingen.",
       fail: "Jede Frage braucht bge-m3 und qwen2.5. Mit 1 würde bei jeder Frage umgeladen (Sekunden statt Millisekunden).",
       fix: "Wert 2 (zusammen 5,7 GB von 8 GB) und NUM_PARALLEL=1. Noch vor dem ersten Start erkannt." },
-    { s: "gewaehlt", t: "Strom-Tracker", k: "Verbrauch je Anfrage und im Betrieb, umgerechnet in Geld.",
+    { v: "0.3", s: "gewaehlt", t: "Strom-Tracker", k: "Verbrauch je Anfrage und im Betrieb, umgerechnet in Geld.",
       why: "Macht die Kosten eines lokalen Modells greifbar. Grafikkarte gemessen (nvidia-smi), übriger PC geschätzt, Strompreis als Annahme, und das steht auch so in der Anzeige. Eine genaue Messung bräuchte ein Gerät an der Steckdose." },
-    { s: "irrweg", t: "Modelle nach 30 Minuten entladen", k: "Wie am Arbeitsplatz: KEEP_ALIVE=30m.",
+    { v: "0.3", zu: "Ein Ollama, im Container", s: "irrweg", t: "Modelle nach 30 Minuten entladen", k: "Wie am Arbeitsplatz: KEEP_ALIVE=30m.",
       fail: "Im Test von außen wartete der erste Nutzer über eine Minute auf „Lade Sprachmodell“ (gemessen: 96 s).",
       fix: "Auf dem Server laden die Modelle beim Start und bleiben geladen. Preis: 5,7 GB VRAM dauerhaft belegt, solange der Server läuft." },
-    { s: "irrweg", t: "WSL als Server ohne Zusatzeinstellung", k: "Container starten und das Terminal schließen.",
+    { v: "0.3", zu: "WSL2 als Server-VM", s: "irrweg", t: "WSL als Server ohne Zusatzeinstellung", k: "Container starten und das Terminal schließen.",
       fail: "WSL fuhr die Distribution ≈ 15 s nach dem letzten Terminal herunter, der Agent brach beim ersten Einlesen ab („Server disconnected“). Gefunden über journalctl.",
       fix: ".wslconfig: instanceIdleTimeout=-1 und vmIdleTimeout=-1. Getestet: läuft ohne offenes Fenster weiter, Container starten mit der VM von selbst." },
-    { s: "gewaehlt", t: "Zugriff von außen über Cloudflare Tunnel + Access", k: "App-Nutzer erreichen den Server über eine eigene Domain, Anmeldung mit Microsoft-Konto, Zugang nur für Mitglieder des Teams.",
+    { v: "0.3", s: "gewaehlt", t: "Zugriff von außen über Cloudflare Tunnel + Access", k: "App-Nutzer erreichen den Server über eine eigene Domain, Anmeldung mit Microsoft-Konto, Zugang nur für Mitglieder des Teams.",
       why: "Keine offenen Ports am Router, private IP bleibt verborgen, HTTPS automatisch. Ohne Anmeldung könnte jeder im Internet GPU und Index nutzen. Die Team-Mitgliedschaft regelt den Zugang, eine zweite Liste entfällt. Nur fiktive Daten aus dem Test-Tenant." },
-    { s: "verworfen", t: "Anmeldung per Einmalcode", k: "Cloudflare Access schickt einen Code per Mail.",
+    { v: "0.3", zu: "Zugriff von außen über Cloudflare Tunnel + Access", s: "verworfen", t: "Anmeldung per Einmalcode", k: "Cloudflare Access schickt einen Code per Mail.",
       why: "Schneller eingerichtet, braucht aber eine eigene Liste von Adressen und verbindet die Person nicht mit dem Team." },
-    { s: "zukunft", t: "Ablage auf dem Server", k: "ablage.py schreibt auf dem Server, nicht auf den PC des App-Nutzers.",
+    { v: "next", s: "zukunft", t: "Ablage auf dem Server", k: "ablage.py schreibt auf dem Server, nicht auf den PC des App-Nutzers.",
       why: "Volume für ABLAGE_DIR ist eingerichtet. Offen: Ablage in der Oberfläche anzeigen bzw. herunterladen (docs/server_einrichtung.md, A1)." },
+  ]},
+  { cat: "Dokumentation", items: [
+    { v: "0.9", s: "gewaehlt", t: "C4-Diagramm für Laien", k: "Ebene 1 und 2 als Mermaid, mit kurzen Erklärungen (docs/server_c4.md).",
+      why: "Der Aufbau des Servers soll auch ohne Technikkenntnisse nachvollziehbar sein." },
+    { v: "0.9", zu: "C4-Diagramm für Laien", s: "verworfen", t: "Eigene C4-Syntax von Mermaid", k: "Mermaid bietet dafür einen eigenen Diagrammtyp.",
+      why: "Wirkt oft unruhig und ist für Laien schwerer zu lesen. Normale Flussdiagramme in den üblichen C4-Farben sind ruhiger." },
+    { v: "0.10", s: "gewaehlt", t: "Entscheidungsbaum mit Versionen", k: "Ein zusammenhängender Baum: Version, Bereich, Entscheidung, verworfene Wege.",
+      why: "Zeigt auf einen Blick, wann was entstand, wie groß jeder Schritt war und welche Wege dabei verworfen wurden." },
+    { v: "0.10", zu: "Entscheidungsbaum mit Versionen", s: "verworfen", t: "Karten-Liste je Bereich", k: "Bisherige Darstellung: aufklappbare Karten, nach Bereichen sortiert.",
+      why: "Zeigte weder eine zeitliche Reihenfolge noch den Umfang, und Verworfenes stand ohne Bezug zur gewählten Lösung in der Liste." },
+    { v: "0.10", s: "gewaehlt", t: "Eine Version je Merge in main", k: "Jeder Pull Request ergibt eine Version, die Einträge sind aus der Git-Historie zugeordnet.",
+      why: "Nachprüfbar statt geschätzt: Maßgeblich ist, ab welchem Merge ein Eintrag in der Doku steht." },
+    { v: "next", s: "zukunft", t: "Versionen auch als Git-Tags", k: "v0.1, v0.2 … an die Merge-Commits heften.",
+      why: "Dann ließe sich jeder Stand direkt auschecken. Bisher stehen die Nummern nur in dieser Übersicht." },
   ]},
 ];
 
@@ -617,50 +702,220 @@ $("#play").onclick = () => {
 };
 
 /* ===================== Baum ===================== */
+/* Eine Zeichenfläche: Kästen sind Buttons mit fester Position, die Linien liegen als SVG dahinter.
+   Aufbau: Wurzel > Version > Bereich > Entscheidung > verworfene Wege derselben Version. */
 const LABEL = { gewaehlt: "gewählt", verworfen: "verworfen", irrweg: "Irrweg, korrigiert", zukunft: "Zukunft" };
+const REPO = "https://github.com/maxibach2006-cell/KI-Agent";
+const SPALTEN = [{ x: 0, b: 84 }, { x: 108, b: 216 }, { x: 348, b: 172 }, { x: 544, b: 224 }, { x: 792, b: 224 }];
+const HOEHE = { wurzel: 66, version: 76, bereich: 44, eintrag: 44 };
+const ABSTAND = 10;
+const STATUS = ["gewaehlt", "verworfen", "irrweg", "zukunft"];
 let filter = "alle";
+let auswahl = null;
+const offen = new Set();
 
 function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+function tausender(z) { return Number(z).toLocaleString("de-DE"); }
 
-function nodeHtml(n, id) {
-  const body = n.s === "irrweg"
-    ? `<div class="fail"><h4>Was schiefging</h4>${esc(n.fail)}</div><div class="fix"><h4>Korrektur</h4>${esc(n.fix)}</div>`
-    : `<div><h4>Begründung</h4>${esc(n.why)}</div>`;
-  return `<li data-s="${n.s}"><div class="node ${n.s}">
-    <button class="node-btn" type="button" aria-expanded="false" aria-controls="${id}">
-      <span class="t">${esc(n.t)}</span><span class="chip s-${n.s}">${LABEL[n.s]}</span><span class="s">${esc(n.k)}</span>
-    </button>
-    <div class="node-body" id="${id}" hidden>${body}${n.metric ? `<div class="metric">${esc(n.metric)}</div>` : ""}</div>
-  </div></li>`;
+const EINTRAEGE = TREE.flatMap(c => c.items.map(n => ({ ...n, cat: c.cat })));
+EINTRAEGE.forEach((n, i) => { n.id = `e${i}`; });
+const NACH_TITEL = Object.fromEntries(EINTRAEGE.map(n => [n.t, n]));
+const VERWORFENE = (n) => EINTRAEGE.filter(k => k.zu === n.t);
+
+function passt(n) { return filter === "alle" || n.s === filter; }
+
+function zaehle(liste) {
+  const z = { gewaehlt: 0, verworfen: 0, irrweg: 0, zukunft: 0 };
+  liste.forEach(n => { z[n.s]++; });
+  return STATUS.filter(s => z[s]).map(s => `<span class="s-${s}" title="${LABEL[s]}">${z[s]}</span>`).join("");
+}
+
+/* Baumstruktur für die aktuelle Filterung. Verworfene Wege hängen an ihrer Lösung, wenn beide zur selben Version gehören. */
+function baueBaum() {
+  const versionen = VERSIONEN.map(ver => {
+    const eigene = EINTRAEGE.filter(n => n.v === ver.v);
+    const bereiche = [...new Set(eigene.map(n => n.cat))].map(cat => {
+      const hier = eigene.filter(n => n.cat === cat);
+      const kinderVon = (n) => hier.filter(k => k.zu === n.t);
+      const oben = hier.filter(n => !n.zu || !hier.some(p => p.t === n.zu));
+      const kinder = oben.map(n => {
+        const unter = kinderVon(n).filter(passt);
+        return { id: n.id, art: "eintrag", eintrag: n, kinder: unter.map(k => ({ id: k.id, art: "eintrag", eintrag: k, kinder: [] })) };
+      }).filter(k => passt(k.eintrag) || k.kinder.length);
+      return { id: `${ver.v}/${cat}`, art: "bereich", name: cat, alle: hier.filter(passt), kinder };
+    }).filter(b => b.kinder.length);
+    return { id: `v${ver.v}`, art: "version", ver, alle: eigene.filter(passt), kinder: bereiche };
+  });
+  return { id: "wurzel", art: "wurzel", kinder: versionen };
+}
+
+function setzeAnsicht(art) {
+  offen.clear();
+  const baum = baueBaum();
+  baum.kinder.forEach(v => {
+    // v0.1 und die nächsten Schritte umfassen je rund 11 Bereiche: In der Übersicht bleiben sie zu, sonst bestimmen sie die ganze Höhe.
+    if (art === "alles" || (art === "ueberblick" && !["0.1", "next"].includes(v.ver.v))) offen.add(v.id);
+    v.kinder.forEach(b => {
+      if (art === "alles") offen.add(b.id);
+      b.kinder.forEach(e => { if (art === "alles") offen.add(e.id); });
+    });
+  });
+}
+
+function ordneAn(baum) {
+  let y = 0;
+  const knoten = [], linien = [];
+  function verschiebe(k, um) {
+    k.mitte += um;
+    if (offen.has(k.id) || k.art === "wurzel") k.kinder.forEach(kind => verschiebe(kind, um));
+  }
+  function lege(k, tiefe) {
+    const auf = (k.art === "wurzel" || offen.has(k.id)) && k.kinder.length > 0;
+    const start = y;
+    k.tiefe = tiefe;
+    k.h = HOEHE[k.art];
+    if (auf) {
+      k.kinder.forEach(kind => lege(kind, tiefe + 1));
+      k.mitte = (k.kinder[0].mitte + k.kinder[k.kinder.length - 1].mitte) / 2;
+      // Ein Elternkasten kann höher sein als seine Kinder zusammen: Dann rückt der ganze Ast nach unten.
+      const fehlt = start + k.h / 2 - k.mitte;
+      if (fehlt > 0) {
+        verschiebe(k, fehlt);
+        y += fehlt;
+      }
+      y = Math.max(y, k.mitte + k.h / 2 + ABSTAND);
+    } else {
+      k.mitte = y + k.h / 2;
+      y += k.h + ABSTAND;
+    }
+    knoten.push(k);
+    if (auf) k.kinder.forEach(kind => linien.push([k, kind]));
+  }
+  lege(baum, 0);
+  return { knoten, linien, hoehe: Math.max(y - ABSTAND, HOEHE.wurzel) };
+}
+
+function inhalt(k) {
+  const pfeil = k.kinder.length ? `<span class="pfeil">${offen.has(k.id) ? "▾" : "▸"} ${k.kinder.length}</span>` : "";
+  if (k.art === "wurzel") return `<span class="name">KAM-Agent</span>`;
+  if (k.art === "version") {
+    const v = k.ver;
+    const fein = v.geplant ? "noch keiner Version zugeordnet"
+      : `${v.datum} · ${v.wer}` + (v.commits ? ` · ${v.commits} Commit${v.commits === 1 ? "" : "s"}` : " · in Arbeit");
+    const groesste = Math.max(...VERSIONEN.map(x => x.plus || 0));
+    const balken = v.plus ? `<span class="balken" title="+${tausender(v.plus)} Zeilen"><i style="width:${Math.max(3, v.plus / groesste * 100)}%"></i></span>` : "";
+    return `<span class="kopf"><span class="name"><span class="nr">${v.geplant ? "später" : "v" + v.v}</span> ${esc(v.titel)}</span>${pfeil}</span>
+      <span class="fein">${esc(fein)}</span>${balken}<span class="zahlen">${zaehle(k.alle)}</span>`;
+  }
+  if (k.art === "bereich") {
+    return `<span class="kopf"><span class="name">${esc(k.name)}</span>${pfeil}</span><span class="zahlen">${zaehle(k.alle)}</span>`;
+  }
+  return `<span class="kopf"><span class="name">${esc(k.eintrag.t)}</span>${pfeil}</span>`;
 }
 
 function renderTree() {
-  const counts = { alle: 0, gewaehlt: 0, verworfen: 0, irrweg: 0, zukunft: 0 };
-  TREE.forEach(c => c.items.forEach(n => { counts[n.s]++; counts.alle++; }));
-  $("#filters").innerHTML = ["alle", "gewaehlt", "verworfen", "irrweg", "zukunft"].map(f =>
-    `<button class="filter" type="button" data-f="${f}" aria-pressed="${f === filter}">${f === "alle" ? "Alle" : LABEL[f]} · ${counts[f]}</button>`).join("");
-  $("#filters").querySelectorAll(".filter").forEach(b => b.onclick = () => { filter = b.dataset.f; renderTree(); });
+  const summe = (f) => VERSIONEN.reduce((a, v) => a + (f(v) || 0), 0);
+  const fertig = VERSIONEN.filter(v => v.commits);
+  const je = (wer) => fertig.filter(v => v.wer === wer).reduce((a, v) => a + v.commits, 0);
+  $("#summe").innerHTML = `<b>${fertig.length} Versionen</b> · ${summe(v => v.commits)} Commits · <b>+${tausender(summe(v => v.plus))}</b> Zeilen ·
+    Max ${je("Max")} Commits, Jonas ${je("Jonas")} Commits · ${EINTRAEGE.length} Einträge. Ohne erzeugte Daten.`;
 
-  $("#tree").innerHTML = `<li><div class="root-node">Lokaler Informations-Agent (Ollama + RAG)</div><ul>` +
-    TREE.map((c, ci) => {
-      const items = c.items.filter(n => filter === "alle" || n.s === filter);
-      if (!items.length) return "";
-      return `<li><button class="cat-btn" type="button" aria-expanded="true" aria-controls="cat${ci}">
-        <span class="caret">▾</span>${esc(c.cat)}<span class="count">${items.length}</span></button>
-        <ul id="cat${ci}">${items.map((n, ni) => nodeHtml(n, `n${ci}-${ni}`)).join("")}</ul></li>`;
-    }).join("") + `</ul></li>`;
+  const zahl = { alle: EINTRAEGE.length };
+  STATUS.forEach(s => { zahl[s] = EINTRAEGE.filter(n => n.s === s).length; });
+  $("#filters").innerHTML = ["alle", ...STATUS].map(f =>
+    `<button class="filter" type="button" data-f="${f}" aria-pressed="${f === filter}">${f === "alle" ? "Alle" : LABEL[f]} · ${zahl[f]}</button>`).join("");
+  $("#filters").querySelectorAll(".filter").forEach(b => b.onclick = () => {
+    filter = b.dataset.f;
+    setzeAnsicht(filter === "alle" ? "ueberblick" : "alles");
+    renderTree();
+  });
+  $("#ansichten").innerHTML = [["versionen", "Nur Versionen"], ["ueberblick", "Überblick"], ["alles", "Alles aufklappen"]].map(([a, t]) =>
+    `<button class="filter" type="button" data-a="${a}">${t}</button>`).join("");
+  $("#ansichten").querySelectorAll(".filter").forEach(b => b.onclick = () => { setzeAnsicht(b.dataset.a); renderTree(); });
 
-  $("#tree").querySelectorAll(".node-btn").forEach(b => b.onclick = () => {
-    const open = b.getAttribute("aria-expanded") === "true";
-    b.setAttribute("aria-expanded", String(!open));
-    document.getElementById(b.getAttribute("aria-controls")).hidden = open;
-  });
-  $("#tree").querySelectorAll(".cat-btn").forEach(b => b.onclick = () => {
-    const open = b.getAttribute("aria-expanded") === "true";
-    b.setAttribute("aria-expanded", String(!open));
-    document.getElementById(b.getAttribute("aria-controls")).hidden = open;
-  });
+  const { knoten, linien, hoehe } = ordneAn(baueBaum());
+  const breite = SPALTEN[4].x + SPALTEN[4].b;
+  const pfade = linien.map(([a, b]) => {
+    const x1 = SPALTEN[a.tiefe].x + SPALTEN[a.tiefe].b, x2 = SPALTEN[b.tiefe].x, m = (x1 + x2) / 2;
+    return `<path d="M${x1} ${a.mitte} C${m} ${a.mitte} ${m} ${b.mitte} ${x2} ${b.mitte}"/>`;
+  }).join("");
+  const kaesten = knoten.map(k => {
+    const sp = SPALTEN[k.tiefe];
+    const klasse = [`knoten k-${k.art}`, k.art === "eintrag" ? k.eintrag.s : "", k.ver && k.ver.geplant ? "plan" : "",
+      k.art === "version" && !k.kinder.length ? "leer" : "", auswahl === k.id ? "gewaehlt-jetzt" : ""].join(" ");
+    const auf = k.kinder.length ? ` aria-expanded="${offen.has(k.id)}"` : "";
+    const stil = `left:${sp.x}px;top:${k.mitte - k.h / 2}px;width:${sp.b}px;height:${k.h}px`;
+    if (k.art === "wurzel") return `<div class="${klasse}" style="${stil}">${inhalt(k)}</div>`;
+    return `<button type="button" class="${klasse}" style="${stil}" data-id="${esc(k.id)}"${auf}>${inhalt(k)}</button>`;
+  }).join("");
+  $("#baum").style.cssText = `width:${breite}px;height:${hoehe}px`;
+  $("#baum").innerHTML = `<svg width="${breite}" height="${hoehe}" aria-hidden="true">${pfade}</svg>${kaesten}`;
+
+  const nachId = Object.fromEntries(knoten.map(k => [k.id, k]));
+  $("#baum").querySelectorAll("button.knoten").forEach(b => b.onclick = () => klick(nachId[b.dataset.id], b.dataset.id));
 }
+
+function klick(k, id) {
+  if (k.kinder.length) {
+    if (offen.has(id)) offen.delete(id); else offen.add(id);
+  }
+  if (k.art === "version") zeigeVersion(k.ver);
+  if (k.art === "eintrag") zeigeEintrag(k.eintrag);
+  renderTree();
+  const neu = document.querySelector(`#baum [data-id="${CSS.escape(id)}"]`);
+  if (neu) neu.focus({ preventScroll: true });
+}
+
+function schliesseDetail() {
+  auswahl = null;
+  $("#detail").hidden = true;
+  renderTree();
+}
+
+function zeigeVersion(v) {
+  auswahl = `v${v.v}`;
+  const umfang = v.commits ? `${v.commits} Commit${v.commits === 1 ? "" : "s"} · ${v.dateien} Dateien · +${tausender(v.plus)} / −${tausender(v.minus)} Zeilen` : "";
+  const links = [v.pr ? `<a href="${REPO}/pull/${v.pr}">Pull Request #${v.pr}</a>` : "", v.commit ? `<a href="${REPO}/commit/${v.commit}">Commit ${v.commit}</a>` : ""].filter(Boolean).join(" · ");
+  $("#detail").innerHTML = `<div class="detail-kopf"><h3>${v.geplant ? "" : "v" + v.v + " · "}${esc(v.titel)}</h3><button class="zu-btn" type="button" id="detail-zu">Schließen</button></div>
+    ${v.geplant ? "" : `<div class="detail-ort">${esc(v.datum)}2026 · ${esc(v.wer)}${umfang ? " · " + umfang : ""}</div>`}
+    <p>${esc(v.text)}</p>${links ? `<div>${links}</div>` : ""}`;
+  $("#detail").hidden = false;
+  $("#detail-zu").onclick = schliesseDetail;
+}
+
+function zeigeEintrag(n) {
+  auswahl = n.id;
+  const ver = VERSIONEN.find(v => v.v === n.v);
+  const koerper = n.s === "irrweg"
+    ? `<div class="fail"><h4>Was schiefging</h4>${esc(n.fail)}</div><div class="fix"><h4>Korrektur</h4>${esc(n.fix)}</div>`
+    : `<div><h4>Begründung</h4>${esc(n.why)}</div>`;
+  const loesung = n.zu && NACH_TITEL[n.zu]
+    ? `<div><h4>Gehört zur Entscheidung</h4><div class="bezug"><button type="button" data-ziel="${NACH_TITEL[n.zu].id}">${esc(n.zu)} (v${esc(NACH_TITEL[n.zu].v)})</button></div></div>` : "";
+  const wege = VERWORFENE(n);
+  const verworfen = wege.length
+    ? `<div><h4>Verworfene Wege dazu</h4><div class="bezug">${wege.map(k => `<button type="button" data-ziel="${k.id}">${esc(k.t)} (v${esc(k.v)})</button>`).join("")}</div></div>` : "";
+  $("#detail").innerHTML = `<div class="detail-kopf"><h3>${esc(n.t)}</h3><span class="chip s-${n.s}">${LABEL[n.s]}</span><button class="zu-btn" type="button" id="detail-zu">Schließen</button></div>
+    <div class="detail-ort">${ver.geplant ? "Später" : "v" + esc(n.v)} · ${esc(n.cat)}</div><p>${esc(n.k)}</p>${koerper}
+    ${n.metric ? `<div class="metric">${esc(n.metric)}</div>` : ""}${loesung}${verworfen}`;
+  $("#detail").hidden = false;
+  $("#detail-zu").onclick = schliesseDetail;
+  $("#detail").querySelectorAll("[data-ziel]").forEach(b => b.onclick = () => springeZu(EINTRAEGE.find(e => e.id === b.dataset.ziel)));
+}
+
+/* Öffnet den Weg zu einem Eintrag, auch wenn er gerade von einem Filter verdeckt ist. */
+function springeZu(n) {
+  filter = "alle";
+  offen.add(`v${n.v}`);
+  offen.add(`${n.v}/${n.cat}`);
+  const eltern = n.zu && NACH_TITEL[n.zu];
+  if (eltern && eltern.v === n.v && eltern.cat === n.cat) offen.add(eltern.id);
+  zeigeEintrag(n);
+  renderTree();
+  const ziel = document.querySelector(`#baum [data-id="${n.id}"]`);
+  if (ziel) { ziel.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" }); ziel.focus({ preventScroll: true }); }
+}
+
+setzeAnsicht("ueberblick");
 
 /* ===================== Lernkurven (SVG, eine Skala je Achse) ===================== */
 function chart(el, pts, yMax, yTicks, unit) {

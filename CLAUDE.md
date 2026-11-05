@@ -38,4 +38,5 @@ Zwei Personen arbeiten mit je eigenem Claude Code gleichzeitig an diesem Reposit
 - `agent.py`, `prompts.py` und `config.py` werden von fast allem berührt: größere Umbauten dort vorher absprechen.
 - Code-Stil: deutsche Bezeichner und Kommentare, einfache Funktionen, keine Frameworks (z. B. LangChain) ohne Absprache.
 - Keine echten Kunden- oder Personendaten committen. `demo_data/` ist fiktiv, `.env` und Token-Cache bleiben lokal.
-- Wichtige Entscheidungen, verworfene Ideen und Irrwege in `docs/architektur_uebersicht.html` (Liste `TREE`) nachtragen.
+- Wichtige Entscheidungen, verworfene Ideen und Irrwege in `docs/architektur_uebersicht.html` (Liste `TREE`) nachtragen, mit `v` (Version) und bei Verworfenem `zu` (gewählte Lösung).
+- Jeder Merge in `main` ist eine Version: in derselben Datei eine Zeile in `VERSIONEN` ergänzen, Umfang aus Git ohne erzeugte Daten.
