@@ -10,6 +10,7 @@ Idee:
     │  ├─ _Uebersicht.md                    ← alle Fragen zu diesem Kunden, chronologisch
     │  ├─ _Allgemein/                       ← Fragen, deren Thema (noch) keinen eigenen Ordner hat
     │  └─ Rahmenvertrag RV-1/
+    │     ├─ _Stand.md                      ← Steckbrief: aktueller Stand des Vertrags (steckbrief.py)
     │     ├─ 2026-11-02_0930_Welche Konditionen gelten.md   ← Frage, Antwort, Quellenliste
     │     └─ Quellen/                       ← Kopien bzw. Auszüge der gefundenen Quellen
     └─ _register.json                       ← Gedächtnis der Ablage (nicht von Hand ändern)
@@ -25,7 +26,9 @@ Ablauf von ablegen():
          - Kundenordner, sobald zum Kunden genug Fragen vorliegen (einzelne Themen liegen dann in _Allgemein),
          - Themenordner, sobald zum Thema genug Fragen vorliegen (frühere Einträge ziehen dorthin um).
        So entsteht kein Ordner-Wildwuchs durch einmalige Fragen.
-    5. Dateien schreiben (Antwort + Quellen) und die Übersichten neu erzeugen.
+    5. Bei Verträgen den Steckbrief aktualisieren (steckbrief.py). Der Stand wird schon ab der ersten Frage im
+       Register gesammelt und als _Stand.md geschrieben, sobald der Themenordner existiert.
+    6. Dateien schreiben (Antwort + Quellen) und die Übersichten neu erzeugen.
 
 Quellen im Ordner:
     - Lokale Dateien (Demo: demo_data/sharepoint/...) werden kopiert.
@@ -51,11 +54,13 @@ import numpy as np
 import ollama
 
 import config
+import steckbrief
 
 ALLGEMEIN = "_Allgemein"            # Ordner für Fragen ohne (eigenen) Themenordner
 OHNE_KUNDE = "_Ohne Kunde"          # Projekte/Verhandlungen, zu denen kein Kunde erkennbar ist
 REGISTER = "_register.json"
 UEBERSICHT = "_Uebersicht.md"
+STAND = "_Stand.md"                 # Steckbrief eines Vertrags (steckbrief.py)
 PROJEKT_ARTEN = {"projekt", "verhandlung", "vertrag", "reklamation"}  # ohne Kunden nur diese Arten ablegen
 _SPERRE = threading.Lock()          # Streamlit bedient jede Sitzung in einem eigenen Thread, das Register gibt es nur einmal
 
@@ -295,42 +300,49 @@ def einordnen(frage: str, treffer: list[dict], register: dict, model: str = conf
 # C. Dateien schreiben: Antwort, Quellen, Übersichten
 # =============================================================================
 
-def _quellen_ablegen(ziel: Path, treffer: list[dict]) -> list[str]:
-    """Kopiert lokale Quelldateien bzw. speichert Textauszüge nach ziel/Quellen. Rückgabe: Dateinamen.
-    Gleiche Quelle in mehreren Fragen -> nur einmal gespeichert, Auszüge werden ergänzt."""
+def _quelle_ablegen(ziel: Path, t: dict) -> str | None:
+    """Kopiert eine lokale Quelldatei bzw. speichert den Textauszug nach ziel/Quellen. Rückgabe: Dateiname
+    (None beim automatisch erzeugten Inhaltsverzeichnis, das keine echte Quelle ist).
+    Gleiche Quelle mehrfach -> nur einmal gespeichert, neue Auszüge werden ergänzt."""
     ordner = ziel / "Quellen"
+    meta = t["meta"]
+    if meta["quelle"] == "Übersicht":
+        return None
+    ordner.mkdir(parents=True, exist_ok=True)
+    # Lokaler Pfad = Link ohne Schema wie "http:", "onenote:", "outlook:" (Demo: demo_data/sharepoint/...)
+    ist_pfad = meta["link"] and not re.match(r"^[a-z]{2,}:", meta["link"])
+    lokal = config.BASE_DIR / meta["link"] if ist_pfad else None
+    if lokal and lokal.is_file():
+        # Demo-Dateien (und künftig lokal synchronisierte Dateien): Original kopieren
+        datei = ordner / lokal.name
+        if not datei.exists():
+            shutil.copy2(lokal, datei)
+    else:
+        datei = ordner / (ordnername(f"{meta['datum'][:10]} {meta['quelle']} - {meta['titel']}") + ".md")
+        auszug = t["text"].split("\n", 1)[-1].strip()  # erste Zeile ist die Kopfzeile aus ingest.kopfzeile()
+        if not datei.exists():
+            kopf = [f"# {meta['titel']}", "", f"- **Quelle:** {meta['quelle']}", f"- **Ablage:** {meta['ort']}",
+                    f"- **Datum:** {meta['datum']}"]
+            if meta.get("absender"):
+                kopf.append(f"- **Von:** {meta['absender']}")
+            kopf += [f"- **Original:** {meta['link']}", "", "## Gefundene Auszüge", ""]
+            datei.write_text("\n".join(kopf) + "\n", encoding="utf-8")
+        vorhanden = datei.read_text(encoding="utf-8")
+        if auszug not in vorhanden:
+            datei.write_text(vorhanden + "\n" + auszug + "\n\n---\n", encoding="utf-8")
+        if meta["link"].startswith("http"):
+            # Windows-Verknüpfung: Doppelklick öffnet das Original (SharePoint, OneDrive, Outlook im Web)
+            (datei.with_suffix(".url")).write_text(f"[InternetShortcut]\nURL={meta['link']}\n", encoding="utf-8")
+    return datei.name
+
+
+def _quellen_ablegen(ziel: Path, treffer: list[dict]) -> list[str]:
+    """Alle Quellen einer Antwort nach ziel/Quellen. Rückgabe: Dateinamen ohne Doppelte."""
     namen = []
     for t in treffer:
-        meta = t["meta"]
-        if meta["quelle"] == "Übersicht":
-            continue  # automatisch erzeugtes Inhaltsverzeichnis, keine echte Quelle
-        ordner.mkdir(parents=True, exist_ok=True)
-        # Lokaler Pfad = Link ohne Schema wie "http:", "onenote:", "outlook:" (Demo: demo_data/sharepoint/...)
-        ist_pfad = meta["link"] and not re.match(r"^[a-z]{2,}:", meta["link"])
-        lokal = config.BASE_DIR / meta["link"] if ist_pfad else None
-        if lokal and lokal.is_file():
-            # Demo-Dateien (und künftig lokal synchronisierte Dateien): Original kopieren
-            datei = ordner / lokal.name
-            if not datei.exists():
-                shutil.copy2(lokal, datei)
-        else:
-            datei = ordner / (ordnername(f"{meta['datum'][:10]} {meta['quelle']} - {meta['titel']}") + ".md")
-            auszug = t["text"].split("\n", 1)[-1].strip()  # erste Zeile ist die Kopfzeile aus ingest.kopfzeile()
-            if not datei.exists():
-                kopf = [f"# {meta['titel']}", "", f"- **Quelle:** {meta['quelle']}", f"- **Ablage:** {meta['ort']}",
-                        f"- **Datum:** {meta['datum']}"]
-                if meta.get("absender"):
-                    kopf.append(f"- **Von:** {meta['absender']}")
-                kopf += [f"- **Original:** {meta['link']}", "", "## Gefundene Auszüge", ""]
-                datei.write_text("\n".join(kopf) + "\n", encoding="utf-8")
-            vorhanden = datei.read_text(encoding="utf-8")
-            if auszug not in vorhanden:
-                datei.write_text(vorhanden + "\n" + auszug + "\n\n---\n", encoding="utf-8")
-            if meta["link"].startswith("http"):
-                # Windows-Verknüpfung: Doppelklick öffnet das Original (SharePoint, OneDrive, Outlook im Web)
-                (datei.with_suffix(".url")).write_text(f"[InternetShortcut]\nURL={meta['link']}\n", encoding="utf-8")
-        if datei.name not in namen:
-            namen.append(datei.name)
+        name = _quelle_ablegen(ziel, t)
+        if name and name not in namen:
+            namen.append(name)
     return namen
 
 
@@ -382,6 +394,8 @@ def _uebersichten_schreiben(wurzel: Path, register: dict) -> None:
             if not t["ordner"]:
                 continue
             zeilen += [f"## {t['name']}" + (f" ({t['art']})" if t.get("art") else ""), ""]
+            if t.get("stand", {}).get("felder"):
+                zeilen += [f"**[Aktueller Stand]({ordnername(t['name']).replace(' ', '%20')}/{STAND})**", ""]
             zeilen += [f"- {e['zeit'][:10]}: [{e['frage']}]({ordnername(t['name']).replace(' ', '%20')}/"
                        f"{e['datei'].replace(' ', '%20')})" for e in sorted(t["eintraege"], key=lambda e: e["zeit"])]
             zeilen.append("")
@@ -393,6 +407,20 @@ def _uebersichten_schreiben(wurzel: Path, register: dict) -> None:
                        + (f" – Thema: {e['thema']}" if e["thema"] else "") for e in lose]
         (wurzel / ordnername(k["name"]) / UEBERSICHT).write_text("\n".join(zeilen) + "\n", encoding="utf-8")
     (wurzel / UEBERSICHT).write_text("\n".join(gesamt) + "\n", encoding="utf-8")
+
+
+def _steckbrief_schreiben(wurzel: Path, kunde: dict, thema: dict) -> None:
+    """_Stand.md im Themenordner. Jede Quelle des Steckbriefs wird nach Quellen/ kopiert und von dort verlinkt."""
+    ordner = _ordner_von(wurzel, kunde, thema)
+    ordner.mkdir(parents=True, exist_ok=True)
+
+    def link_fuer(quelle: dict) -> str | None:
+        name = _quelle_ablegen(ordner, quelle)
+        return f"Quellen/{name}" if name else None
+
+    text = steckbrief.markdown(thema["name"], kunde["name"], thema["stand"], link_fuer, config.heute(),
+                               len(thema["eintraege"]))
+    (ordner / STAND).write_text(text, encoding="utf-8")
 
 
 def _verschieben(alt: Path, neu: Path, eintraege: list[dict]) -> None:
@@ -452,7 +480,16 @@ def _ablegen(frage: str, treffer: list[dict], antwort: str, user: str, model: st
                "treffer": [{"text": t["text"], "meta": t["meta"]} for t in treffer]}
     (thema["eintraege"] if thema else kunde["allgemein"]).append(eintrag)
 
-    # --- Schritt 5: Ordner anlegen, sobald genug Fragen vorliegen, dann Dateien schreiben ---
+    # --- Schritt 5: Steckbrief bei Verträgen (Fehler dort dürfen die Ablage nicht verhindern) ---
+    stand_meldungen = []
+    if thema and steckbrief.ist_vertrag(thema):
+        try:
+            stand_meldungen = steckbrief.aktualisiere(thema.setdefault("stand", steckbrief.leer()), antwort,
+                                                      treffer, model, eintrag["zeit"])
+        except Exception as e:
+            stand_meldungen = [f"Steckbrief nicht aktualisiert ({e})"]
+
+    # --- Schritt 6: Ordner anlegen, sobald genug Fragen vorliegen, dann Dateien schreiben ---
     alle = kunde["allgemein"] + [e for t in kunde["themen"] for e in t["eintraege"]]
     neu_kunde = not kunde["ordner"] and len(alle) >= config.ABLAGE_MIN_FRAGEN
     neu_thema = thema is not None and not thema["ordner"] and len(thema["eintraege"]) >= config.ABLAGE_MIN_FRAGEN
@@ -473,6 +510,9 @@ def _ablegen(frage: str, treffer: list[dict], antwort: str, user: str, model: st
                 if t is None or t["ordner"]:  # zieht nicht mehr um -> Text steht in der Datei, Register bleibt klein
                     e.pop("treffer", None)
                     e.pop("antwort", None)
+        for t in kunde["themen"]:
+            if t["ordner"] and t.get("stand", {}).get("felder"):
+                _steckbrief_schreiben(wurzel, kunde, t)
         _uebersichten_schreiben(wurzel, register)
     speichere_register(wurzel, register)
 
@@ -483,8 +523,9 @@ def _ablegen(frage: str, treffer: list[dict], antwort: str, user: str, model: st
     ordner = _ordner_von(wurzel, kunde, thema)
     pfad = ordner.relative_to(wurzel)
     neu = " (neu angelegt)" if neu_kunde or neu_thema else ""
+    stand = f" · Steckbrief: {', '.join(stand_meldungen)}" if stand_meldungen else ""
     return {"status": "abgelegt", "kunde": kunde["name"], "thema": eintrag["thema"], "ordner": ordner,
-            "meldung": f"Abgelegt in {' / '.join(pfad.parts)}{neu}"}
+            "meldung": f"Abgelegt in {' / '.join(pfad.parts)}{neu}{stand}", "steckbrief": stand_meldungen}
 
 
 if __name__ == "__main__":

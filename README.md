@@ -122,14 +122,16 @@ KAM-Ablage/<nutzer>/
    ├─ _Uebersicht.md              alle Fragen zum Kunden
    ├─ _Allgemein/                 Fragen ohne eigenen Themenordner
    └─ <Thema>/                    z. B. Rahmenvertrag RV-…
+      ├─ _Stand.md                Steckbrief (nur Verträge)
       ├─ 2026-11-02_0930 <Frage>.md
       └─ Quellen/                 Kopien (lokale Dateien) bzw. Textauszüge + Link zum Original
 ```
 - Ordner entstehen erst ab der **2. Frage** zum selben Kunden bzw. Thema. Vorher wird die Frage nur vorgemerkt und beim Anlegen nachgetragen.
 - Fragen ohne Kunden- oder Projektbezug („Welche Termine habe ich nächste Woche?“) werden nicht abgelegt. Steht der Kunde nicht in der Frage, wird er aus den Quellen nur übernommen, wenn mindestens die Hälfte der Quellen zu ihm gehört (`ABLAGE_KUNDE_ANTEIL`).
 - Das Sprachmodell beschreibt nur Kunde und Thema. Ob es ein bekannter Kunde bzw. ein bekanntes Thema ist, entscheidet der Code (Namensvergleich, gleiche Vertrags- oder Projektnummer, Embedding-Ähnlichkeit).
+- **Steckbrief bei Verträgen:** Im Themenordner entsteht `_Stand.md` mit Laufzeit, Rabatt, Zahlungsziel, Kündigungsfrist, Preisanpassung und Ansprechpartner, jeweils mit Quelle und Datum der Quelle, dazu Fristen (inkl. berechnetem letzten Kündigungstermin) und Änderungen. Jeder Wert wird vom Code gegen die Originalquelle geprüft; eine neuere Quelle ersetzt einen alten Wert, gleich alte Quellen mit verschiedenen Werten werden als ⚠️ Widerspruch angezeigt. Alle Quellen des Steckbriefs liegen als Kopie bzw. Auszug in `Quellen/` und sind verlinkt. Der Steckbrief ist eine Zusammenfassung, keine Quelle für Antworten.
 - In der App lässt sich die Ablage in der Seitenleiste abschalten. `python ablage.py` zeigt den aktuellen Stand. Der Testlauf legt nichts ab.
-- Test ohne Ollama: `python evaluation/test_ablage.py`
+- Tests ohne Ollama: `python evaluation/test_ablage.py` und `python evaluation/test_steckbrief.py`
 
 ## Evaluation
 ```bash
@@ -185,6 +187,7 @@ Die Demo-Kalendertermine liegen relativ zum heutigen Tag (letzte, diese und näc
 | [ingest.py](ingest.py) | Abschnitte bilden, Embeddings, Index |
 | [agent.py](agent.py) | Suche, Antwort, Quellenliste |
 | [ablage.py](ablage.py) | persönliche Ablage: Ordner je Kunde/Thema, wächst mit jeder Frage |
+| [steckbrief.py](steckbrief.py) | Steckbrief je Vertrag (_Stand.md): aktueller Stand mit Quellen und Fristen |
 | [app.py](app.py) | Streamlit-Oberfläche |
 | [seed_graph.py](seed_graph.py) | Test-Tenant mit Demo-Daten befüllen |
 | [evaluation/](evaluation) | Testfragen und Messung |

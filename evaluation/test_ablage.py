@@ -49,6 +49,7 @@ def falscher_vektor(text):
 
 ablage._analysiere = falsche_analyse
 ablage._vektor = falscher_vektor
+ablage.steckbrief.extrahiere = lambda antwort, model=None: []  # Steckbrief testet evaluation/test_steckbrief.py
 
 
 def frage(text, kunde, thema, t):
