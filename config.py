@@ -10,6 +10,7 @@ Herkunft der Werte:
     - Geheime oder umgebungsabhängige Werte (Client-ID, Tenant-ID, Modellname, Stichtag) kommen
       aus der Datei .env im Projektordner. Vorlage: .env.example. Die .env wird nicht weitergegeben.
 """
+import hashlib
 import os
 from datetime import date
 from pathlib import Path
@@ -32,7 +33,8 @@ CHAT_MODEL = os.getenv("CHAT_MODEL", "qwen2.5:7b")
 EMBED_MODEL = os.getenv("EMBED_MODEL", "bge-m3")
 TEMPERATURE = 0.1  # Zufälligkeit der Textgenerierung; niedrig = sachliche, reproduzierbare Antworten
 NUM_CTX = 8192     # Kontextfenster in Tokens (Prompt + Antwort); 10-12 Quellen brauchen ca. 4.500
-KEEP_ALIVE = "30m" # Modelle im VRAM halten -> kein Nachladen zwischen den Fragen
+# Modelle im VRAM halten -> kein Nachladen zwischen den Fragen. Auf dem Server dauerhaft (siehe docker-compose.yml)
+KEEP_ALIVE = os.getenv("KEEP_ALIVE", "30m")
 
 # =============================================================================
 # Microsoft Graph (Zugriff auf die echten Microsoft-365-Daten, nur im Modus "graph")
@@ -95,7 +97,11 @@ KALENDER_BOOST = 0.1    # bei Zeitfragen sind Kalendertermine meist das Gesuchte
 # =============================================================================
 DATA_DIR = BASE_DIR / "data"           # Vektor-Datenbank (ChromaDB), getrennt pro Nutzer
 DEMO_DIR = BASE_DIR / "demo_data"      # fiktive Beispieldaten für den Demo-Modus
-TOKEN_CACHE = BASE_DIR / ".token_cache.json"  # gespeichertes Microsoft-Anmeldetoken
+# Gespeichertes Microsoft-Anmeldetoken; im Container auf einem Volume, weil /app dort nicht beschreibbar ist
+TOKEN_CACHE = Path(os.getenv("TOKEN_CACHE", str(BASE_DIR / ".token_cache.json")))
+
+# Serverbetrieb (docker-compose.yml): Der Nutzer kommt aus der Anmeldung, Modell und Einlesen sind nicht wählbar
+SERVER_MODUS = os.getenv("SERVER_MODUS", "0") == "1"
 
 # =============================================================================
 # Persönliche Ablage (ablage.py): Ordner je Kunde und Thema, wächst mit jeder Frage
@@ -111,6 +117,13 @@ ABLAGE_KUNDE_ANTEIL = 0.5
 ABLAGE_THEMA_SCHWELLE = 0.8
 
 
+# =============================================================================
+# Strom-Tracker (strom.py)
+# =============================================================================
+STROM_PREIS_EURO_KWH = float(os.getenv("STROM_PREIS_EURO_KWH", "0.35"))  # Annahme, eigenen Tarif in .env eintragen
+STROM_REST_WATT = float(os.getenv("STROM_REST_WATT", "60"))  # geschätzter Verbrauch des PCs ohne Grafikkarte
+
+
 def heute() -> date:
     """Heutiges Datum, auf das sich relative Zeitangaben ("nächste Woche") beziehen.
 
@@ -120,11 +133,24 @@ def heute() -> date:
     return date.fromisoformat(os.getenv("HEUTE")) if os.getenv("HEUTE") else date.today()
 
 
+def sicherer_name(user: str) -> str:
+    """Gültiger Ordnername für einen Nutzer, z. B. "max.muster@firma.de" -> "max_muster_firma_de_1a2b3c4d".
+
+    Der Prüfwert hält ähnliche Namen auseinander ("a.b@firma.de" und "a_b@firma.de"), sonst teilten
+    sich zwei Personen Index und Ablage.
+    """
+    name = user.lower()
+    safe = "".join(c if c.isalnum() else "_" for c in name)
+    return safe if safe == name else f"{safe}_{hashlib.sha1(name.encode()).hexdigest()[:8]}"
+
+
 def db_path(user: str) -> Path:
     """Ordner der Vektor-Datenbank für einen Nutzer.
+    Jeder Nutzer bekommt einen eigenen Index -> keine fremden Daten in den Antworten."""
+    return DATA_DIR / sicherer_name(user)
 
-    Jeder Nutzer bekommt einen eigenen Index -> keine fremden Daten in den Antworten.
-    Aus dem Nutzernamen (z. B. "max.muster@firma.de") wird ein gültiger Ordnername ("max_muster_firma_de").
-    """
-    safe = "".join(c if c.isalnum() else "_" for c in user.lower())
-    return DATA_DIR / safe
+
+def index_nutzer(email: str) -> str:
+    """Index für eine angemeldete Adresse im Serverbetrieb: der eigene, falls eingelesen, sonst die Demo-Daten.
+    Die Adresse kommt aus der Anmeldung, ohne Anmeldung gibt es nur die Demo-Daten."""
+    return email if email and db_path(email).exists() else "demo"

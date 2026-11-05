@@ -32,12 +32,14 @@ def lies_msg(daten: bytes) -> dict:
     with tempfile.NamedTemporaryFile(suffix=".msg", delete=False) as f:
         f.write(daten)
         pfad = f.name
-    msg = extract_msg.Message(pfad)
+    msg = None
     try:
+        msg = extract_msg.Message(pfad)
         return {"betreff": msg.subject or "", "absender": msg.sender or "",
                 "datum": str(msg.date or "")[:10], "text": msg.body or ""}
     finally:
-        msg.close()
+        if msg:
+            msg.close()
         Path(pfad).unlink(missing_ok=True)  # temporäre Datei wieder löschen
 
 
@@ -49,7 +51,8 @@ def lies_eml(daten: bytes) -> dict:
     text = teil.get_content() if teil else ""
     if teil is not None and teil.get_content_type() == "text/html":
         text = html_zu_text(text)
-    datum = msg["Date"].datetime.date().isoformat() if msg["Date"] else ""
+    # Ein unlesbarer Date-Header ergibt datetime=None, die Mail bleibt trotzdem nutzbar
+    datum = msg["Date"].datetime.date().isoformat() if msg["Date"] and msg["Date"].datetime else ""
     return {"betreff": str(msg["Subject"] or ""), "absender": str(msg["From"] or ""),
             "datum": datum, "text": text}
 

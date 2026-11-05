@@ -37,7 +37,16 @@ def erkenne_zeitraum(frage: str, heute: date) -> tuple[date, date, str] | None:
         heute:  Bezugsdatum (config.heute())
     Rückgabe:
         (von, bis, Beschreibung), z. B. (09.11.2026, 15.11.2026, "nächste Woche"),
-        oder None, wenn die Frage keinen Zeitraum enthält.
+        oder None, wenn die Frage keinen (gültigen) Zeitraum enthält.
+    """
+    try:
+        return _wende_regeln_an(frage, heute)
+    except (ValueError, OverflowError):
+        return None  # unmögliche Angabe ("KW 60", "in den nächsten 99999999 Tagen"): normale Frage statt Absturz
+
+
+def _wende_regeln_an(frage: str, heute: date) -> tuple[date, date, str] | None:
+    """Die Regeln zu erkenne_zeitraum().
 
     Die Regeln werden von speziell nach allgemein geprüft (die erste passende gewinnt), damit z. B.
     "übernächste Woche" nicht schon von der Regel für "nächste Woche" erfasst wird.

@@ -1,0 +1,113 @@
+# =========================================================================
+# Server des KAM-Agenten: zwei Container in der WSL2-VM "kam-server".
+#   ollama  Sprachmodell und Embeddings auf der GPU
+#   agent   Streamlit-App (app.py), spricht Ollama über das interne Docker-Netz an
+# Doku: docs/server_einrichtung.md (Phase 1)
+#
+# Starten (in der VM, im Projektordner):  docker compose -f server/docker-compose.yml up -d --build
+# Logs:                                    docker compose -f server/docker-compose.yml logs -f agent
+# Stoppen:                                 docker compose -f server/docker-compose.yml down
+# =========================================================================
+name: kam-server
+
+services:
+  ollama:
+    # feste Version statt "latest": ein Update soll eine bewusste Entscheidung sein, kein Zufall beim Neustart
+    image: ollama/ollama:0.40.13
+    restart: unless-stopped
+    gpus: all
+    environment:
+      # Chat-Modell + Embedding-Modell gleichzeitig im VRAM (wie bisher unter Windows).
+      # Mit 1 würde bei jeder Frage zwischen bge-m3 und qwen2.5 umgeladen.
+      OLLAMA_MAX_LOADED_MODELS: "2"
+      # eine Anfrage nach der anderen: 8 GB VRAM reichen nicht für parallele Antworten
+      OLLAMA_NUM_PARALLEL: "1"
+      # Modelle dauerhaft im VRAM halten, auch bei Aufrufen ohne eigenes keep_alive (z. B. ablage.py): Nachladen
+      # dauert über 1 Minute. Solange der Server läuft, sind so ~5,7 GB VRAM belegt; freigeben mit: wsl --shutdown
+      OLLAMA_KEEP_ALIVE: "-1m"
+    volumes:
+      - ollama-modelle:/root/.ollama
+    # Nur für diesen PC (127.0.0.1): So nutzen auch Testlauf und Entwicklung unter Windows dieses Ollama.
+    # Aus dem Netz ist der Port nicht erreichbar.
+    ports:
+      - "127.0.0.1:11434:11434"
+    networks:
+      - intern
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  agent:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    image: kam-agent
+    restart: unless-stopped
+    # nur zum Lesen der Leistung für den Strom-Tracker (nvidia-smi); das Modell läuft im Container ollama
+    gpus: all
+    depends_on:
+      ollama:
+        condition: service_healthy
+    # optionale Einstellungen (z. B. HEUTE=2026-11-02 für eine Demo mit festem Stichtag)
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      ABLAGE_DIR: /daten/ablage
+      TOKEN_CACHE: /daten/token/token_cache.json
+      KEEP_ALIVE: "-1m"
+      # Nutzer nur aus der Anmeldung, keine Modellwahl und kein Einlesen in der Oberfläche
+      SERVER_MODUS: "1"
+      TZ: Europe/Berlin
+    volumes:
+      - index:/app/data
+      - ablage:/daten/ablage
+      - token:/daten/token
+    # vorerst nur auf diesem PC erreichbar; der Zugang von außen kommt in Phase 2 über den Tunnel
+    ports:
+      - "127.0.0.1:8510:8510"
+    networks:
+      - intern
+      - tunnel
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8510/_stcore/health')"]
+      interval: 15s
+      timeout: 5s
+      # lang wegen des Modell-Downloads beim allerersten Start; danach zählt der erste erfolgreiche Check
+      start_period: 900s
+      retries: 5
+
+  # Zugang von außen (Phase 2). Baut nur eine ausgehende Verbindung zu Cloudflare auf, kein Port am Router.
+  # Startet nur mit: docker compose -f server/docker-compose.yml --profile tunnel up -d
+  # Das Ziel (http://agent:8510) und die Adresse stehen im Cloudflare-Dashboard, nicht hier.
+  tunnel:
+    image: cloudflare/cloudflared:2026.10.7
+    restart: unless-stopped
+    profiles:
+      - tunnel
+    command: tunnel --no-autoupdate run
+    # Token in eigener Datei statt .env: Die .env bekommt auch der Agent-Container, der aus dem Internet
+    # erreichbar ist. Vorlage: server/tunnel.env.example
+    env_file:
+      - path: tunnel.env
+        required: true
+    depends_on:
+      agent:
+        condition: service_healthy
+    # nur im Netz "tunnel": Der Tunnel erreicht den Agenten, aber nicht Ollama
+    networks:
+      - tunnel
+
+networks:
+  intern:
+  tunnel:
+
+# Daten liegen in Docker-Volumes in der VM (auf H:) und überstehen einen Neubau der Container
+volumes:
+  ollama-modelle:
+  index:
+  ablage:
+  token:
