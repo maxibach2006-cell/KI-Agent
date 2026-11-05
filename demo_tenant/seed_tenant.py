@@ -68,11 +68,16 @@ class Graph:
 
     def request(self, methode: str, pfad: str, **kw) -> requests.Response:
         url = pfad if pfad.startswith("http") else GRAPH + pfad
-        for versuch in range(6):
-            headers = {"Authorization": "Bearer " + self.token(), **kw.pop("headers", {})}
+        extra = kw.pop("headers", {})
+        for versuch in range(12):
+            headers = {"Authorization": "Bearer " + self.token(), **extra}
             r = requests.request(methode, url, headers=headers, timeout=60, **kw)
             if r.status_code in (429, 503, 504):
                 time.sleep(int(r.headers.get("Retry-After", 5 * (versuch + 1))))
+                continue
+            # Neue Konten: der OneNote-Dienst antwortet in den ersten Stunden zeitweise mit 401 (Code 40001)
+            if r.status_code == 401 and "/onenote/" in url and "40001" in r.text:
+                time.sleep(10)
                 continue
             return r
         return r
@@ -230,8 +235,8 @@ def chats(g: Graph, liste: list[dict], name: str) -> None:
 
 
 def main() -> None:
-    if len(sys.argv) != 2 or sys.argv[1] not in NUTZER:
-        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}>")
+    if len(sys.argv) not in (2, 3) or sys.argv[1] not in NUTZER:
+        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}> [--nur-onenote]")
     kuerzel = sys.argv[1]
     plan = json.loads((AUSGABE / "plan.json").read_text(encoding="utf-8"))[kuerzel]
     g = Graph(kuerzel)
@@ -239,6 +244,9 @@ def main() -> None:
     fehler = []
     s = lambda name: schritt(name, fehler)  # noqa: E731
     s("OneNote")(onenote, g, plan["onenote"])
+    if sys.argv[2:] == ["--nur-onenote"]:
+        print("Fertig (nur OneNote)." + (f" Fehler: {fehler}" if fehler else ""))
+        return
     s("Posteingang")(mails, g, plan["inbox"], "inbox")
     s("Gesendet")(mails, g, plan["gesendet"], "sentitems")
     s("Termine")(termine, g, plan["termine"])
