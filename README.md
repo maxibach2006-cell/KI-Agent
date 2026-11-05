@@ -102,7 +102,7 @@ streamlit run app.py
 **Mit Microsoft 365:** Einrichtung siehe [docs/TENANT_SETUP.md](docs/TENANT_SETUP.md), dann:
 ```bash
 python seed_graph.py            # nur im Test-Tenant: Demo-Daten anlegen
-python ingest.py --source graph
+python ingest.py --source graph --nutzer anna@firma.de   # --nutzer: Pflicht, sobald mehrere Nutzer einlesen
 streamlit run app.py
 ```
 **Kommandozeile:** `python agent.py "Bis wann läuft der Vertrag mit Hoffmann?"`

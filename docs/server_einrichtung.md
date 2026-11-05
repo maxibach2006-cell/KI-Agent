@@ -338,6 +338,7 @@ Reihenfolge wie in E15: erst Anmeldung, dann Tunnel.
    Teams „Key Account - Kunden“.
 4. **Tunnel** `kam-server`: Token in `server/tunnel.env`, Container mit `--profile tunnel`, Ziel `http://agent:8510`.
 5. **Tenant-Index im Container** eingelesen, Anmeldetoken im Volume `token`.
+   Für jeden weiteren Nutzer einzeln und immer mit Konto (E28): `docker compose exec agent python ingest.py --source graph --nutzer anna@firma.de`. Die Anmeldung im privaten Browserfenster, sonst nimmt der Browser das zuletzt angemeldete Konto, und das Einlesen bricht ab.
 
 **Start mit Tunnel** (in der VM, im Projektordner):
 `docker compose -f server/docker-compose.yml --profile tunnel up -d`
@@ -371,6 +372,7 @@ ersten Mal geöffnet wurde. Das Einlesen im Terminal zählt nicht mit. Die Koste
 |---|---|---|---|
 | E26 | **Agent-Container bekommt Zugriff auf die GPU** (`gpus: all`), nur um `nvidia-smi` zu lesen | eigener Mess-Container, Messgerät an der Steckdose | Am einfachsten, der Messwert liegt direkt in der App. Preis: Der aus dem Internet erreichbare Container hat GPU-Zugriff, läuft aber weiter als eigener Benutzer ohne Root. Für den echten Betrieb wäre ein getrennter Mess-Container sauberer. |
 | E27 | **Hochrechnung auf den Monat nur aus der Zeit ohne Anfragen** | Mittelwert der gesamten Laufzeit | Kurz nach dem Start bestimmten wenige Anfragen das Ergebnis: Der erste Test zeigte irreführend 38 € im Monat. |
+| E28 | **Token-Cache je Nutzer** (`config.token_cache`), Einlesen mit `--nutzer`; angemeldetes Konto wird geprüft | ein gemeinsamer Cache, `TOKEN_CACHE` je Lauf von Hand umsetzen | `GraphClient._token` nahm das erste Konto im Cache: Las der Server erst für A und dann für B ein, bekam B still die Daten von A. Jetzt: eigene Datei je Konto im Token-Volume, falsches Konto bei der Anmeldung wird abgelehnt, ohne `--nutzer` und mit mehreren Konten bricht das Einlesen ab. Test: `evaluation/test_token_cache.py`, dazu echt gegen den Tenant geprüft (Jonas liest nur eigene Daten, Bellas Cache mit fremdem Token erzwingt neue Anmeldung). |
 
 ## Abhängigkeiten zu anderer Arbeit im Repository
 **PR #1 „Persönliche Ablage“ (Branch `jonas/ablage-ordnerstruktur`, Stand 02.11.2026):** Nach jeder Antwort legt

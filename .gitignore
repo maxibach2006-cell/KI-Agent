@@ -1,6 +1,6 @@
 # Zugangsdaten – niemals hochladen
 .env
-.token_cache.json
+.token_cache*.json
 server/tunnel.env
 
 # Lokale Daten: jeder baut seinen Index selbst (python ingest.py --source demo)

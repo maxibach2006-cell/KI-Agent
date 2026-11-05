@@ -100,6 +100,14 @@ DEMO_DIR = BASE_DIR / "demo_data"      # fiktive Beispieldaten für den Demo-Mod
 # Gespeichertes Microsoft-Anmeldetoken; im Container auf einem Volume, weil /app dort nicht beschreibbar ist
 TOKEN_CACHE = Path(os.getenv("TOKEN_CACHE", str(BASE_DIR / ".token_cache.json")))
 
+
+def token_cache(nutzer: str | None = None) -> Path:
+    """Token-Cache-Datei. Mit Nutzer: eine eigene Datei je Konto im selben Ordner wie TOKEN_CACHE
+    (z. B. .token_cache_jonas_firma_de.json). So kann ein Einlesen nie das Token eines anderen Nutzers verwenden."""
+    if not nutzer:
+        return TOKEN_CACHE
+    return TOKEN_CACHE.parent / f".token_cache_{sicherer_name(nutzer)}.json"  # eindeutig wie der Index (E24)
+
 # Serverbetrieb (docker-compose.yml): Der Nutzer kommt aus der Anmeldung, Modell und Einlesen sind nicht wählbar
 SERVER_MODUS = os.getenv("SERVER_MODUS", "0") == "1"
 
