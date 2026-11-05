@@ -54,13 +54,16 @@ class GraphClient:
     Parameter:
         scopes: Berechtigungen, die beim Anmelden angefragt werden (config.READ_SCOPES oder SEED_SCOPES)
         nutzer: erwartetes Konto (UPN). Empfohlen, sobald mehr als ein Nutzer auf demselben Rechner einliest.
+        melde_anmeldung: bekommt Link und Code der Anmeldung (dict von MSAL) statt der Ausgabe im Terminal.
+            Auf dem Server nötig, sonst stünde der Code im Log und jeder mit Log-Zugriff könnte ihn benutzen.
     """
 
-    def __init__(self, scopes: list[str], nutzer: str | None = None):
+    def __init__(self, scopes: list[str], nutzer: str | None = None, melde_anmeldung=None):
         if not config.CLIENT_ID:
             raise RuntimeError("CLIENT_ID fehlt – bitte .env anlegen (siehe .env.example).")
         self.scopes = scopes
         self.nutzer = nutzer.lower() if nutzer else None
+        self.melde_anmeldung = melde_anmeldung
         self.cache_datei = config.token_cache(nutzer)
         self.probleme: list[str] = []  # Teilfehler der Connectoren (siehe melde_problem)
         self.dateien_cache: Path | None = None  # bereits gelesene Dateien (connectors/files.py), setzt ingest.py
@@ -88,9 +91,12 @@ class GraphClient:
             flow = self.app.initiate_device_flow(scopes=self.scopes)
             if "message" not in flow:  # z. B. App-Registrierung falsch eingerichtet
                 raise RuntimeError(f"Anmeldung nicht möglich: {flow.get('error_description')}")
-            if self.nutzer:
-                print(f"Bitte als {self.nutzer} anmelden:")
-            print(flow["message"])  # "Öffnen Sie https://microsoft.com/devicelogin und geben Sie den Code ... ein"
+            if self.melde_anmeldung:
+                self.melde_anmeldung(flow)
+            else:
+                if self.nutzer:
+                    print(f"Bitte als {self.nutzer} anmelden:")
+                print(flow["message"])  # "Öffnen Sie https://microsoft.com/devicelogin und geben Sie den Code ... ein"
             ergebnis = self.app.acquire_token_by_device_flow(flow)  # wartet, bis der Nutzer sich angemeldet hat
             if "access_token" in ergebnis:
                 pruefe_anmeldung(ergebnis, self.nutzer)  # falsches Konto -> abbrechen, nichts speichern
@@ -100,6 +106,10 @@ class GraphClient:
             self.cache_datei.write_text(self.cache.serialize())
             self.cache.has_state_changed = False
         return ergebnis["access_token"]
+
+    def anmelden(self) -> None:
+        """Anmeldung vorab erledigen, ohne schon Daten zu lesen (wartet ggf. auf den Gerätecode-Login)."""
+        self._token()
 
     def request(self, methode: str, pfad: str, **kwargs) -> requests.Response:
         """Eine HTTP-Anfrage an Graph mit Token. Bei Drosselung bis zu 5 Versuche.

@@ -10,14 +10,16 @@ messen, wie lange Antworten bei gleichzeitigen Fragen dauern. Grundlage sind die
    der zweite Nutzer die Daten des ersten.
 2. **Zugang:** Die Testnutzer sind Mitglied im Team, das Cloudflare Access zulässt (derzeit „Key Account - Kunden“).
    Für Test T6 bleibt **ein** Konto bewusst draußen (Vorschlag: Heinrich Frei).
-3. **Index je Nutzer** auf dem Server einlesen, einzeln und jeweils im privaten Browserfenster anmelden:
+3. **Index je Nutzer:** Normalerweise beim ersten Öffnen der App (E29, Tests T9 bis T11). Wer die Wartezeit sparen will,
+   liest vorab von Hand ein, einzeln und jeweils im privaten Browserfenster angemeldet:
    ```bash
-   docker compose exec agent python ingest.py --source graph --nutzer Joki@KAMPilot.onmicrosoft.com
-   docker compose exec agent python ingest.py --source graph --nutzer Bella@KAMPilot.onmicrosoft.com
-   docker compose exec agent python ingest.py --source graph --nutzer Peter@KAMPilot.onmicrosoft.com
+   docker compose -f server/docker-compose.yml exec agent python ingest.py --source graph --nutzer Joki@KAMPilot.onmicrosoft.com
+   docker compose -f server/docker-compose.yml exec agent python ingest.py --source graph --nutzer Bella@KAMPilot.onmicrosoft.com
+   docker compose -f server/docker-compose.yml exec agent python ingest.py --source graph --nutzer Peter@KAMPilot.onmicrosoft.com
    ```
    Erwartung: jeweils „Angemeldet als …“ mit genau diesem Konto. Wird ein anderes Konto angemeldet, bricht das
-   Einlesen mit „Falsches Konto angemeldet“ ab (das ist Test T5).
+   Einlesen mit „Falsches Konto angemeldet“ ab (das ist Test T5). Nicht von Hand einlesen, während die App für
+   denselben Nutzer einliest.
 4. Kein Testlauf und kein 14B-Gutachter parallel (CLAUDE.md, GPU).
 
 ## Testfälle
@@ -32,6 +34,9 @@ messen, wie lange Antworten bei gleichzeitigen Fragen dauern. Grundlage sind die
 | T6 | **Konto ohne Zugang** | Mit dem Konto, das nicht im zugelassenen Team ist, die Server-Adresse öffnen. | Cloudflare Access lehnt ab, die App ist nicht erreichbar (offener Punkt aus dem Server-PR). |
 | T7 | **Gesprächsverlauf je Sitzung** | Jonas fragt „Welchen Rabatt hat Albers?“, Bella gleich danach „Und bis wann läuft der Vertrag?“ | Bellas Folgefrage bezieht sich **nicht** auf Albers (kein gemeinsamer Verlauf). |
 | T8 | **Ablage gleichzeitig** | Jonas und Peter stellen gleichzeitig je zwei Fragen zu einem eigenen Kunden (Albers bzw. Ruhrstahl), Ablage eingeschaltet. | Je Nutzer ein eigener Ablageordner mit eigenem `_register.json`, keine Einträge des anderen, kein kaputtes Register. Wartezeit der Ablage notieren: Sie läuft unter einer gemeinsamen Sperre (`ablage._SPERRE`), mit Steckbrief einschließlich eines Modellaufrufs. |
+| T9 | **Erstes Öffnen** | Ein Konto ohne Index (Vorschlag: Sally) öffnet die App und gibt mit Link und Code den Zugriff frei. Während des Einlesens eine Frage versuchen. Dauer notieren. | Code erscheint nur auf Sallys Seite, nicht in `docker compose logs agent`. Kein Chat, bis das Einlesen fertig ist; keine Antwort aus Demo-Daten. Danach Chat mit eigenen Quellen, ohne die Seite neu zu laden. |
+| T10 | **Falsches Konto beim ersten Öffnen** | Ein zweites Konto ohne Index (Vorschlag: Ingo) öffnet die App, meldet sich bei Microsoft aber als Sally an. Danach „Erneut einlesen“ und richtig anmelden. | Meldung „Falsches Konto angemeldet“, kein Token und kein Index mit Sallys Daten unter Ingos Namen. Der zweite Versuch klappt. |
+| T11 | **Auffrischen und Fragen gleichzeitig** | `EINLESEN_ALLE_STUNDEN=0.1` in `.env`, Container neu erzeugen. Nach 6 Minuten öffnen Jonas und Bella die App und stellen je eine Frage, während „wird aktualisiert“ angezeigt wird. Danach den Wert wieder entfernen. | Keine neue Microsoft-Anmeldung, Einlesen nacheinander, der Chat bleibt nutzbar und die laufende Antwort bricht nicht ab. Antwortzeit notieren: Sie wird länger sein als in T4. |
 
 ## Messprotokoll
 
@@ -45,6 +50,9 @@ messen, wie lange Antworten bei gleichzeitigen Fragen dauern. Grundlage sind die
 | T6 | Heinrich | | | |
 | T7 | Jonas / Bella | | | |
 | T8 | Jonas / Peter | | | |
+| T9 | Sally | | | |
+| T10 | Ingo | | | |
+| T11 | Jonas / Bella | | | |
 
 ## Was bei Problemen zu prüfen ist
 

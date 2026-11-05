@@ -59,7 +59,7 @@ services:
       ABLAGE_DIR: /daten/ablage
       TOKEN_CACHE: /daten/token/token_cache.json
       KEEP_ALIVE: "-1m"
-      # Nutzer nur aus der Anmeldung, keine Modellwahl und kein Einlesen in der Oberfläche
+      # Nutzer nur aus der Anmeldung, keine Modellwahl; eingelesen wird automatisch (einlesen.py, abschalten: AUTO_EINLESEN=0)
       SERVER_MODUS: "1"
       TZ: Europe/Berlin
     volumes:

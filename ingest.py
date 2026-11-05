@@ -38,12 +38,13 @@ from zeitraum import daten_im_text
 META_FELDER = ["quelle", "titel", "ort", "absender", "datum", "link"]
 
 
-def lade_dokumente(source: str, nutzer: str | None = None) -> tuple[str, list[dict], list[str]]:
+def lade_dokumente(source: str, nutzer: str | None = None, graph=None) -> tuple[str, list[dict], list[str]]:
     """Lädt alle Dokumente aus der gewählten Quelle.
 
     Parameter:
         source: "demo" (lokale Beispieldaten) oder "graph" (Microsoft 365 des angemeldeten Nutzers)
         nutzer: erwartetes Microsoft-Konto (UPN) bei "graph"; eigener Token-Cache, falsches Konto wird abgelehnt
+        graph: bereits angemeldeter GraphClient (einlesen.py); sonst wird hier einer erzeugt
     Rückgabe:
         (Nutzername, Dokumente, unvollständige Quellen). Der Nutzername bestimmt, in welchen Index geschrieben
         wird. Unvollständig = Quelle konnte nicht oder nur teilweise gelesen werden (Werte wie meta["quelle"]).
@@ -56,7 +57,7 @@ def lade_dokumente(source: str, nutzer: str | None = None) -> tuple[str, list[di
     from graph_client import GraphClient
     from connectors import files, kalender, onenote, outlook, teams
 
-    graph = GraphClient(config.READ_SCOPES, nutzer)
+    graph = graph or GraphClient(config.READ_SCOPES, nutzer)
     user = graph.get("/me")["userPrincipalName"]  # z. B. "max.muster@firma.de"
     if nutzer and user.lower() != nutzer.lower():  # doppelte Absicherung: nie in einen fremden Index schreiben
         raise RuntimeError(f"Token gehört zu {user}, erwartet {nutzer} – Einlesen abgebrochen")
@@ -172,7 +173,7 @@ def inhaltsverzeichnis(docs: list[dict]) -> dict:
                                    "ort": "automatisch erzeugt", "link": "uebersicht"}}
 
 
-def ingest(source: str, neu: bool = False, nutzer: str | None = None) -> list[str]:
+def ingest(source: str, neu: bool = False, nutzer: str | None = None, graph=None) -> list[str]:
     """Kompletter Indexaufbau (siehe Ablauf oben). Arbeitet inkrementell: Nur neue oder geänderte
     Abschnitte werden neu berechnet, nicht mehr vorhandene werden gelöscht.
 
@@ -180,7 +181,7 @@ def ingest(source: str, neu: bool = False, nutzer: str | None = None) -> list[st
     Dokumente heißen dann nicht "gelöscht", sondern "nicht erreichbar" (z. B. vorübergehender Fehler 401).
     Rückgabe: unvollständige Quellen (leer = alles aktuell).
     """
-    user, docs, unvollstaendig = lade_dokumente(source, nutzer)
+    user, docs, unvollstaendig = lade_dokumente(source, nutzer, graph)
     if neu and unvollstaendig:
         print(f"Index wird nicht gelöscht, weil unvollständig gelesen wurde: {', '.join(unvollstaendig)}")
         neu = False

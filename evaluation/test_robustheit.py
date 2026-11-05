@@ -74,7 +74,7 @@ def quellen_im_index(user: str) -> dict:
 def teste_index() -> None:
     print("Index:")
     stand = {}
-    ingest_modul.lade_dokumente = lambda source: ("test", list(stand["docs"]), list(stand["fehlt"]))
+    ingest_modul.lade_dokumente = lambda source, *_: ("test", list(stand["docs"]), list(stand["fehlt"]))
     # Festes Embedding: Für diese Prüfungen zählt nur, welche Abschnitte im Index liegen
     ingest_modul.ollama.embed = lambda model, input: SimpleNamespace(embeddings=[[1.0, 0.0, 0.0] for _ in input])
 

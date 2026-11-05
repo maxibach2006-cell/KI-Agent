@@ -11,6 +11,7 @@ Funktionsweise von Streamlit (wichtig zum Verständnis dieser Datei):
 Aufbau der Seite:
     1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
+    Im Serverbetrieb davor: Stand des automatischen Einlesens mit dem Anmeldecode (einlesen.py)
     3. Bei einer Frage: die Bausteine des Agenten aufrufen und Zwischenstände anzeigen
        (verstanden als ..., zusätzlich gesucht nach ..., gestreamte Antwort, Quellen, Textauszüge)
     4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
@@ -23,6 +24,7 @@ import streamlit as st
 import ablage
 import agent
 import config
+import einlesen
 import strom
 from ingest import ingest, oeffne_collection
 
@@ -40,12 +42,16 @@ BEISPIELFRAGEN = [
 # --- 1. Seitenleiste -------------------------------------------------------
 with st.sidebar:
     st.header("Einstellungen")
+    email = ""
     if config.SERVER_MODUS:
         # Auf dem Server bestimmt allein die Anmeldung den Nutzer (Cloudflare Access setzt diesen Header).
-        # Keine Eingabe, keine Modellwahl, kein Einlesen: Das steht aus dem Internet niemandem offen.
+        # Keine Eingabe, keine Modellwahl: Das steht aus dem Internet niemandem offen. Eingelesen wird automatisch
+        # und nur für diese Adresse (einlesen.py, Anzeige siehe einlese_status).
         email = st.context.headers.get("Cf-Access-Authenticated-User-Email", "")
         user, ablage_nutzer, model = config.index_nutzer(email), email or "demo", config.CHAT_MODEL
         st.caption(f"Angemeldet als **{email or 'Gast'}**")
+        if user == email and email:
+            st.caption(f"Stand der Daten: {time.strftime('%d.%m.%Y %H:%M', time.localtime(config.index_stand(email)))}")
     else:
         quelle = st.radio("Datenquelle", ["demo", "graph"],
                           format_func=lambda q: "Demo-Daten (lokal)" if q == "demo" else "Microsoft 365 (Graph)")
@@ -64,7 +70,8 @@ with st.sidebar:
                 st.warning(f"Nicht vollständig gelesen, bisherige Daten bleiben erhalten: {', '.join(unvollstaendig)}")
             else:
                 st.success("Index aktualisiert")
-    if user:
+    wartet_auf_index = config.AUTO_EINLESEN and email and user != email  # noch kein eigener Index, siehe Hauptbereich
+    if user and not wartet_auf_index:
         st.caption(f"Abschnitte im Index von **{user}**: {oeffne_collection(user).count()}")
     if st.button("Neues Gespräch"):  # Folgefragen beziehen sich sonst auf die bisherigen Runden
         st.session_state.verlauf = []
@@ -86,10 +93,57 @@ def modell_laden(name: str) -> bool:
     return True
 
 
+def einlese_status(email: str, war_aktiv: bool) -> None:
+    """Zeigt den Stand des Einlesens. Läuft als Fragment: Solange ein Auftrag aktiv ist, alle 5 s nur dieser Teil der
+    Seite neu, damit ein laufender Chat nicht gestört wird. Der Code erscheint nur hier, also nur bei diesem Nutzer."""
+    auftrag = einlesen.auftrag(email)
+    if not auftrag:
+        return
+    zustand = auftrag["zustand"]
+    if war_aktiv and zustand not in einlesen.AKTIV:
+        st.rerun()  # fertig oder Fehler: ganze Seite neu aufbauen, das beendet die Abfrage und gibt den Chat frei
+    erstmalig = config.index_stand(email) is None
+    if auftrag["code"]:
+        st.info(f"**Bitte gib den Zugriff auf deine Microsoft-365-Daten frei.** Melde dich dort als **{email}** an, "
+                "am besten in einem privaten Browserfenster. Der Code gilt etwa 15 Minuten.")
+        st.link_button("Microsoft-Anmeldung öffnen", auftrag["link"])
+        st.code(auftrag["code"], language=None)
+    elif zustand == "wartet" and erstmalig:
+        st.info("Anmeldung erfolgreich. Gerade werden die Daten einer anderen Person eingelesen, danach bist du dran.")
+    elif zustand == "laeuft" and erstmalig:
+        st.info("Deine Daten werden eingelesen. Das dauert etwa 10 Minuten, du kannst die Seite so lange schließen.")
+    elif zustand in einlesen.AKTIV and erstmalig:
+        st.info("Anmeldung wird vorbereitet …")
+    elif zustand in einlesen.AKTIV:
+        st.caption("🔄 Deine Daten werden im Hintergrund aktualisiert. Bis dahin gilt der bisherige Stand.")
+    elif zustand == "fehler":
+        if erstmalig:
+            st.error(f"Einlesen fehlgeschlagen: {auftrag['meldung']}")
+        else:
+            st.warning(f"Einlesen fehlgeschlagen, der bisherige Stand bleibt erhalten: {auftrag['meldung']}")
+    elif auftrag["unvollstaendig"]:
+        st.warning(f"Nicht vollständig gelesen, bisherige Daten bleiben erhalten: {', '.join(auftrag['unvollstaendig'])}")
+    if zustand == "fehler" or (zustand == "fertig" and auftrag["unvollstaendig"]):
+        if st.button("Erneut einlesen"):
+            einlesen.starte(email)
+            st.rerun()
+
+
 # --- 2. Hauptbereich ---------------------------------------------------------
 modell_laden(model)
 st.title("🔎 Informations-Agent Key-Account-Management")
 st.caption("Durchsucht OneNote „MBS 2“, Teams und Outlook – jede Aussage mit Quelle.")
+
+# Beim ersten Öffnen und danach regelmäßig einlesen (einlesen.py). Ohne fertigen Index keine Fragen: Antworten aus den
+# Demo-Daten sähen sonst aus wie Antworten aus den eigenen Daten.
+if config.AUTO_EINLESEN and email:
+    if einlesen.noetig(email):
+        einlesen.starte(email)
+    letzter_auftrag = einlesen.auftrag(email)
+    aktiv = bool(letzter_auftrag) and letzter_auftrag["zustand"] in einlesen.AKTIV
+    st.fragment(einlese_status, run_every=5 if aktiv else None)(email, aktiv)
+    if wartet_auf_index and config.index_stand(email) is None:
+        st.stop()
 
 # Chatverlauf: Liste von {"rolle": "user"|"assistant", "text": ...}, abwechselnd Frage und Antwort
 if "verlauf" not in st.session_state:

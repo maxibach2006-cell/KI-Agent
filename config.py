@@ -110,6 +110,11 @@ def token_cache(nutzer: str | None = None) -> Path:
 
 # Serverbetrieb (docker-compose.yml): Der Nutzer kommt aus der Anmeldung, Modell und Einlesen sind nicht wählbar
 SERVER_MODUS = os.getenv("SERVER_MODUS", "0") == "1"
+# Einlesen bei der Anmeldung (einlesen.py). Ohne CLIENT_ID oder mit AUTO_EINLESEN=0 bleibt es bei den Demo-Daten
+# und dem Einlesen von Hand, z. B. für die Vorführung, wenn der befristete Test-Tenant abgelaufen ist.
+AUTO_EINLESEN = SERVER_MODUS and bool(CLIENT_ID) and os.getenv("AUTO_EINLESEN", "1") != "0"
+# Daten höchstens so oft auffrischen; 8 Stunden entsprechen der Sitzungsdauer von Cloudflare Access
+EINLESEN_ALLE_STUNDEN = float(os.getenv("EINLESEN_ALLE_STUNDEN", "8"))
 
 # =============================================================================
 # Persönliche Ablage (ablage.py): Ordner je Kunde und Thema, wächst mit jeder Frage
@@ -158,7 +163,14 @@ def db_path(user: str) -> Path:
     return DATA_DIR / sicherer_name(user)
 
 
+def index_stand(user: str) -> float | None:
+    """Zeitpunkt des letzten abgeschlossenen Einlesens (Sekunden seit 1970), None = noch nie abgeschlossen.
+    ingest() schreibt stand.txt ganz am Ende. Der Ordner allein sagt nichts: Er entsteht schon beim Start des Einlesens."""
+    datei = db_path(user) / "stand.txt"
+    return datei.stat().st_mtime if datei.exists() else None
+
+
 def index_nutzer(email: str) -> str:
-    """Index für eine angemeldete Adresse im Serverbetrieb: der eigene, falls eingelesen, sonst die Demo-Daten.
+    """Index für eine angemeldete Adresse im Serverbetrieb: der eigene, falls fertig eingelesen, sonst die Demo-Daten.
     Die Adresse kommt aus der Anmeldung, ohne Anmeldung gibt es nur die Demo-Daten."""
-    return email if email and db_path(email).exists() else "demo"
+    return email if email and index_stand(email) is not None else "demo"
