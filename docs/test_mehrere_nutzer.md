@@ -2,7 +2,7 @@
 
 Ziel: belegen, dass der Server mehrere angemeldete Nutzer gleichzeitig bedient, **ohne Daten zu vermischen**, und
 messen, wie lange Antworten bei gleichzeitigen Fragen dauern. Grundlage sind die fiktiven Daten im Tenant KAMPilot
-(`demo_tenant/`, 9 Testnutzer, Team „KAM-Pilot“). Dauer: etwa 1 Stunde, davon 30 Minuten Einlesen.
+(`demo_tenant/`, 9 Testnutzer, Team „KAM-Pilot“). Dauer: etwa 1 Stunde. Einlesen je Konto rund 1–1,5 Minuten (docs/leistung.md).
 
 ## Voraussetzungen
 

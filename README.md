@@ -109,7 +109,7 @@ streamlit run app.py
 ```
 **Kommandozeile:** `python agent.py "Bis wann läuft der Vertrag mit Hoffmann?"`
 
-**Als Server (Docker in WSL2):** Agent und Ollama laufen als Container in einer WSL2-VM. Einrichtung, Entscheidungen und Messwerte: [docs/server_einrichtung.md](docs/server_einrichtung.md).
+**Als Server (Docker in WSL2):** Agent und Ollama laufen als Container in einer WSL2-VM. Einrichtung, Entscheidungen und Messwerte: [docs/server_einrichtung.md](docs/server_einrichtung.md). Wohin die Zeit geht und was sie begrenzt: [docs/leistung.md](docs/leistung.md).
 ```bash
 wsl -d kam-server --cd /mnt/c/Projekte/KI-Agent -- docker compose -f server/docker-compose.yml up -d --build
 ```
