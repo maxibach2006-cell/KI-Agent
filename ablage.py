@@ -43,6 +43,7 @@ Fehler in der Ablage dürfen nie die Antwort verhindern: app.py und agent.py fan
 import json
 import re
 import shutil
+import threading
 from datetime import datetime
 from pathlib import Path
 
@@ -55,6 +56,8 @@ ALLGEMEIN = "_Allgemein"            # Ordner für Fragen ohne (eigenen) Themenor
 OHNE_KUNDE = "_Ohne Kunde"          # Projekte/Verhandlungen, zu denen kein Kunde erkennbar ist
 REGISTER = "_register.json"
 UEBERSICHT = "_Uebersicht.md"
+PROJEKT_ARTEN = {"projekt", "verhandlung", "vertrag", "reklamation"}  # ohne Kunden nur diese Arten ablegen
+_SPERRE = threading.Lock()          # Streamlit bedient jede Sitzung in einem eigenen Thread, das Register gibt es nur einmal
 
 # Rechtsformen und Füllwörter spielen beim Namensvergleich keine Rolle ("Firma X GmbH" = "Firma X")
 NAMENS_FUELLER = {"gmbh", "ag", "kg", "co", "se", "mbh", "ug", "ohg", "gbr", "und", "&", "der", "die", "das",
@@ -94,8 +97,7 @@ Frage: "Welche Termine habe ich nächste Woche?" -> {"kunde": "", "thema": "", "
 def ablage_pfad(user: str) -> Path:
     """Wurzelordner der Ablage eines Nutzers. Wie beim Index (config.db_path) bekommt jeder Nutzer einen
     eigenen Ordner, damit Demo-Daten und echte Kundendaten nie gemischt werden."""
-    safe = "".join(c if c.isalnum() else "_" for c in user.lower())
-    return config.ABLAGE_DIR / safe
+    return config.ABLAGE_DIR / config.sicherer_name(user)
 
 
 def ordnername(text: str, laenge: int = 60) -> str:
@@ -133,6 +135,11 @@ def gleicher_kunde(a: str, b: str) -> bool:
 def _kennwoerter(thema: str) -> set[str]:
     """Wörter, die ein Thema eindeutig machen: Nummern (RV-100, 2027) und Eigennamen (Billbrook)."""
     return {w for w in _woerter(thema, THEMEN_FUELLER) if any(c.isdigit() for c in w) or len(w) >= 5}
+
+
+def _nummern(thema: str) -> set[str]:
+    """Kennwörter mit Ziffern (Vertrags- und Projektnummern)."""
+    return {w for w in _kennwoerter(thema) if any(c.isdigit() for c in w)}
 
 
 
@@ -236,21 +243,19 @@ def _thema_zuordnen(thema: str, kunde_eintrag: dict, vektor: list[float]) -> dic
     oder (c) die Bedeutung per Embedding ähnlich genug ist. Bei (b) gilt: verschiedene Nummern -> verschiedene
     Themen ('Rahmenvertrag RV-1' ≠ 'Rahmenvertrag RV-2'), auch wenn die Bedeutung fast gleich ist.
     """
-    kennung = _kennwoerter(thema)
-    nummern = {w for w in kennung if any(c.isdigit() for c in w)}
+    kennung, nummern = _kennwoerter(thema), _nummern(thema)
     for t in kunde_eintrag["themen"]:
         if t["name"].lower() == thema.lower():
             return t
     for t in kunde_eintrag["themen"]:
-        andere = _kennwoerter(t["name"])
-        andere_nummern = {w for w in andere if any(c.isdigit() for c in w)}
+        andere_nummern = _nummern(t["name"])
         if nummern and andere_nummern and not (nummern & andere_nummern):
             continue  # unterschiedliche Nummern -> sicher verschieden
-        if kennung & andere:
+        if kennung & _kennwoerter(t["name"]):
             return t
     beste, bester_wert = None, config.ABLAGE_THEMA_SCHWELLE
     for t in kunde_eintrag["themen"]:
-        andere_nummern = {w for w in _kennwoerter(t["name"]) if any(c.isdigit() for c in w)}
+        andere_nummern = _nummern(t["name"])
         if nummern and andere_nummern and not (nummern & andere_nummern):
             continue
         wert = _kosinus(vektor, t["vektor"]) if t.get("vektor") else 0.0
@@ -271,7 +276,12 @@ def einordnen(frage: str, treffer: list[dict], register: dict, model: str = conf
     thema = analyse["thema"]
     if thema.lower() in ("", "allgemein", "keins", "kein thema"):
         thema = ""
-    if not kunde and not thema:
+    # Wie beim Kunden: Ein Thema, dessen Kennwörter weder in der Frage noch in den Quellen stehen, ist erfunden
+    belegt = (frage + " " + " ".join(t["text"] for t in treffer)).lower()
+    if thema and _kennwoerter(thema) and not any(w in belegt for w in _kennwoerter(thema)):
+        thema = ""
+    # Ohne Kunden nur echte Projekte, Verträge usw. ablegen, keine allgemeinen Fragen ("Wann ist das Betriebsfest?")
+    if not kunde and (not thema or analyse["art"].lower() not in PROJEKT_ARTEN):
         return None
     kunde = kunde or OHNE_KUNDE
     kunde_eintrag = next((k for k in register["kunden"] if k["name"] == kunde), None)
@@ -400,7 +410,13 @@ def _verschieben(alt: Path, neu: Path, eintraege: list[dict]) -> None:
 
 def ablegen(frage: str, treffer: list[dict], antwort: str, user: str = "demo", model: str = config.CHAT_MODEL,
             verstanden_als: str | None = None) -> dict:
-    """Ordnet eine beantwortete Frage ein und legt sie ab.
+    """Ordnet eine beantwortete Frage ein und legt sie ab; immer nur eine Sitzung zur Zeit (siehe _SPERRE)."""
+    with _SPERRE:
+        return _ablegen(frage, treffer, antwort, user, model, verstanden_als)
+
+
+def _ablegen(frage: str, treffer: list[dict], antwort: str, user: str, model: str, verstanden_als: str | None) -> dict:
+    """Ablauf von ablegen().
 
     Parameter:
         frage:          die Frage, wie der Nutzer sie gestellt hat
@@ -454,6 +470,9 @@ def ablegen(frage: str, treffer: list[dict], antwort: str, user: str = "demo", m
             for e in liste:
                 if e["datei"] is None:
                     e["datei"] = _eintrag_schreiben(_ordner_von(wurzel, kunde, t), e)
+                if t is None or t["ordner"]:  # zieht nicht mehr um -> Text steht in der Datei, Register bleibt klein
+                    e.pop("treffer", None)
+                    e.pop("antwort", None)
         _uebersichten_schreiben(wurzel, register)
     speichere_register(wurzel, register)
 

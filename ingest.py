@@ -23,7 +23,10 @@ Jedes Dokument hat dieses einheitliche Format (egal aus welcher Quelle):
 """
 import argparse
 import hashlib
+import re
+import time
 from collections import Counter
+from functools import lru_cache
 
 import chromadb
 import ollama
@@ -35,17 +38,18 @@ from zeitraum import daten_im_text
 META_FELDER = ["quelle", "titel", "ort", "absender", "datum", "link"]
 
 
-def lade_dokumente(source: str) -> tuple[str, list[dict]]:
+def lade_dokumente(source: str) -> tuple[str, list[dict], list[str]]:
     """Lädt alle Dokumente aus der gewählten Quelle.
 
     Parameter:
         source: "demo" (lokale Beispieldaten) oder "graph" (Microsoft 365 des angemeldeten Nutzers)
     Rückgabe:
-        (Nutzername, Dokumente). Der Nutzername bestimmt, in welchen Index geschrieben wird.
+        (Nutzername, Dokumente, unvollständige Quellen). Der Nutzername bestimmt, in welchen Index geschrieben
+        wird. Unvollständig = Quelle konnte nicht oder nur teilweise gelesen werden (Werte wie meta["quelle"]).
     """
     if source == "demo":
         import local_loader
-        return "demo", local_loader.lade_alle(config.DEMO_DIR)
+        return "demo", local_loader.lade_alle(config.DEMO_DIR), []
 
     # Erst hier importiert: Der Demo-Modus braucht weder msal noch eine Internetverbindung
     from graph_client import GraphClient
@@ -53,17 +57,23 @@ def lade_dokumente(source: str) -> tuple[str, list[dict]]:
 
     graph = GraphClient(config.READ_SCOPES)
     user = graph.get("/me")["userPrincipalName"]  # z. B. "max.muster@firma.de"
+    graph.dateien_cache = config.db_path(user) / "dateien_cache.json"
     print(f"Angemeldet als {user}")
-    docs = []
-    for name, connector in [("OneNote", onenote), ("Outlook", outlook), ("Kalender", kalender),
-                            ("Teams", teams), ("Dateien", files)]:
+    docs, unvollstaendig = [], []
+    for name, quelle, connector in [("OneNote", "OneNote", onenote), ("Outlook", "Outlook", outlook),
+                                    ("Kalender", "Kalender", kalender), ("Teams", "Teams", teams),
+                                    ("Dateien", "Datei", files)]:
+        probleme_vorher = len(graph.probleme)
         try:
             gefunden = connector.lade(graph)
             print(f"  {name}: {len(gefunden)} Dokumente")
             docs += gefunden
+            if len(graph.probleme) > probleme_vorher:  # z. B. ein gesperrter Kanal oder eine defekte Datei
+                unvollstaendig.append(quelle)
         except Exception as e:  # eine fehlende Berechtigung soll nicht alles abbrechen
             print(f"  {name}: übersprungen ({e})")
-    return user, docs
+            unvollstaendig.append(quelle)
+    return user, docs, unvollstaendig
 
 
 def teile_text(text: str, size: int = config.CHUNK_SIZE, overlap: int = config.CHUNK_OVERLAP) -> list[str]:
@@ -118,6 +128,23 @@ def oeffne_collection(user: str, neu: bool = False):
     return client.get_or_create_collection("wissen", metadata={"hnsw:space": "cosine"})
 
 
+@lru_cache(maxsize=8)
+def _lies_index(user: str, stand: int) -> dict:
+    daten = oeffne_collection(user).get(include=["metadatas", "documents"])
+    return {"ids": daten["ids"], "documents": daten["documents"], "metadatas": daten["metadatas"],
+            "korpus": " ".join(daten["documents"]).lower()}
+
+
+def index_daten(user: str) -> dict:
+    """Alle Abschnitte eines Index plus Gesamttext, zwischengespeichert bis zum nächsten Einlesen.
+
+    Die Suche braucht sie bei jeder Frage mehrfach. Die Stand-Datei schreibt ingest() am Ende; so bemerkt auch
+    ein laufender Server, dass ein anderer Prozess neu eingelesen hat.
+    """
+    datei = config.db_path(user) / "stand.txt"
+    return _lies_index(user, datei.stat().st_mtime_ns if datei.exists() else 0)
+
+
 def inhaltsverzeichnis(docs: list[dict]) -> dict:
     """Zusätzliches Dokument aus der Ablagestruktur (OneNote-Abschnitte, Teams-Kanäle, Ordner).
 
@@ -125,10 +152,10 @@ def inhaltsverzeichnis(docs: list[dict]) -> dict:
     aus einzelnen Textabschnitten allein übersieht ein kleines Modell leicht einen Kunden.
     Das Dokument wird mit der Quelle "Übersicht" in den Index gelegt und wie jede andere Quelle gefunden.
     """
-    def orte(quelle: str, trenner: str) -> Counter:
+    def orte(quelle: str) -> Counter:
         # letzter Teil des Ablageorts = Kunde, z. B. "MBS 2 / Hoffmann Maschinenbau" -> "Hoffmann Maschinenbau"
-        return Counter(d["meta"]["ort"].split(trenner)[-1].strip() for d in docs if d["meta"]["quelle"] == quelle)
-    onenote, teams, ordner = orte("OneNote", "/"), orte("Teams", ">"), orte("Datei", ">")
+        return Counter(re.split(r"[/>]", d["meta"]["ort"])[-1].strip() for d in docs if d["meta"]["quelle"] == quelle)
+    onenote, teams, ordner = orte("OneNote"), orte("Teams"), orte("Datei")
     # eine Zeile je Kunde/Thema – eine lange Aufzählung überliest ein kleines Modell leicht
     zeilen = [f"- {name}: {onenote[name]} OneNote-Seiten, {teams[name]} Teams-Nachrichten"
               for name in sorted(set(onenote) | set(teams))]
@@ -142,15 +169,29 @@ def inhaltsverzeichnis(docs: list[dict]) -> dict:
                                    "ort": "automatisch erzeugt", "link": "uebersicht"}}
 
 
-def ingest(source: str, neu: bool = False) -> None:
+def ingest(source: str, neu: bool = False) -> list[str]:
     """Kompletter Indexaufbau (siehe Ablauf oben). Arbeitet inkrementell: Nur neue oder geänderte
-    Abschnitte werden neu berechnet, nicht mehr vorhandene werden gelöscht."""
-    user, docs = lade_dokumente(source)
-    docs.append(inhaltsverzeichnis(docs))
+    Abschnitte werden neu berechnet, nicht mehr vorhandene werden gelöscht.
+
+    Eine Quelle, die nicht vollständig gelesen werden konnte, behält ihre bisherigen Abschnitte: Fehlende
+    Dokumente heißen dann nicht "gelöscht", sondern "nicht erreichbar" (z. B. vorübergehender Fehler 401).
+    Rückgabe: unvollständige Quellen (leer = alles aktuell).
+    """
+    user, docs, unvollstaendig = lade_dokumente(source)
+    if neu and unvollstaendig:
+        print(f"Index wird nicht gelöscht, weil unvollständig gelesen wurde: {', '.join(unvollstaendig)}")
+        neu = False
     collection = oeffne_collection(user, neu)
+    bisher = collection.get(include=["metadatas"])
+    # Das Inhaltsverzeichnis wäre ohne die fehlende Quelle falsch -> dann das bisherige behalten
+    geschuetzt = set(unvollstaendig)
+    if unvollstaendig and any(m["quelle"] == "Übersicht" for m in bisher["metadatas"]):
+        geschuetzt.add("Übersicht")
+    else:
+        docs.append(inhaltsverzeichnis(docs))
 
     # --- Schritt 1: alle Dokumente in Abschnitte zerlegen und vorbereiten ---
-    ids, texte, metas = [], [], []
+    ids, texte, metas, gesehen = [], [], [], set()
     for doc in docs:
         # ChromaDB erlaubt in Metadaten nur einfache Werte -> alles als Text, fehlende Felder als ""
         meta = {f: str(doc["meta"].get(f) or "") for f in META_FELDER}
@@ -159,16 +200,18 @@ def ingest(source: str, neu: bool = False) -> None:
             # Alle im Abschnitt genannten Daten merken -> Fragen wie "nächste Woche" lassen sich danach filtern
             termine = ",".join(d.isoformat() for d in daten_im_text(chunk))
             # Die ID ergibt sich aus dem Inhalt -> unveränderte Abschnitte werden nicht neu berechnet.
-            ids.append(hashlib.sha1((text + meta["link"]).encode()).hexdigest())
+            id_ = hashlib.sha1((text + meta["link"]).encode()).hexdigest()
+            if id_ in gesehen:
+                continue  # gleicher Text mit gleichem Link (z. B. zweimal "ok" im Chat): nur einmal speichern
+            gesehen.add(id_)
+            ids.append(id_)
             texte.append(text)
             metas.append({**meta, "termine": termine})
 
     # --- Schritt 2: Index mit dem aktuellen Stand abgleichen ---
-    # Abschnitte, die es in den Quellen nicht mehr gibt (gelöscht, geändert, verschobene Termine), entfernen
-    alt = set(collection.get()["ids"]) - set(ids)
-    if alt:
-        collection.delete(ids=list(alt))
-    vorhanden = set(collection.get(ids=ids)["ids"]) if ids else set()
+    # Entfernt werden Abschnitte, die es in den Quellen nicht mehr gibt (gelöscht, geändert, verschobene Termine)
+    alt = {i for i, m in zip(bisher["ids"], bisher["metadatas"]) if m["quelle"] not in geschuetzt} - gesehen
+    vorhanden = set(bisher["ids"])
     neu_idx = [i for i, id_ in enumerate(ids) if id_ not in vorhanden]  # Positionen der neuen Abschnitte
     print(f"{len(docs)} Dokumente -> {len(ids)} Abschnitte, davon {len(neu_idx)} neu, {len(alt)} entfernt")
 
@@ -178,10 +221,17 @@ def ingest(source: str, neu: bool = False) -> None:
         vektoren = ollama.embed(model=config.EMBED_MODEL, input=[texte[i] for i in stapel]).embeddings
         collection.add(ids=[ids[i] for i in stapel], documents=[texte[i] for i in stapel],
                        metadatas=[metas[i] for i in stapel], embeddings=vektoren)
+    # Erst löschen, wenn das Neue gespeichert ist: Fällt Ollama vorher aus, bleibt der alte Stand erhalten
+    if alt:
+        collection.delete(ids=list(alt))
+    (config.db_path(user) / "stand.txt").write_text(str(time.time()), encoding="utf-8")  # siehe index_daten()
 
     # Zusammenfassung: wie viele Abschnitte je Quelle jetzt im Index liegen
     zaehler = Counter(m["quelle"] for m in collection.get(include=["metadatas"])["metadatas"])
     print("Index für", user, "->", dict(zaehler))
+    if unvollstaendig:
+        print(f"Unvollständig gelesen, bisherige Abschnitte bleiben erhalten: {', '.join(unvollstaendig)}")
+    return unvollstaendig
 
 
 if __name__ == "__main__":

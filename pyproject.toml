@@ -1,0 +1,10 @@
+# Einheitliche Code-Prüfung:  python -m ruff check .
+# Eine reine Neuformatierung (ruff format) folgt erst, wenn offene Branches zusammengeführt sind,
+# sonst entstehen Konflikte in jeder Zeile.
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501"]  # Prompts und Datensätze haben bewusst lange Zeilen

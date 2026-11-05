@@ -29,32 +29,34 @@ Personen genannt, nimm die, nach der zuletzt gefragt wurde.
 Erfinde nichts dazu, beantworte die Frage nicht. Antworte nur mit JSON {"frage": "..."}.
 
 Beispiele:
-Verlauf: "Welche Konditionen hat Hoffmann?" / Neue Frage: "Und bis wann läuft der Vertrag?"
--> {"frage": "Bis wann läuft der Rahmenvertrag mit Hoffmann?"}
+Verlauf: "Welche Konditionen hat Firma X?" / Neue Frage: "Und bis wann läuft der Vertrag?"
+-> {"frage": "Bis wann läuft der Vertrag mit Firma X?"}
 Verlauf: "Wer ist bei Firma X zuständig?" Antwort: "Anna Weber (Technik), im Einkauf Peter Klein." / Neue Frage: "Wie erreiche ich sie?"
 -> {"frage": "Wie erreiche ich Anna Weber von Firma X?"}
-Verlauf: "Welche Termine habe ich nächste Woche?" / Neue Frage: "Was muss ich für den mit Brenner vorbereiten?"
--> {"frage": "Was muss ich für den Termin mit Brenner nächste Woche vorbereiten?"}
-Verlauf: "Wie hoch ist der Rabatt für Hoffmann?" / Neue Frage: "Und bei Brenner?"
--> {"frage": "Wie hoch ist der Rabatt für Brenner?"}
-Verlauf: "Wie hoch ist der Rabatt für Hoffmann?" / Neue Frage: "Wann ist die Hausmesse?"
--> {"frage": "Wann ist die Hausmesse?"}"""
+Verlauf: "Welche Termine habe ich nächste Woche?" / Neue Frage: "Was muss ich für den mit Firma Y vorbereiten?"
+-> {"frage": "Was muss ich für den Termin mit Firma Y nächste Woche vorbereiten?"}
+Verlauf: "Wie hoch ist der Preisnachlass für Firma X?" / Neue Frage: "Und bei Firma Y?"
+-> {"frage": "Wie hoch ist der Preisnachlass für Firma Y?"}
+Verlauf: "Wie hoch ist der Preisnachlass für Firma X?" / Neue Frage: "Wann ist das Betriebsfest?"
+-> {"frage": "Wann ist das Betriebsfest?"}"""
 
 VARIANTEN_PROMPT = """Formuliere die Frage für eine Suche in Geschäftsunterlagen (Key-Account-Management) zweimal
 anders: Ersetze Umgangssprache durch typische Fachbegriffe aus Vertrieb, Einkauf und Logistik (z. B. Ärger ->
-Reklamation, zu spät -> Lieferverzug, Zeit zum Bezahlen -> Zahlungsziel, Vereinbarung -> Rahmenvertrag,
-Steuerungen -> Steuermodule). Behalte alle Namen, Orte und Jahreszahlen der Frage bei.
+Reklamation, zu spät -> Lieferverzug, Zeit zum Bezahlen -> Zahlungsziel, Vereinbarung -> Rahmenvertrag).
+Behalte alle Namen, Orte und Jahreszahlen der Frage bei.
 Füge KEINE Kunden, Orte, Produkte oder Personen hinzu, die nicht in der Frage stehen.
 Antworte nur mit JSON {"varianten": ["...", "..."]}."""
 
 
-def _json(antwort, schluessel: str, ersatz):
-    """Wert `schluessel` aus der JSON-Antwort des Modells; bei kaputtem JSON der Ersatzwert.
+def json_wert(antwort, schluessel: str, ersatz):
+    """Wert `schluessel` aus der JSON-Antwort des Modells; bei kaputtem JSON oder falschem Typ der Ersatzwert.
+    format="json" erzwingt nur gültiges JSON, nicht den erwarteten Aufbau (das Modell kann z. B. [] liefern).
     So führt eine fehlerhafte Modellantwort nie zum Absturz, sondern nur zum Verzicht auf den Schritt."""
     try:
-        return json.loads(antwort.message.content).get(schluessel, ersatz)
-    except (json.JSONDecodeError, AttributeError):
+        wert = json.loads(antwort.message.content).get(schluessel, ersatz)
+    except (json.JSONDecodeError, AttributeError, TypeError):
         return ersatz
+    return wert if isinstance(wert, type(ersatz)) else ersatz
 
 
 def umschreiben(frage: str, verlauf: list[dict], model: str = config.CHAT_MODEL) -> str:
@@ -78,7 +80,7 @@ def umschreiben(frage: str, verlauf: list[dict], model: str = config.CHAT_MODEL)
                           messages=[{"role": "system", "content": UMSCHREIBEN_PROMPT},
                                     {"role": "user", "content": "Verlauf:\n" + "\n\n".join(zeilen)
                                      + f"\n\nNeue Frage: {frage}"}])
-    neu = str(_json(antwort, "frage", frage)).strip()
+    neu = json_wert(antwort, "frage", frage).strip()
     return neu or frage  # leere Modellantwort -> Originalfrage verwenden
 
 
@@ -88,7 +90,7 @@ def varianten(frage: str, model: str = config.CHAT_MODEL) -> list[str]:
     antwort = ollama.chat(model=model, format="json", options={"temperature": 0, "num_ctx": config.NUM_CTX}, keep_alive=config.KEEP_ALIVE,
                           messages=[{"role": "system", "content": VARIANTEN_PROMPT},
                                     {"role": "user", "content": frage}])
-    liste = _json(antwort, "varianten", [])
+    liste = json_wert(antwort, "varianten", [])
     return [str(v).strip() for v in liste if str(v).strip() and str(v).strip() != frage][:2]
 
 

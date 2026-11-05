@@ -6,6 +6,14 @@ import config
 from parsers import html_zu_text
 
 
+def _alle_abschnitte(graph, pfad: str) -> list[dict]:
+    """Abschnitte eines Notizbuchs oder einer Abschnittsgruppe, auch aus verschachtelten Gruppen."""
+    abschnitte = graph.get_all(f"{pfad}/sections")
+    for gruppe in graph.get_all(f"{pfad}/sectionGroups"):
+        abschnitte += _alle_abschnitte(graph, f"/me/onenote/sectionGroups/{gruppe['id']}")
+    return abschnitte
+
+
 def lade(graph) -> list[dict]:
     """Alle Seiten des Notizbuchs config.NOTEBOOK_NAME als Dokumente (eine Seite = ein Dokument)."""
     notizbuecher = graph.get_all("/me/onenote/notebooks")
@@ -14,7 +22,7 @@ def lade(graph) -> list[dict]:
         raise RuntimeError(f'Notizbuch "{config.NOTEBOOK_NAME}" nicht gefunden')
 
     docs = []
-    for abschnitt in graph.get_all(f"/me/onenote/notebooks/{nb['id']}/sections"):
+    for abschnitt in _alle_abschnitte(graph, f"/me/onenote/notebooks/{nb['id']}"):
         for seite in graph.get_all(f"/me/onenote/sections/{abschnitt['id']}/pages"):
             # Seiteninhalt kommt als HTML und muss einzeln abgefragt werden
             html = graph.request("GET", f"/me/onenote/pages/{seite['id']}/content").text

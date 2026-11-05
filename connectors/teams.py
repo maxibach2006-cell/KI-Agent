@@ -1,6 +1,8 @@
 """Teams-Connector: Kanalnachrichten (inkl. Antworten im Thread) der eigenen Teams und persönliche Chats."""
 import re
 
+import requests
+
 from parsers import html_zu_text
 
 
@@ -31,20 +33,37 @@ def _nachricht_zu_dokument(n: dict, ort: str) -> dict | None:
     }
 
 
+def _lies_nachrichten(graph, pfad: str, ort: str, docs: list, mit_antworten: bool = False) -> None:
+    """Nachrichten eines Kanals oder Chats an docs anhängen. Ein gesperrter Kanal oder Chat darf die übrigen
+    nicht verhindern; das Problem wird gemeldet, damit ingest.py die bisherigen Teams-Daten behält."""
+    try:
+        # Antworten im Thread gehören inhaltlich dazu; $expand spart einen eigenen Aufruf je Nachricht
+        for n in graph.get_all(pfad + "?$expand=replies" if mit_antworten else pfad):
+            docs.append(_nachricht_zu_dokument(n, ort))
+            docs += [_nachricht_zu_dokument(antwort, ort) for antwort in n.get("replies", [])]
+    except requests.RequestException as e:
+        graph.melde_problem(f"{ort}: {e}")
+
+
 def lade(graph) -> list[dict]:
     """Alle Nachrichten aus allen Kanälen aller eigenen Teams sowie aus allen persönlichen Chats."""
     docs = []
     for team in graph.get_all("/me/joinedTeams"):
-        for kanal in graph.get_all(f"/teams/{team['id']}/channels"):
-            for n in graph.get_all(f"/teams/{team['id']}/channels/{kanal['id']}/messages"):
-                docs.append(_nachricht_zu_dokument(n, f"{team['displayName']} > {kanal['displayName']}"))
-                # Antworten im Thread gehören inhaltlich dazu
-                for antwort in graph.get_all(
-                        f"/teams/{team['id']}/channels/{kanal['id']}/messages/{n['id']}/replies"):
-                    docs.append(_nachricht_zu_dokument(antwort, f"{team['displayName']} > {kanal['displayName']}"))
+        try:
+            kanaele = graph.get_all(f"/teams/{team['id']}/channels")
+        except requests.RequestException as e:
+            graph.melde_problem(f"{team['displayName']}: {e}")
+            continue
+        for kanal in kanaele:
+            _lies_nachrichten(graph, f"/teams/{team['id']}/channels/{kanal['id']}/messages",
+                              f"{team['displayName']} > {kanal['displayName']}", docs, mit_antworten=True)
 
-    for chat in graph.get_all("/me/chats"):
+    try:
+        chats = graph.get_all("/me/chats")
+    except requests.RequestException as e:
+        graph.melde_problem(f"Chats: {e}")
+        chats = []
+    for chat in chats:
         name = chat.get("topic") or "Chat"  # 1:1-Chats haben kein Thema
-        for n in graph.get_all(f"/me/chats/{chat['id']}/messages"):
-            docs.append(_nachricht_zu_dokument(n, f"Chat: {name}"))
+        _lies_nachrichten(graph, f"/me/chats/{chat['id']}/messages", f"Chat: {name}", docs)
     return [d for d in docs if d]  # None-Einträge (Systemmeldungen) entfernen

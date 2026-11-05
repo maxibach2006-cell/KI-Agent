@@ -144,6 +144,10 @@ def regelpruefung(e: dict) -> dict[str, tuple[bool, str]]:
     if e.get("widerspruch"):
         p["Widerspruch"] = (bool(e["widersprueche"]), f"{len(e['widersprueche'])} erkannt")
 
+    # Datum im Antworttext, das in keiner Quelle steht (Hinweis von agent.anhang_markdown)
+    datum_ok = "### Bitte prüfen" not in antwort
+    p["Datum"] = (datum_ok, "belegt" if datum_ok else "Datum ohne Quelle")
+
     # Rückbezug: Wurde die Folgefrage richtig verstanden (mind. ein erwartetes Wort) bzw. bei
     # Themenwechsel NICHT mit dem alten Thema vermischt?
     verstanden = _norm(e.get("verstanden_als", e["frage"]))

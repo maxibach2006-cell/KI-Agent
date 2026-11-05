@@ -4,6 +4,7 @@ Termine sind die Hauptquelle für Zeitfragen ("Was steht nächste Woche an?", si
 """
 from datetime import date, timedelta
 
+import config
 from parsers import html_zu_text
 from zeitraum import WOCHENTAGE
 
@@ -23,7 +24,7 @@ def termin_text(betreff: str, tag: date, von: str, bis: str, ort: str, teilnehme
 
 def lade(graph) -> list[dict]:
     """Alle Termine im Zeitraum heute - 2 Jahre bis heute + 1 Jahr als Dokumente."""
-    heute = date.today()
+    heute = config.heute()
     von, bis = heute - timedelta(days=730), heute + timedelta(days=365)
     # calendarView liefert auch Einzeltermine von Serienterminen (anders als /me/events).
     # Prefer-Header: Zeiten in deutscher Zeitzone statt UTC
