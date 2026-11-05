@@ -26,3 +26,6 @@ evaluation/testlauf_bericht.md
 # Persönliche Claude-Code-Einstellungen (enthalten lokale Pfade)
 .claude/launch.json
 .claude/settings.local.json
+
+# Erzeugte Testdaten für den Tenant (python demo_tenant/erzeuge.py erzeugt sie neu)
+demo_tenant/ausgabe/
