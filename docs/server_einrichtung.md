@@ -10,7 +10,7 @@ auch von außerhalb des Heimnetzes. Zweck ist die Vorführung in der Abgabe (Cli
 
 ```
 App (.exe, pywebview) ──HTTPS──► agent.<domain>
-                                   │  Cloudflare Access: Einmalcode per Mail
+                                   │  Cloudflare Access: Microsoft-Anmeldung, nur Team-Mitglieder
                                    ▼
                        Cloudflare Tunnel (nur ausgehende Verbindung)
                                    ▼
@@ -23,8 +23,8 @@ App (.exe, pywebview) ──HTTPS──► agent.<domain>
 |---|---|---|
 | 0 | WSL2, Ubuntu, Docker Engine, NVIDIA Container Toolkit, GPU-Test | erledigt 02.11.2026 |
 | 1 | Container für Ollama und Agent (docker compose) | erledigt 02.11.2026 |
-| 2 | Cloudflare Tunnel und Domain | begonnen 02.11.2026 (Domain liegt bei Strato) |
-| 3 | Anmeldung über Cloudflare Access | offen |
+| 2 | Cloudflare Tunnel und Domain | erledigt 05.11.2026 |
+| 3 | Anmeldung über Cloudflare Access | erledigt 05.11.2026, Test mit Nicht-Mitglied offen |
 | 4 | Client-App (pywebview als .exe) | offen |
 | 5 | Demo-Betrieb: Start per Doppelklick, Statusprüfung | offen |
 | 6 | Testlauf und Dokumentation | offen |
@@ -50,7 +50,7 @@ App (.exe, pywebview) ──HTTPS──► agent.<domain>
 | E3 | **Docker Engine** direkt in Ubuntu | Docker Desktop | Docker Desktop ist ein zusätzliches Windows-Programm mit eigener VM und Lizenzbedingungen. Die Engine in WSL ist schlanker und entspricht einem Linux-Server. |
 | E4 | **Weg A: Web-Oberfläche** bleibt Streamlit, die App ist ein Programmfenster (pywebview) | eigene HTTP-API + eigener Client | Kaum neuer Code, keine Absprache für ein neues Framework nötig. Für die Demo ausreichend. |
 | E5 | **Cloudflare Tunnel** für den Zugriff von außen | Portfreigabe am Router, Tailscale | Keine offenen Ports, private IP bleibt verborgen, HTTPS automatisch. Tailscale müsste jeder Nutzer selbst installieren. |
-| E6 | **Cloudflare Access** mit Einmalcode per Mail | Microsoft-Anmeldung (`st.login`), gemeinsames Passwort | Kein Code im Projekt, Freigabeliste von Mail-Adressen, kostenlos bis 50 Nutzer. Ein öffentlicher Server ohne Anmeldung wäre für jeden nutzbar. |
+| E6 | **Cloudflare Access mit Microsoft-Anmeldung und Team-Prüfung** (zuerst geplant: Einmalcode per Mail) | Einmalcode per Mail, Microsoft-Anmeldung in der App (`st.login`), gemeinsames Passwort | Nur Mitglieder des Teams „Key Account - Kunden“ kommen auf die Seite, es gibt keine zweite Mitgliederliste, und die bestätigte Adresse bestimmt den Index. Kein Anmeldecode im Projekt. Einschränkungen: Nutzer brauchen ein Konto im Tenant, und Cloudflare liest die Gruppen bei der Anmeldung, wer aus dem Team entfernt wird, kommt also bis zum Ablauf der Sitzung weiter hinein. Die Anmeldung gibt dem Agenten keinen Zugriff auf Postfächer: Die Daten werden weiterhin vorab eingelesen. |
 | E7 | **Nur Demo-Daten** auf dem öffentlich erreichbaren Server | echte Daten | Echte Kundendaten auf einem privaten, aus dem Internet erreichbaren PC bräuchten eine Freigabe der Firma. |
 | E8 | **VM auf Laufwerk H:** (SATA-SSD) | C: (NVMe), D: | Geplant war D:, die Prüfung zeigte aber eine mechanische Festplatte. Ollama lädt beim Start ~5 GB Modell, auf einer HDD dauert das ein Vielfaches. C: hat nur 18 GB frei. |
 | E9 | **Ubuntu 24.04 LTS** | Ubuntu 26.04 LTS, Debian | Für 24.04 sind Docker und das NVIDIA Container Toolkit am längsten erprobt und am besten dokumentiert. Support bis 2029, für das Projekt ausreichend. Ein Server soll stabil sein, nicht neu. |
@@ -189,7 +189,10 @@ gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert d
 - Nameserver bei Strato auf Cloudflare umgestellt. Die Registry führt jetzt `marge.ns.cloudflare.com` und
   `uriah.ns.cloudflare.com` (per RDAP geprüft). Bei der ersten Prüfung stand dort noch Strato: Erst die Abfrage bei der
   Registry zeigte, dass die Änderung noch nicht angekommen war und kein Cache die Ursache ist.
-- Offene Entscheidung: Anmeldung per Mail-Code (E6) oder Microsoft-Anmeldung mit Prüfung der Team-Mitgliedschaft.
+- Entschieden: Microsoft-Anmeldung mit Prüfung der Team-Mitgliedschaft (E6). Entra ID ist als Anmeldeweg in Cloudflare
+  eingerichtet. Der Test liefert die Adresse und die Gruppen, darunter „Key Account - Kunden“ (Object ID `20c9c084-…`).
+  Die Einstellung „Entra ID Policy Sync“ gehört nicht dazu: Sie verlangt weitere Rechte für Conditional Access, die das
+  Projekt nicht braucht. Ist sie an, scheitert der Test mit „Failed to fetch Entra ID Authentication Context“.
 
 ### DNS-Bestandsaufnahme vor dem Umzug (öffentliche Abfrage über 1.1.1.1, 04.11.2026)
 Die Domain galt als ungenutzt. Die Abfrage zeigte aber Einträge, die beim Umzug verloren gehen könnten (P6):
@@ -324,6 +327,51 @@ verschiedene Regeln haben. Ein eigener Testfall für relative Datumsangaben im T
 | E20 | **Datumsprüfung im Code**, Hinweis unter der Antwort | Regel im Prompt, Antwort nachträglich korrigieren | Eine Prompt-Regel half im Versuch nicht (3 von 3 falsch, vorher 2 von 3). Der Code entscheidet, wie bei den Widersprüchen. Korrigieren geht nicht, weil die Antwort schon gestreamt ist und der Code das richtige Datum nicht kennt. |
 | E19 | **Eigener Test-Tenant** (Business Basic, Testversion) mit fiktiven Daten | nur Demo-Dateien, Dev Proxy, Firmen-Tenant | Nur ein echter Tenant prüft Anmeldung, Rechte und das Verhalten der Dienste. P8 und P9 wären mit Demo-Daten nie aufgefallen. Er ist befristet, deshalb bleiben die Demo-Daten als Rückfallebene für die Vorführung. |
 
+## Phase 2 und 3: Zugang von außen eingerichtet (05.11.2026)
+
+Reihenfolge wie in E15: erst Anmeldung, dann Tunnel.
+
+1. **Zweite App in Entra** (`KAM Cloudflare Anmeldung`) mit geheimem Schlüssel, getrennt von der App zum Einlesen. Der
+   Schlüssel liegt nur bei Cloudflare. **Sein Ablaufdatum notieren:** Danach funktioniert die Anmeldung nicht mehr.
+2. **Entra ID als Anmeldeweg** bei Cloudflare, mit „Support Groups“ und PKCE.
+3. **Access-Anwendung** `KAM Agent` für `agent.auremlips.store`, Sitzung 8 Stunden, Regel „Allow“ nur für die Gruppe des
+   Teams „Key Account - Kunden“.
+4. **Tunnel** `kam-server`: Token in `server/tunnel.env`, Container mit `--profile tunnel`, Ziel `http://agent:8510`.
+5. **Tenant-Index im Container** eingelesen, Anmeldetoken im Volume `token`.
+
+**Start mit Tunnel** (in der VM, im Projektordner):
+`docker compose -f server/docker-compose.yml --profile tunnel up -d`
+
+**Prüfung ohne Anmeldung** (05.11.2026, aus der VM): Startseite, `/_stcore/health`, `/_stcore/stream`, `/api/tags` und eine
+Anfrage mit gefälschtem Header `Cf-Access-Authenticated-User-Email` antworten alle mit HTTP 302 auf die Anmeldeseite von
+Cloudflare. Am Router ist kein Port offen, Ollama ist aus dem Netz `tunnel` nicht erreichbar.
+
+**Test von außen** (05.11.2026, durch Max): Anmeldung mit dem Team-Konto und Nutzung der App funktionieren. Noch offen:
+Test mit einem Konto ohne Team-Mitgliedschaft, damit auch die Ablehnung belegt ist.
+
+## Strom-Tracker (05.11.2026)
+`strom.py` zeigt unter jeder Antwort den Verbrauch und in der Seitenleiste die Summe in Geld. Der Stand liegt in
+`data/strom.json` und übersteht einen Neustart.
+
+| Wert | Herkunft |
+|---|---|
+| Grafikkarte | **gemessen** mit `nvidia-smi`, einmal pro Sekunde |
+| übriger PC | **geschätzt**, fester Wert `STROM_REST_WATT` (60 W), ohne Messgerät an der Steckdose nicht messbar |
+| Strompreis | **Annahme** `STROM_PREIS_EURO_KWH` (35 Cent/kWh), eigenen Tarif in `.env` eintragen |
+
+Erste Messung: Eine Frage in der App verbrauchte rund 0,85 Wh (davon Grafikkarte gemessen 0,62 Wh), das sind rund
+0,03 Cent. Das ist ein Einzelwert, die Laufzeit einer Frage schwankt stark. Grafikkarte im Leerlauf mit geladenen
+Modellen: rund 26 W. Dazu kommt der geschätzte Rest des PCs.
+
+Grenzen: Eine Anfrage zählt den gesamten Verbrauch während ihrer Laufzeit, auch den Grundverbrauch und das, was
+andere Programme auf dem PC an der Grafikkarte verursachen. Gemessen wird erst, wenn die App nach einem Start zum
+ersten Mal geöffnet wurde. Das Einlesen im Terminal zählt nicht mit. Die Kosten sieht jeder angemeldete Nutzer.
+
+| Nr. | Entscheidung | Alternativen | Begründung |
+|---|---|---|---|
+| E26 | **Agent-Container bekommt Zugriff auf die GPU** (`gpus: all`), nur um `nvidia-smi` zu lesen | eigener Mess-Container, Messgerät an der Steckdose | Am einfachsten, der Messwert liegt direkt in der App. Preis: Der aus dem Internet erreichbare Container hat GPU-Zugriff, läuft aber weiter als eigener Benutzer ohne Root. Für den echten Betrieb wäre ein getrennter Mess-Container sauberer. |
+| E27 | **Hochrechnung auf den Monat nur aus der Zeit ohne Anfragen** | Mittelwert der gesamten Laufzeit | Kurz nach dem Start bestimmten wenige Anfragen das Ergebnis: Der erste Test zeigte irreführend 38 € im Monat. |
+
 ## Abhängigkeiten zu anderer Arbeit im Repository
 **PR #1 „Persönliche Ablage“ (Branch `jonas/ablage-ordnerstruktur`, Stand 02.11.2026):** Nach jeder Antwort legt
 `ablage.py` Frage, Antwort und Quellen in Ordnern je Kunde und Thema ab (`ABLAGE_DIR`, Standard `~/KAM-Ablage`).
@@ -342,7 +390,7 @@ Kein Konflikt mit diesem Branch, aber Folgen für den Server:
 | P1 | Geplanter Speicherort D: ungeeignet | D: ist eine HDD, nicht wie angenommen eine SSD | Prüfung mit `Get-PhysicalDisk`, Umstieg auf H: (E8) |
 | P2 | Installationsbefehle, direkt aus PowerShell an `wsl … bash -c` übergeben, liefen nicht; Ausgabe nur „deb“ | PowerShell zerlegt mehrzeilige Argumente und Anführungszeichen beim Aufruf von `wsl.exe`, Bash bekam ein zerstückeltes Skript | Befehle als Datei `server/setup_wsl.sh` ins Repository, Aufruf über `/mnt/c/...`. Zusatznutzen: Einrichtung ist dokumentiert und wiederholbar. Zeilenenden LF sind durch `.gitattributes` gesichert, mit CRLF würde Bash scheitern. |
 | P3 | Beim ersten Start brach der Agent mit `Server disconnected without sending a response` ab, beide Container starteten kurz darauf neu. Ollama meldete danach irreführend „total blobs: 0“ (die Modelle waren aber vorhanden). | Das Systemprotokoll (`journalctl`) zeigte um 20:19:31, dass systemd die **ganze Distribution herunterfuhr**: WSL beendet eine Distribution ≈ 15 s, nachdem das letzte Windows-Terminal sie verlassen hat, auch wenn darin Dienste laufen. Der Startbefehl hatte sich beendet, beim Warten war kein Terminal mehr offen. | `.wslconfig`: `[general] instanceIdleTimeout=-1` und `[wsl2] vmIdleTimeout=-1`. Test: `wsl --shutdown`, Container starten, Terminal schließen, 60 s warten → `kam-server` läuft weiter. Nebenbei bestätigt: Nach einem Start der VM fahren die Container dank `restart: unless-stopped` von selbst hoch. Lehre: Ein „Server“ unter WSL braucht diese Einstellung, sonst lebt er nur, solange ein Fenster offen ist. |
-| P4 | Erste Seite der App hing über eine Minute bei „Lade Sprachmodell …“ | Kaltstart: qwen2.5:7b (4,7 GB) wird beim ersten Aufruf von der virtuellen Festplatte gelesen und auf die GPU geladen (1 min 20 s laut Ollama-Log). Die Anfrage danach (18 s) wartete noch auf die Initialisierung. | Kein Fehler. Ab der zweiten Anfrage 0,2–0,3 s. Für die Demo: Modelle beim Serverstart vorladen (Phase 5). |
+| P4 | Erste Seite der App hing über eine Minute bei „Lade Sprachmodell …“ | Kaltstart: qwen2.5:7b (4,7 GB) wird beim ersten Aufruf von der virtuellen Festplatte gelesen und auf die GPU geladen (1 min 20 s laut Ollama-Log). Die Anfrage danach (18 s) wartete noch auf die Initialisierung. | Kein Fehler, aber im Test von außen als langes Warten aufgefallen. Gemessen: 96 s zum Laden (bge-m3 14,5 s, qwen 82 s). Lösung: `agent_start.sh` lädt die Modelle beim Serverstart, und auf dem Server bleiben sie dauerhaft geladen (`KEEP_ALIVE=-1m`). Aufwärmen danach: 0,07 s. Preis: Solange der Server läuft, sind etwa 5,7 GB VRAM belegt. Freigeben mit `wsl --shutdown`. Nach dem Start einer VM dauert es bis zur Bereitschaft weiterhin 1–2 Minuten. |
 | P8 | Der Datei-Connector übersprang alle Dateien mit einem 404 | Das automatisch angelegte Team „KAM-Pilot“ hat keine SharePoint-Ablage. Dieser eine Fehler brach den ganzen Connector ab. | `connectors/files.py` überspringt nur noch das betroffene Team. Danach: 4 Dateien eingelesen. |
 | P9 | OneNote antwortet unzuverlässig: gültiges Token erhält zeitweise 401 (Code 40001) oder 403 (Code 40007), das Anlegen von Seiten scheitert mit 404 | Vergleichstest: gleiches Token, gleicher Pfad, mal 200, mal 401. Token und Rechte sind also nicht die Ursache. Vermutung: OneNote ist im neuen Tenant noch nicht fertig bereitgestellt (nicht belegt). | `graph_client.py` wiederholt Anfragen bei Code 40001 bis zu fünfmal. Das Anlegen gelang erst nach acht Versuchen mit Pausen. Ob das Lesen dauerhaft zuverlässig ist, muss sich noch zeigen. |
 | P10 | 2 Hoffmann-Seiten doppelt im Notizbuch (12 statt 10) | `seed_graph.py` prüft vor dem Anlegen den Titel. Frisch angelegte Seiten erscheinen in der Liste zunächst ohne Titel, gelten also als fehlend. | Dubletten von Hand in OneNote löschen. Offen: Prüfung in `seed_graph.py` verbessern. |

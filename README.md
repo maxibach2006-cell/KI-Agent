@@ -51,6 +51,8 @@ Teil 1–3 schreibt das Sprachmodell. Teil 4 und 5 erzeugt der Code aus den Meta
 
 **Datumsprüfung:** Das Modell rechnet relative Angaben („am Dienstag“) teils falsch in ein Kalenderdatum um. Der Code vergleicht deshalb jedes vollständige Datum im Antworttext mit den Quellen und nennt fehlende Belege unter „Bitte prüfen“. Test ohne Ollama: `python evaluation/test_datumspruefung.py`
 
+**Stromkosten:** [strom.py](strom.py) zeigt unter jeder Antwort den Verbrauch und in der Seitenleiste die Summe in Euro. Die Grafikkarte wird gemessen, der übrige PC ist geschätzt, und der Strompreis ist eine Annahme (`STROM_REST_WATT`, `STROM_PREIS_EURO_KWH` in der `.env`). Test ohne Ollama: `python evaluation/test_strom.py`
+
 **Fehlerfälle:** Kann eine Quelle beim Einlesen nicht vollständig gelesen werden (z. B. vorübergehender Fehler 401, defekte Datei, gesperrter Kanal), behält sie ihre bisherigen Abschnitte im Index, und die App zeigt eine Warnung. Test ohne Ollama: `python evaluation/test_robustheit.py`
 
 **Widerspruchsprüfung als eigener Schritt:** Ein 7B-Modell übersieht Widersprüche leicht, wenn es gleichzeitig die Antwort schreibt. Deshalb läuft sie getrennt:

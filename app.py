@@ -23,9 +23,11 @@ import streamlit as st
 import ablage
 import agent
 import config
+import strom
 from ingest import ingest, oeffne_collection
 
 st.set_page_config(page_title="KAM Informations-Agent", page_icon="🔎", layout="wide")
+strom.starte()  # Strommessung im Hintergrund, läuft nur einmal je Serverprozess
 
 # Feste Fragen für die Präsentation (siehe Demo-Ablauf im README)
 BEISPIELFRAGEN = [
@@ -120,6 +122,7 @@ if frage and user:
     # Dieselben Bausteine wie agent.antworte(), aber mit Zwischenständen und gestreamter Antwort
     with st.chat_message("assistant"):
         start = time.perf_counter()
+        strom_start = strom.marke()
         hinweis = st.empty()
         schritte = agent.vorbereite(frage, user, model, runden, melde=hinweis.caption)  # Schritte 0-2
         hinweis.empty()
@@ -148,6 +151,16 @@ if frage and user:
             symbol = {"abgelegt": "📁", "fehler": "⚠️"}.get(abgelegt["status"], "📝")
             st.caption(f"{symbol} {abgelegt['meldung']}")
 
+        # Verbrauch erst hier: Auch die Ablage nutzt das Sprachmodell
+        messung = strom.anfrage_beenden(strom_start)
+        if messung:
+            st.caption(strom.text_anfrage(messung))
+
     st.session_state.verlauf.append({"rolle": "assistant", "text": antwort + quellen})
 elif frage:
     st.warning("Bitte zuerst den angemeldeten Nutzer angeben und die Daten einlesen.")
+
+# Am Ende des Skripts, damit die Seitenleiste die gerade beantwortete Frage schon mitzählt
+if uebersicht := strom.text_uebersicht():
+    st.sidebar.divider()
+    st.sidebar.caption(uebersicht)

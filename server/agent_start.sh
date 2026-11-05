@@ -3,7 +3,8 @@
 # Startablauf im Agent-Container (wie start_demo.bat unter Windows):
 #   1. warten, bis Ollama antwortet, fehlende Modelle einmalig herunterladen
 #   2. Demo-Daten neu einlesen (die Demo-Termine liegen relativ zum heutigen Tag)
-#   3. Streamlit starten, im Container auf allen Adressen (0.0.0.0) statt nur localhost,
+#   3. Modelle vorab in den Grafikspeicher laden
+#   4. Streamlit starten, im Container auf allen Adressen (0.0.0.0) statt nur localhost,
 #      sonst wäre die App von außerhalb des Containers nicht erreichbar
 # =========================================================================
 set -euo pipefail
@@ -36,5 +37,10 @@ EOF
 echo "== 2. Demo-Daten einlesen"
 python ingest.py --source demo
 
-echo "== 3. Oberfläche starten (Port 8510)"
+echo "== 3. Modelle vorab laden (der erste Nutzer soll nicht über eine Minute warten)"
+# zweimal: Der erste Aufruf lädt, beim zweiten ist auch die einmalige Verzögerung danach vorbei.
+# Scheitert das, startet die App trotzdem und lädt die Modelle bei der ersten Frage.
+python -c "import agent; agent.aufwaermen(); agent.aufwaermen()" || echo "Vorabladen fehlgeschlagen"
+
+echo "== 4. Oberfläche starten (Port 8510)"
 exec python -m streamlit run app.py --server.address 0.0.0.0 --server.headless true

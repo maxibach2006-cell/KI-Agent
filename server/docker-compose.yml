@@ -22,8 +22,9 @@ services:
       OLLAMA_MAX_LOADED_MODELS: "2"
       # eine Anfrage nach der anderen: 8 GB VRAM reichen nicht für parallele Antworten
       OLLAMA_NUM_PARALLEL: "1"
-      # Modelle 30 min im VRAM halten, auch bei Aufrufen ohne eigenes keep_alive (z. B. ablage.py)
-      OLLAMA_KEEP_ALIVE: "30m"
+      # Modelle dauerhaft im VRAM halten, auch bei Aufrufen ohne eigenes keep_alive (z. B. ablage.py): Nachladen
+      # dauert über 1 Minute. Solange der Server läuft, sind so ~5,7 GB VRAM belegt; freigeben mit: wsl --shutdown
+      OLLAMA_KEEP_ALIVE: "-1m"
     volumes:
       - ollama-modelle:/root/.ollama
     # Nur für diesen PC (127.0.0.1): So nutzen auch Testlauf und Entwicklung unter Windows dieses Ollama.
@@ -44,6 +45,8 @@ services:
       dockerfile: server/Dockerfile
     image: kam-agent
     restart: unless-stopped
+    # nur zum Lesen der Leistung für den Strom-Tracker (nvidia-smi); das Modell läuft im Container ollama
+    gpus: all
     depends_on:
       ollama:
         condition: service_healthy
@@ -55,6 +58,7 @@ services:
       OLLAMA_HOST: http://ollama:11434
       ABLAGE_DIR: /daten/ablage
       TOKEN_CACHE: /daten/token/token_cache.json
+      KEEP_ALIVE: "-1m"
       # Nutzer nur aus der Anmeldung, keine Modellwahl und kein Einlesen in der Oberfläche
       SERVER_MODUS: "1"
       TZ: Europe/Berlin

@@ -33,7 +33,8 @@ CHAT_MODEL = os.getenv("CHAT_MODEL", "qwen2.5:7b")
 EMBED_MODEL = os.getenv("EMBED_MODEL", "bge-m3")
 TEMPERATURE = 0.1  # Zufälligkeit der Textgenerierung; niedrig = sachliche, reproduzierbare Antworten
 NUM_CTX = 8192     # Kontextfenster in Tokens (Prompt + Antwort); 10-12 Quellen brauchen ca. 4.500
-KEEP_ALIVE = "30m" # Modelle im VRAM halten -> kein Nachladen zwischen den Fragen
+# Modelle im VRAM halten -> kein Nachladen zwischen den Fragen. Auf dem Server dauerhaft (siehe docker-compose.yml)
+KEEP_ALIVE = os.getenv("KEEP_ALIVE", "30m")
 
 # =============================================================================
 # Microsoft Graph (Zugriff auf die echten Microsoft-365-Daten, nur im Modus "graph")
@@ -114,6 +115,13 @@ ABLAGE_KUNDE_ANTEIL = 0.5
 # Ab dieser Embedding-Ähnlichkeit gilt ein Thema als bereits bekannt (z. B. "Rahmenvertrag" ~ "Rahmenvertrag RV-1").
 # Vorläufiger Wert, noch nicht mit echten Fragen kalibriert.
 ABLAGE_THEMA_SCHWELLE = 0.8
+
+
+# =============================================================================
+# Strom-Tracker (strom.py)
+# =============================================================================
+STROM_PREIS_EURO_KWH = float(os.getenv("STROM_PREIS_EURO_KWH", "0.35"))  # Annahme, eigenen Tarif in .env eintragen
+STROM_REST_WATT = float(os.getenv("STROM_REST_WATT", "60"))  # geschätzter Verbrauch des PCs ohne Grafikkarte
 
 
 def heute() -> date:
