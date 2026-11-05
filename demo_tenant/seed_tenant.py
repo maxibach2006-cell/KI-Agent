@@ -238,14 +238,15 @@ def chats(g: Graph, liste: list[dict], name: str) -> None:
 
 def main() -> None:
     if len(sys.argv) not in (2, 3) or sys.argv[1] not in NUTZER:
-        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}> [--nur-onenote]")
+        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}> [--nur-onenote|--ohne-onenote]")
     kuerzel = sys.argv[1]
     plan = json.loads((AUSGABE / "plan.json").read_text(encoding="utf-8"))[kuerzel]
     g = Graph(kuerzel)
     print("Angemeldet als", g.ok("GET", "/me")["userPrincipalName"], "–", datetime.now().strftime("%H:%M"))
     fehler = []
     s = lambda name: schritt(name, fehler)  # noqa: E731
-    s("OneNote")(onenote, g, plan["onenote"])
+    if sys.argv[2:] != ["--ohne-onenote"]:
+        s("OneNote")(onenote, g, plan["onenote"])
     if sys.argv[2:] == ["--nur-onenote"]:
         print("Fertig (nur OneNote)." + (f" Fehler: {fehler}" if fehler else ""))
         return
