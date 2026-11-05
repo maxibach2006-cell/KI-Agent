@@ -51,6 +51,8 @@ Teil 1–3 schreibt das Sprachmodell. Teil 4 und 5 erzeugt der Code aus den Meta
 
 **Datumsprüfung:** Das Modell rechnet relative Angaben („am Dienstag“) teils falsch in ein Kalenderdatum um. Der Code vergleicht deshalb jedes vollständige Datum im Antworttext mit den Quellen und nennt fehlende Belege unter „Bitte prüfen“. Test ohne Ollama: `python evaluation/test_datumspruefung.py`
 
+**Kundenprüfung:** Verträge verschiedener Kunden klingen ähnlich. Nennt eine Frage einen Kunden, entfernt der Code deshalb Abschnitte, die erkennbar zu einem anderen Kunden gehören. Die Kundennamen stammen aus der Ablage (OneNote-Abschnitte, Teams-Kanäle). Test ohne Ollama: `python evaluation/test_kundenpruefung.py`
+
 **Stromkosten:** [strom.py](strom.py) zeigt unter jeder Antwort den Verbrauch und in der Seitenleiste die Summe in Euro. Die Grafikkarte wird gemessen, der übrige PC ist geschätzt, und der Strompreis ist eine Annahme (`STROM_REST_WATT`, `STROM_PREIS_EURO_KWH` in der `.env`). Test ohne Ollama: `python evaluation/test_strom.py`
 
 **Fehlerfälle:** Kann eine Quelle beim Einlesen nicht vollständig gelesen werden (z. B. vorübergehender Fehler 401, defekte Datei, gesperrter Kanal), behält sie ihre bisherigen Abschnitte im Index, und die App zeigt eine Warnung. Test ohne Ollama: `python evaluation/test_robustheit.py`
@@ -145,6 +147,10 @@ In [evaluation/testfragen.json](evaluation/testfragen.json) für jede Frage `man
 python evaluation/testlauf.py                 # alle Fragen beantworten und prüfen (~25 min)
 python evaluation/testlauf.py --nur-gutachter # nur erneut prüfen, setzt nach Abbruch fort
 python evaluation/testlauf.py --kategorie Rückbezug --ohne-gutachter  # schneller Zwischentest
+```
+Die Demo-Daten haben nur wenige, gut unterscheidbare Kunden. Ob ähnliche Kunden verwechselt werden oder Nutzer sich vermischen, prüft ein eigener Lauf mit Regeln auf den Indizes der Testkonten (auf dem Server, Konten ohne Index werden übersprungen):
+```bash
+docker compose -f server/docker-compose.yml exec agent python evaluation/tenant_lauf.py
 ```
 [evaluation/testkatalog.json](evaluation/testkatalog.json) enthält 60 Fragen in 11 Kategorien: Fakten, alte Daten, Widersprüche, Zeitfragen, Zusammenfassungen, Formulierungsvarianten (Kleinschreibung, Tippfehler, Englisch), **Rückbezüge** (Dialoge mit 2–3 Fragen, die Vorfragen werden echt durchgespielt), **Umschreibungen** (Umgangssprache, indirekte Bezeichnungen wie „die Feuerbacher“), unbeantwortbare Fragen und Fangfragen. Zu jeder Frage gibt es eine Sollantwort, Pflichtfakten und erwartete Quellen. Jede Antwort wird zweifach geprüft:
 

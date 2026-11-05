@@ -1,0 +1,15 @@
+[
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Hoffmann", "frage": "Welche Konditionen gelten im Rahmenvertrag mit Hoffmann Maschinenbau?", "fakten": [], "darf_nicht": ["01.04.2022", "RV-2022-214", "Brandt", "Niederrhein", "Bodensee"], "warum": "Peter hat keinen Hoffmann-Vertrag: Keine Daten eines ähnlichen Vertrags übernehmen."},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Ruhrstahl", "frage": "Bis wann läuft der Rahmenvertrag mit Ruhrstahl?", "fakten": [["31.03.2027"]], "darf_nicht": [], "warum": "Vertrag RV-2023-237"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Ruhrstahl", "frage": "Welches Zahlungsziel gilt im Rahmenvertrag mit Ruhrstahl?", "fakten": [["30 Tage"]], "darf_nicht": [], "warum": "Vertrag RV-2023-237"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Ruhrstahl", "frage": "Welchen Rabatt hat Ruhrstahl 2027 angenommen?", "fakten": [["12 %", "12%"]], "darf_nicht": [], "warum": "v3 angenommen, nicht v1/v2"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Moselland", "frage": "Bis wann läuft der Rahmenvertrag mit Moselland?", "fakten": [["31.03.2027"]], "darf_nicht": [], "warum": "Vertrag RV-2023-183"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Moselland", "frage": "Welches Zahlungsziel hat Moselland im Rahmenvertrag?", "fakten": [["30 Tage"]], "darf_nicht": [], "warum": "Vertrag RV-2023-183"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Rheintal", "frage": "Welches Zahlungsziel hat Rheintal Pharma im Rahmenvertrag?", "fakten": [["45 Tage"]], "darf_nicht": [], "warum": "Vertrag RV-2022-234"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Rheintal", "frage": "Bis wann läuft der Rahmenvertrag mit Rheintal Pharma?", "fakten": [["30.09.2027"]], "darf_nicht": [], "warum": "Vertrag RV-2022-234"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Eifel", "frage": "Bis wann läuft der Rahmenvertrag mit der Eifel Papierfabrik?", "fakten": [["30.09.2028"]], "darf_nicht": [], "warum": "Vertrag RV-2024-147"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Niederrhein", "frage": "Bis wann läuft der Rahmenvertrag mit Niederrhein Logistiksysteme?", "fakten": [["30.09.2027"]], "darf_nicht": [], "warum": "Vertrag RV-2022-156"},
+  {"nutzer": "Peter@KAMPilot.onmicrosoft.com", "kunde": "Kessler", "frage": "Wer ist bei Kessler im Einkauf zuständig?", "fakten": [["Rautenberg"]], "darf_nicht": [], "warum": "Neue Leitung Einkauf laut Peters Notiz"},
+  {"nutzer": "brad@kampilot.onmicrosoft.com", "frage": "Wer ist bei Kessler im Einkauf zuständig?", "keine_quelle": true, "fakten": [], "darf_nicht": [], "warum": "Datentrennung: Kessler gibt es in diesem Index nicht."},
+  {"nutzer": "brad@kampilot.onmicrosoft.com", "frage": "Welchen Rabatt hat Ruhrstahl 2027 angenommen?", "fakten": [], "darf_nicht": ["Hoffmann", "RV-2023-117", "8 %"], "warum": "Datentrennung und keine Angaben zu einem anderen Kunden."}
+]

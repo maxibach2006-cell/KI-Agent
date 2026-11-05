@@ -18,7 +18,7 @@ Grundprinzip – Aufgabenteilung zwischen Sprachmodell und Code:
     auflisten), macht der Code. So kann das Modell an diesen Stellen nichts erfinden.
 
 Gliederung dieser Datei:
-    A. Hilfsfunktionen für die Suche   (_woerter, _abdeckung, _namen, _aehnlichkeiten, ...)
+    A. Hilfsfunktionen für die Suche   (_woerter, _abdeckung, _namen, _genannte_kunden, _aehnlichkeiten, ...)
     B. Suche                           (suche_zeitraum, suche, suche_verstanden)
     C. Widerspruchsprüfung             (pruefe_widersprueche und Hilfsfunktionen)
     D. Antwort erzeugen                (generiere, aufwaermen)
@@ -82,6 +82,9 @@ FUELLWOERTER = {
     "heute", "morgen", "über", "nach", "bei", "beim", "für", "von", "vom", "mit", "zum", "zur", "noch",
     "wichtige", "wichtiges", "fasse", "zusammen", "what", "does", "the", "with", "get"}
 
+# Ablageorte, die keinen Kunden bezeichnen
+OHNE_KUNDE = {"allgemein", "general", "persönliche", "chat", "intern", "interne"}
+
 
 def _woerter(text: str) -> set[str]:
     """Inhaltswörter eines Textes: kleingeschrieben, mindestens 4 Zeichen, ohne Füllwörter."""
@@ -106,6 +109,44 @@ def _namen(frage: str, metas: list[dict]) -> set[str]:
     for m in metas:
         vokabular |= _woerter(f"{m['titel']} {m['ort']} {m['absender']}")
     return {w for w in _woerter(frage) if w in vokabular and w not in MONATE}
+
+
+def _kennwort_kunde(name: str) -> str:
+    """Erstes aussagekräftiges Wort eines Kundennamens: "Firma X Maschinenbau GmbH" -> "x", "Muster Logistik" -> "muster".
+    Nur das erste Wort: "Logistik" oder "Pharma" allein bezeichnen keinen Kunden, und eine Frage nach "der Logistik"
+    darf nicht auf einen Kunden eingeschränkt werden."""
+    for wort in re.findall(r"[^\W\d_][^\W_]*", name.lower()):
+        if wort not in ablage.NAMENS_FUELLER:
+            return "" if wort in OHNE_KUNDE else wort
+    return ""
+
+
+def _kunden_im_index(metas: list[dict]) -> set[str]:
+    """Kennwörter aller Kunden eines Index. Die Ablage ist die verlässliche Quelle, nicht das Sprachmodell:
+    OneNote-Abschnitt ("MBS 2 / Firma X"), Teams-Kanal ("Team > Firma X") und Ordner darin ("Teams: Team/Firma X")."""
+    kunden = set()
+    for m in metas:
+        if m["quelle"] in ("OneNote", "Teams") or m["ort"].startswith("Teams:"):
+            if not m["ort"].startswith("Chat"):
+                kunden.add(_kennwort_kunde(re.split(r"\s*[/>]\s*", m["ort"])[-1]))
+    return kunden - {""}
+
+
+def _genannte_kunden(frage: str, metas: list[dict]) -> set[str]:
+    """Kennwörter der Kunden, die die Frage nennt (auch im Genitiv: "Firma Xs Rabatt"). Leer = kein Kunde genannt."""
+    woerter = set(re.findall(r"[^\W\d_][^\W_]*", frage.lower()))
+    return {k for k in _kunden_im_index(metas) if k in woerter or k + "s" in woerter}
+
+
+def _nennt_kunden(text: str, kunden: set[str]) -> bool:
+    """Nennt der Abschnitt (mit Kopfzeile) einen der Kunden? "_" trennt Wörter, Dateien heißen oft "RV-100_Firma_X.pdf"."""
+    return any(re.search(rf"(?<![^\W_]){re.escape(k)}(?![^\W_])", text.lower()) for k in kunden)
+
+
+def _gehoert_anderem(text: str, genannt: set[str], alle_kunden: set[str]) -> bool:
+    """Gehört der Abschnitt erkennbar zu einem anderen Kunden als den genannten? Abschnitte ohne Kundennamen bleiben:
+    Eine Chat-Nachricht wie "Herr X ist nicht mehr im Einkauf" nennt die Firma nicht und kann trotzdem entscheidend sein."""
+    return not _nennt_kunden(text, genannt) and _nennt_kunden(text, alle_kunden - genannt)
 
 
 def _aehnlichkeiten(collection, ids: list[str], vektor: list[float]) -> dict:
@@ -182,6 +223,16 @@ def suche(frage: str, user: str = "demo", top_k: int = config.TOP_K) -> list[dic
     semantisch = collection.query(query_embeddings=[vektor], n_results=min(20, len(alle["ids"])))["ids"][0]
     stichwort = [i for i, a in abdeckung.items() if a >= 0.5]
 
+    # Nennt die Frage einen Kunden, werden alle seine Abschnitte Kandidaten und die anderer Kunden fallen weg. Verträge
+    # klingen ähnlich: Die reine Ähnlichkeit brachte sonst den Vertrag eines anderen Kunden als scheinbaren Beleg.
+    kunden = _genannte_kunden(frage, alle["metadatas"])
+    if kunden:
+        alle_kunden = _kunden_im_index(alle["metadatas"])
+        texte = dict(zip(alle["ids"], alle["documents"]))
+        eigene = [i for i, text in texte.items() if _nennt_kunden(text, kunden)]
+        semantisch = [i for i in semantisch if not _gehoert_anderem(texte[i], kunden, alle_kunden)]
+        stichwort = [i for i in stichwort if not _gehoert_anderem(texte[i], kunden, alle_kunden)] + eigene
+
     # --- Bewertung jedes Kandidaten ---
     # score = Ähnlichkeit + STICHWORT_GEWICHT * Abdeckung + OneNote-Bonus
     # Beispiel: Ähnlichkeit 0,60, Abdeckung 1,0, OneNote -> 0,60 + 0,25 + 0,05 = 0,90
@@ -235,8 +286,13 @@ def suche_verstanden(frage: str, user: str = "demo", model: str = config.CHAT_MO
     # Kommt ein Abschnitt mehrfach vor, zählt seine beste Bewertung (Schlüssel = Abschnittstext).
     varianten = verstehen.varianten(frage, model)
     alle = {t["text"]: t for t in treffer}
+    # Eine Variante kann den Kundennamen verlieren. Es zählt der Kunde aus der Frage des Nutzers.
+    metas = index_daten(user)["metadatas"]
+    kunden, alle_kunden = _genannte_kunden(frage, metas), _kunden_im_index(metas)
     for variante in varianten:
         for t in suche(variante, user):
+            if kunden and _gehoert_anderem(t["text"], kunden, alle_kunden):
+                continue
             if t["text"] not in alle or t["score"] > alle[t["text"]]["score"]:
                 alle[t["text"]] = t
     top_k = config.UEBERBLICK_TOP_K if _ist_ueberblick(frage) else config.TOP_K
