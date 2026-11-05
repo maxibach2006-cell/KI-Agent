@@ -1,6 +1,6 @@
 # Nicht ins Container-Image: Zugangsdaten, lokale Daten, Git-Verlauf, Präsentationen
 .env
-.token_cache.json
+.token_cache*.json
 server/tunnel.env
 data/
 .git/

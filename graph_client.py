@@ -2,7 +2,12 @@
 
 Anmeldung per Device-Code-Flow (delegiert): Man öffnet einen Link, gibt einen Code ein und meldet
 sich mit dem eigenen Konto an. Graph liefert dann nur Daten, auf die DIESER Nutzer Zugriff hat.
-Das Token wird lokal in .token_cache.json gespeichert, damit man sich nicht jedes Mal anmelden muss.
+Das Token wird lokal gespeichert, damit man sich nicht jedes Mal anmelden muss: mit Nutzerangabe in einer eigenen
+Datei je Konto (config.token_cache), sonst in .token_cache.json.
+
+Mehrere Nutzer auf einem Rechner/Server: IMMER mit Nutzer aufrufen (GraphClient(scopes, nutzer="anna@firma.de")).
+Dann wird nur das Token dieses Kontos verwendet, und eine Anmeldung mit einem anderen Konto wird abgelehnt.
+Ohne Nutzer und mit mehreren Konten im Cache bricht der Client ab, statt still das erste Konto zu nehmen.
 
 Die Klasse kapselt drei technische Details, damit die Connectoren nur noch Pfade angeben müssen:
     1. Anmeldung und Token-Erneuerung       (_token)
@@ -20,23 +25,49 @@ import config
 GRAPH = "https://graph.microsoft.com/v1.0"  # Basis-URL; Pfade wie "/me/messages" werden angehängt
 
 
+def waehle_konto(konten: list[dict], nutzer: str | None) -> dict | None:
+    """Konto aus dem Token-Cache, dessen Token verwendet werden darf (None = neu anmelden).
+
+    Mit Nutzer: nur genau dieses Konto. Ohne Nutzer: das einzige Konto; bei mehreren Konten Abbruch, denn sonst
+    bekäme ein zweiter Nutzer beim Einlesen still die Daten des ersten (Fehler aus dem Server-PR).
+    """
+    if nutzer:
+        return next((k for k in konten if k.get("username", "").lower() == nutzer.lower()), None)
+    if len(konten) > 1:
+        namen = ", ".join(k.get("username", "?") for k in konten)
+        raise RuntimeError(f"Mehrere Konten im Token-Cache ({namen}). Bitte den Nutzer angeben, "
+                           "z. B. python ingest.py --source graph --nutzer anna@firma.de")
+    return konten[0] if konten else None
+
+
+def pruefe_anmeldung(ergebnis: dict, nutzer: str | None) -> None:
+    """Nach dem Gerätecode-Login: Wurde wirklich das erwartete Konto angemeldet?"""
+    angemeldet = (ergebnis.get("id_token_claims") or {}).get("preferred_username", "").lower()
+    if nutzer and angemeldet != nutzer.lower():
+        raise RuntimeError(f"Falsches Konto angemeldet: {angemeldet or 'unbekannt'} statt {nutzer}. "
+                           "Tipp: im privaten Browserfenster anmelden.")
+
+
 class GraphClient:
     """Verbindung zu Microsoft Graph für einen angemeldeten Nutzer.
 
     Parameter:
         scopes: Berechtigungen, die beim Anmelden angefragt werden (config.READ_SCOPES oder SEED_SCOPES)
+        nutzer: erwartetes Konto (UPN). Empfohlen, sobald mehr als ein Nutzer auf demselben Rechner einliest.
     """
 
-    def __init__(self, scopes: list[str]):
+    def __init__(self, scopes: list[str], nutzer: str | None = None):
         if not config.CLIENT_ID:
             raise RuntimeError("CLIENT_ID fehlt – bitte .env anlegen (siehe .env.example).")
         self.scopes = scopes
+        self.nutzer = nutzer.lower() if nutzer else None
+        self.cache_datei = config.token_cache(nutzer)
         self.probleme: list[str] = []  # Teilfehler der Connectoren (siehe melde_problem)
         self.dateien_cache: Path | None = None  # bereits gelesene Dateien (connectors/files.py), setzt ingest.py
         # Token-Cache aus der Datei laden, damit eine frühere Anmeldung wiederverwendet wird
         self.cache = msal.SerializableTokenCache()
-        if config.TOKEN_CACHE.exists():
-            self.cache.deserialize(config.TOKEN_CACHE.read_text())
+        if self.cache_datei.exists():
+            self.cache.deserialize(self.cache_datei.read_text())
         # "Public Client" = Desktop-App ohne geheimen Schlüssel; die Identität kommt allein vom Nutzer
         self.app = msal.PublicClientApplication(
             config.CLIENT_ID,
@@ -51,18 +82,22 @@ class GraphClient:
 
     def _token(self) -> str:
         """Gültiges Zugriffstoken holen: erst still aus dem Cache, sonst per Device-Code-Anmeldung."""
-        konten = self.app.get_accounts()
-        ergebnis = self.app.acquire_token_silent(self.scopes, account=konten[0]) if konten else None
+        konto = waehle_konto(self.app.get_accounts(), self.nutzer)
+        ergebnis = self.app.acquire_token_silent(self.scopes, account=konto) if konto else None
         if not ergebnis:
             flow = self.app.initiate_device_flow(scopes=self.scopes)
             if "message" not in flow:  # z. B. App-Registrierung falsch eingerichtet
                 raise RuntimeError(f"Anmeldung nicht möglich: {flow.get('error_description')}")
+            if self.nutzer:
+                print(f"Bitte als {self.nutzer} anmelden:")
             print(flow["message"])  # "Öffnen Sie https://microsoft.com/devicelogin und geben Sie den Code ... ein"
             ergebnis = self.app.acquire_token_by_device_flow(flow)  # wartet, bis der Nutzer sich angemeldet hat
+            if "access_token" in ergebnis:
+                pruefe_anmeldung(ergebnis, self.nutzer)  # falsches Konto -> abbrechen, nichts speichern
         if "access_token" not in ergebnis:
             raise RuntimeError(f"Anmeldung fehlgeschlagen: {ergebnis.get('error_description')}")
         if self.cache.has_state_changed:  # neues oder erneuertes Token -> Cache-Datei aktualisieren
-            config.TOKEN_CACHE.write_text(self.cache.serialize())
+            self.cache_datei.write_text(self.cache.serialize())
             self.cache.has_state_changed = False
         return ergebnis["access_token"]
 

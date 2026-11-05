@@ -59,7 +59,7 @@ with st.sidebar:
         if st.button("Daten neu einlesen"):
             # Microsoft-Anmeldung per Code: Link und Code erscheinen im Terminal, in dem die App läuft
             with st.spinner("Lese Daten ein … (bei Microsoft 365 ggf. Anmeldecode im Terminal)"):
-                unvollstaendig = ingest(quelle)
+                unvollstaendig = ingest(quelle, nutzer=user if quelle == "graph" and user else None)
             if unvollstaendig:
                 st.warning(f"Nicht vollständig gelesen, bisherige Daten bleiben erhalten: {', '.join(unvollstaendig)}")
             else:

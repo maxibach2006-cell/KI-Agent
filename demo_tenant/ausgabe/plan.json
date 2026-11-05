@@ -1,0 +1,3352 @@
+{
+ "ingrid": {
+  "onenote": [
+   {
+    "abschnitt": "Eskalationen",
+    "seite": "Kündigung Brandt Mühlenbau",
+    "datum": "2026-09-01",
+    "text": "Brandt & Söhne Mühlenbau GmbH kündigt RV-2022-214 zum 31.03.2027. KAM: Jonas Hechler.\nZiel: Neuvertrag 3 Jahre, Rabatt max. +1 Punkt."
+   },
+   {
+    "abschnitt": "Preisfreigaben",
+    "seite": "Rheintal Pharma 2027",
+    "datum": "2026-10-26",
+    "text": "Anfrage Peter Maier am 26.10.2026: 10 % Rabatt.\nFreigabe bis 10 %, Preisanpassung mind. 3,7 %."
+   },
+   {
+    "abschnitt": "Eskalationen",
+    "seite": "Kündigung Schuster Papier",
+    "datum": "2026-09-14",
+    "text": "Eifel Papierfabrik Schuster KG kündigt RV-2024-147 zum 30.09.2028. KAM: Peter Maier.\nZiel: Neuvertrag 3 Jahre, Rabatt max. +1 Punkt."
+   },
+   {
+    "abschnitt": "Vossberg Fahrzeugtechnik SE",
+    "seite": "Kundenprofil Vossberg Fahrzeugtechnik SE",
+    "datum": "2023-12-02",
+    "text": "Kunde: Vossberg Fahrzeugtechnik SE, Braunschweig (Automotive (Tier 1))\nKundennummer: K-21066\nKunde seit 2015\n\nAnsprechpartner:\n- Volker Mertens, Instandhaltung, v.mertens@vossberg.example, Tel. 0896 29274-23\n- Olga Pohl, Konstruktion, o.pohl@vossberg.example, Tel. 0665 66383-73\n- Lars Kühne, Leitung Technik, l.kuehne@vossberg.example, Tel. 0921 59153-10\n\nRahmenvertrag RV-2024-158: 01.01.2024 bis 31.12.2027, Rabatt 5 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 12 Monate.\nAblage Vertrag: OneDrive > Kunden/Vossberg Fahrzeugtechnik SE"
+   },
+   {
+    "abschnitt": "Vossberg Fahrzeugtechnik SE",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-22",
+    "text": "Angebot ANG-2026-1486, Volumen ca. 778.000 EUR\n- v1 vom 14.07.2026: 5 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 03.08.2026: 6 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 22.09.2026: 6 % Rabatt, +3,9 % – offen\n\nStand 22.09.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Talheim Chemie AG",
+    "seite": "Kundenprofil Talheim Chemie AG",
+    "datum": "2023-12-02",
+    "text": "Kunde: Talheim Chemie AG, Ludwigshafen (Chemie)\nKundennummer: K-21103\nKunde seit 2009\n\nAnsprechpartner:\n- Doris Seidel, Strategischer Einkauf, d.seidel@talheimchemie.example, Tel. 0914 51825-19\n- Karin Pohl, Leitung Einkauf, k.pohl@talheimchemie.example, Tel. 0559 18506-59\n- Elke Brückner, Konstruktion, e.brueckner@talheimchemie.example, Tel. 0535 88965-69\n\nRahmenvertrag RV-2024-166: 01.01.2024 bis 31.12.2028, Rabatt 6 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 12 Monate.\nAblage Vertrag: OneDrive > Kunden/Talheim Chemie/RV"
+   },
+   {
+    "abschnitt": "Talheim Chemie AG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-08-29",
+    "text": "Angebot ANG-2026-1655, Volumen ca. 474.000 EUR\n- v1 vom 11.07.2026: 6 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 08.08.2026: 7 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 29.08.2026: 7 % Rabatt, +4,5 % – offen\n\nStand 29.08.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Preisfreigaben",
+    "seite": "Leitplanken Preisrunde 2027",
+    "datum": "2026-06-28",
+    "text": "Listenpreis +6,5 %, Untergrenze +3,9 %.\nRabatt +2 Punkte: Freigabe Vertriebsleitung.\nMehr als +3 Punkte: Geschäftsführung."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "Brandt Mühlenbau hat RV-2022-214 gekündigt",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-01",
+    "text": "Hallo Ingrid,\n\nBrandt & Söhne Mühlenbau GmbH hat zum 31.03.2027 gekündigt, will aber neu verhandeln. Vorschlag: Termin mit Einkauf im November.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Übergabe Kessler Antriebstechnik",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-20",
+    "text": "Hallo Peter,\n\nanbei die Übergabe für Kessler (liegt auch im Kanal). Wichtig: Frank Sommer entscheidet im Einkauf, v3 steht bei 12 %.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Freigabe Rabatt Rheintal Pharma 2027",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Hallo Ingrid,\n\nfür Rheintal Pharma AG brauche ich deine Freigabe: 10 % Rabatt bei +4,2 % Preisanpassung, Volumen 81.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Schuster Papier hat RV-2024-147 gekündigt",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Ingrid,\n\nEifel Papierfabrik Schuster KG hat zum 30.09.2028 gekündigt, will aber neu verhandeln. Vorschlag: Termin mit Einkauf im November.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1486",
+    "von_name": "Volker Mertens",
+    "von_mail": "v.mertens@vossberg.example",
+    "datum": "2026-07-22",
+    "text": "Guten Tag Ingrid Heller,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nVolker Mertens\nInstandhaltung, Vossberg Fahrzeugtechnik SE"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1486 – Version 2",
+    "von_name": "Volker Mertens",
+    "von_mail": "v.mertens@vossberg.example",
+    "datum": "2026-08-10",
+    "text": "Hallo Ingrid,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 7 % Rabatt und maximal 3,9 % Preiserhöhung, dann können wir das Volumen von 778.000 EUR für 2027 zusagen.\n\nGruß\nVolker Mertens"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1486 v3 – Rückmeldung",
+    "von_name": "Volker Mertens",
+    "von_mail": "v.mertens@vossberg.example",
+    "datum": "2026-09-24",
+    "text": "Hallo Ingrid,\n\nzu Version 3 (6 % Rabatt, 3,9 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nVolker Mertens"
+   },
+   {
+    "betreff": "AW: Freigabe Rabatt Vossberg 2027",
+    "von_name": "Heinrich Frei",
+    "von_mail": "Heinrich@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-22",
+    "text": "Freigegeben bis maximal 7 % Rabatt, Preisanpassung nicht unter 3,4 %.\n\nViele Grüße\nHeinrich Frei\nGeschäftsführung\nKAM-Pilot GmbH\nheinrich@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1655",
+    "von_name": "Doris Seidel",
+    "von_mail": "d.seidel@talheimchemie.example",
+    "datum": "2026-07-17",
+    "text": "Guten Tag Ingrid Heller,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nDoris Seidel\nStrategischer Einkauf, Talheim Chemie AG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1655 – Version 2",
+    "von_name": "Doris Seidel",
+    "von_mail": "d.seidel@talheimchemie.example",
+    "datum": "2026-08-12",
+    "text": "Hallo Ingrid,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 8 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 474.000 EUR für 2027 zusagen.\n\nGruß\nDoris Seidel"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1655 v3 – Rückmeldung",
+    "von_name": "Doris Seidel",
+    "von_mail": "d.seidel@talheimchemie.example",
+    "datum": "2026-09-01",
+    "text": "Hallo Ingrid,\n\nzu Version 3 (7 % Rabatt, 4,5 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nDoris Seidel"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "AW: Freigabe Rabatt Rheintal Pharma 2027",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-27",
+    "text": "Freigegeben bis maximal 10 % Rabatt, Preisanpassung nicht unter 3,7 %.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Vorbereitung Strategiegespräch Vossberg",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-12",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Vossberg am 17.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Freigabe Rabatt Vossberg 2027",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-21",
+    "text": "Heinrich,\n\nfür Vossberg Fahrzeugtechnik SE bitte ich um Freigabe von 6 % Rabatt (+3,9 %).\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Vorbereitung Strategiegespräch Talheim Chemie",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-04",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Talheim Chemie am 09.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Preisrunde 2027 – Leitplanken",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Bella@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-07-01",
+    "text": "Hallo zusammen,\n\nfür die Preisrunde 2027 gilt: Listenpreiserhöhung 6,5 %, Untergrenze 3,9 %. Rabatterhöhungen über +2 Punkte nur mit meiner Freigabe, über +3 Punkte mit Heinrich.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [
+   {
+    "betreff": "Strategiegespräch Vossberg 2027–2029",
+    "tag": "2026-11-17",
+    "von": "13:00",
+    "bis": "15:00",
+    "ort": "Raum Vorstand",
+    "teilnehmer": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Ingo@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Vorbereitung Jahresgespräch Vossberg Fahrzeugtechnik SE: Volumen, Mehrjahresvertrag, Preisstrategie."
+   },
+   {
+    "betreff": "Strategiegespräch Talheim Chemie 2027–2029",
+    "tag": "2026-11-09",
+    "von": "13:00",
+    "bis": "15:00",
+    "ort": "Raum Vorstand",
+    "teilnehmer": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Vorbereitung Jahresgespräch Talheim Chemie AG: Volumen, Mehrjahresvertrag, Preisstrategie."
+   },
+   {
+    "betreff": "Forecast-Runde Vertrieb Q4/2026",
+    "tag": "2026-11-09",
+    "von": "09:00",
+    "bis": "10:30",
+    "ort": "Raum 2.14",
+    "teilnehmer": [
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Bella@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Forecast je Kunde, Preisrunde 2027, Risiken."
+   }
+  ],
+  "onedrive": [
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Kundenprofil Vossberg.docx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Kundenprofil Vossberg.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/ANG-2026-1486_Vossberg_v1.docx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/ANG-2026-1486_Vossberg_v1.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/ANG-2026-1486_Vossberg_v2_überarbeitet.docx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/ANG-2026-1486_Vossberg_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/ANG-2026-1486_Vossberg_v3_FINAL.pdf",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/ANG-2026-1486_Vossberg_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Neuer Ordner/ANG-2026-1486_Vossberg_v3_FINAL (1).pdf",
+    "ziel": "Neuer Ordner/ANG-2026-1486_Vossberg_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/Kalkulation Vossberg 2027.xlsx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Angebote 2026/Kalkulation Vossberg 2027.xlsx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/AW Angebot ANG-2026-1486.eml",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/AW Angebot ANG-2026-1486.eml"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/AW AW Angebot ANG-2026-1486 – Version 2.eml",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/AW AW Angebot ANG-2026-1486 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Angebot ANG-2026-1486 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Angebot ANG-2026-1486 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/RV-2024-158_Vossberg_unterschrieben.pdf",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/RV-2024-158_Vossberg_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/RV-2024-158_Entwurf_v3.docx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/RV-2024-158_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Notizen Vossberg.txt",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Notizen Vossberg.txt"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Vossberg Fahrzeugtechnik SE/Vossberg Account-Plan 2027.pptx",
+    "ziel": "Kunden/Vossberg Fahrzeugtechnik SE/Vossberg Account-Plan 2027.pptx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Profil_Talheim_Chemie_2024.docx",
+    "ziel": "Kunden/Talheim Chemie/Profil_Talheim_Chemie_2024.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/_alt/ANG-2026-1655_Talheim_Chemie_v1.docx",
+    "ziel": "Kunden/Talheim Chemie/_alt/ANG-2026-1655_Talheim_Chemie_v1.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Preise/ANG-2026-1655_Talheim_Chemie_v2_überarbeitet.docx",
+    "ziel": "Kunden/Talheim Chemie/Preise/ANG-2026-1655_Talheim_Chemie_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Preise/ANG-2026-1655_Talheim_Chemie_v3_FINAL.pdf",
+    "ziel": "Kunden/Talheim Chemie/Preise/ANG-2026-1655_Talheim_Chemie_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Desktop-Ablage/Angebot Talheim Chemie final_neu.pdf",
+    "ziel": "Desktop-Ablage/Angebot Talheim Chemie final_neu.pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Preise/Kalkulation Talheim Chemie 2027.xlsx",
+    "ziel": "Kunden/Talheim Chemie/Preise/Kalkulation Talheim Chemie 2027.xlsx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/AW AW Angebot ANG-2026-1655 – Version 2.eml",
+    "ziel": "Kunden/Talheim Chemie/AW AW Angebot ANG-2026-1655 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Angebot ANG-2026-1655 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Talheim Chemie/Angebot ANG-2026-1655 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/RV/RV-2024-166_Talheim_Chemie_unterschrieben.pdf",
+    "ziel": "Kunden/Talheim Chemie/RV/RV-2024-166_Talheim_Chemie_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/_alt/RV-2024-166_Entwurf_v3.docx",
+    "ziel": "Kunden/Talheim Chemie/_alt/RV-2024-166_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Desktop-Ablage/Notizen Talheim Chemie.txt",
+    "ziel": "Desktop-Ablage/Notizen Talheim Chemie.txt"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Talheim Chemie Account-Plan 2027.pptx",
+    "ziel": "Kunden/Talheim Chemie/Talheim Chemie Account-Plan 2027.pptx"
+   },
+   {
+    "datei": "dateien/ingrid/OneDrive/Kunden/Talheim Chemie/Audit/Auditplan Talheim Chemie 2026.pdf",
+    "ziel": "Kunden/Talheim Chemie/Audit/Auditplan Talheim Chemie 2026.pdf"
+   }
+  ],
+  "kanal_posts": [
+   {
+    "kanal": "Vossberg",
+    "datum": "2026-07-14",
+    "text": "Preisrunde 2027 für Vossberg gestartet: Angebot ANG-2026-1486 v1 ist raus (5 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Vossberg",
+    "datum": "2026-09-29",
+    "text": "Update Vossberg: v3 mit 6 % Rabatt und +3,9 % – Status: offen."
+   },
+   {
+    "kanal": "Talheim Chemie",
+    "datum": "2026-07-13",
+    "text": "Preisrunde 2027 für Talheim Chemie gestartet: Angebot ANG-2026-1655 v1 ist raus (6 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Talheim Chemie",
+    "datum": "2026-09-07",
+    "text": "Update Talheim Chemie: v3 mit 7 % Rabatt und +4,5 % – Status: offen."
+   }
+  ],
+  "kanal_dateien": [
+   {
+    "kanal": "Vossberg",
+    "datei": "dateien/_teams/Vossberg/RV-2024-158_Vossberg_unterschrieben.pdf",
+    "name": "RV-2024-158_Vossberg_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Vossberg",
+    "datei": "dateien/_teams/Vossberg/ANG-2026-1486_Vossberg_v3_FINAL.pdf",
+    "name": "ANG-2026-1486_Vossberg_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Talheim Chemie",
+    "datei": "dateien/_teams/Talheim Chemie/RV-2024-166_Talheim_Chemie_unterschrieben.pdf",
+    "name": "RV-2024-166_Talheim_Chemie_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Talheim Chemie",
+    "datei": "dateien/_teams/Talheim Chemie/ANG-2026-1655_Talheim_Chemie_v3_FINAL.pdf",
+    "name": "ANG-2026-1655_Talheim_Chemie_v3_FINAL.pdf"
+   }
+  ],
+  "chats": []
+ },
+ "jonas": {
+  "onenote": [
+   {
+    "abschnitt": "Albers Fördertechnik GmbH",
+    "seite": "Kundenprofil Albers Fördertechnik GmbH",
+    "datum": "2023-06-01",
+    "text": "Kunde: Albers Fördertechnik GmbH, Bremen (Fördertechnik)\nKundennummer: K-20400\nKunde seit 2015\n\nAnsprechpartner:\n- Miriam Zimmer, Instandhaltung, m.zimmer@albers.example, Tel. 0897 36358-76\n- Monika Neumann, Konstruktion, m.neumann@albers.example, Tel. 0682 75523-18\n- Ralf Imhoff, Geschäftsführung, r.imhoff@albers.example, Tel. 0471 85079-57\n\nRahmenvertrag RV-2023-229: 01.07.2023 bis 30.06.2027, Rabatt 5 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Albers/Vertrag"
+   },
+   {
+    "abschnitt": "Albers Fördertechnik GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-04",
+    "text": "Angebot ANG-2026-1093, Volumen ca. 415.000 EUR\n- v1 vom 15.07.2026: 5 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 14.08.2026: 6 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 04.09.2026: 7 % Rabatt, +4,5 % – angenommen\n\nStand 04.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Hanse Verpackung AG",
+    "seite": "Kundenprofil Hanse Verpackung AG",
+    "datum": "2023-09-01",
+    "text": "Kunde: Hanse Verpackung AG, Hamburg (Verpackungsmaschinen)\nKundennummer: K-20437\nKunde seit 2021\n\nAnsprechpartner:\n- Nils Claasen, Leitung Einkauf, n.claasen@hanseverpackung.example, Tel. 0796 59825-11\n- Kerstin Krämer, Geschäftsführung, k.kraemer@hanseverpackung.example, Tel. 0609 68076-47\n- Ralf Pohl, Leitung Technik, r.pohl@hanseverpackung.example, Tel. 0915 73399-33\n\nRahmenvertrag RV-2023-356: 01.10.2023 bis 30.09.2028, Rabatt 5 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 12 Monate.\nAblage Vertrag: OneDrive > Kunden/Hanse Verpackung"
+   },
+   {
+    "abschnitt": "Hanse Verpackung AG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-26",
+    "text": "Angebot ANG-2026-1318, Volumen ca. 653.000 EUR\n- v1 vom 09.08.2026: 5 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 29.08.2026: 6 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 26.09.2026: 7 % Rabatt, +4,2 % – angenommen\n\nStand 26.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Kruse Lebensmitteltechnik KG",
+    "seite": "Kundenprofil Kruse Lebensmitteltechnik KG",
+    "datum": "2023-09-01",
+    "text": "Kunde: Kruse Lebensmitteltechnik KG, Cuxhaven (Lebensmitteltechnik)\nKundennummer: K-20474\nKunde seit 2015\n\nAnsprechpartner:\n- Tobias Rademacher, Konstruktion, t.rademacher@kruse.example, Tel. 0903 59852-28\n- Yvonne Wendt, Geschäftsführung, y.wendt@kruse.example, Tel. 0584 46629-31\n- Olga Ulbrich, Instandhaltung, o.ulbrich@kruse.example, Tel. 0858 24250-29\n\nRahmenvertrag RV-2023-125: 01.10.2023 bis 30.09.2028, Rabatt 8 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 12 Monate.\nAblage Vertrag: OneDrive > 01_Kunden/Kruse/Verträge"
+   },
+   {
+    "abschnitt": "Kruse Lebensmitteltechnik KG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-16",
+    "text": "Angebot ANG-2026-1100, Volumen ca. 347.000 EUR\n- v1 vom 09.08.2026: 8 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 31.08.2026: 9 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 16.10.2026: 10 % Rabatt, +3,9 % – offen\n\nStand 16.10.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Weser Agrartechnik AG",
+    "seite": "Kundenprofil Weser Agrartechnik AG",
+    "datum": "2024-03-02",
+    "text": "Kunde: Weser Agrartechnik AG, Nienburg (Landmaschinen)\nKundennummer: K-20511\nKunde seit 2012\n\nAnsprechpartner:\n- Tobias Böttcher, Strategischer Einkauf, t.boettcher@weseragrar.example, Tel. 0747 59365-93\n- Olga Seidel, Konstruktion, o.seidel@weseragrar.example, Tel. 0784 43793-86\n- Thorsten Zimmer, Geschäftsführung, t.zimmer@weseragrar.example, Tel. 0515 57758-63\n\nRahmenvertrag RV-2024-382: 01.04.2024 bis 31.03.2029, Rabatt 6 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Weser Agrar/RV"
+   },
+   {
+    "abschnitt": "Weser Agrartechnik AG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-13",
+    "text": "Angebot ANG-2026-1939, Volumen ca. 596.000 EUR\n- v1 vom 23.08.2026: 6 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 16.09.2026: 7 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 13.10.2026: 8 % Rabatt, +4,2 % – angenommen\n\nStand 13.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Lindholm Windservice GmbH",
+    "seite": "Kundenprofil Lindholm Windservice GmbH",
+    "datum": "2024-09-01",
+    "text": "Kunde: Lindholm Windservice GmbH, Husum (Windenergie-Service)\nKundennummer: K-20548\nKunde seit 2015\n\nAnsprechpartner:\n- Andreas Tiedemann, Leitung Einkauf, a.tiedemann@lindholm.example, Tel. 0313 92127-94\n- Anke Wendt, Konstruktion, a.wendt@lindholm.example, Tel. 0325 43796-92\n- Anke Jansen, Geschäftsführung, a.jansen@lindholm.example, Tel. 0915 80773-25\n\nRahmenvertrag RV-2024-156: 01.10.2024 bis 30.09.2027, Rabatt 10 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Lindholm/Verträge"
+   },
+   {
+    "abschnitt": "Lindholm Windservice GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-27",
+    "text": "Angebot ANG-2026-1551, Volumen ca. 774.000 EUR\n- v1 vom 23.08.2026: 10 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 19.09.2026: 11 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 27.10.2026: 11 % Rabatt, +3,9 % – angenommen\n\nStand 27.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Brandt & Söhne Mühlenbau GmbH",
+    "seite": "Kundenprofil Brandt & Söhne Mühlenbau GmbH",
+    "datum": "2022-03-02",
+    "text": "Kunde: Brandt & Söhne Mühlenbau GmbH, Oldenburg (Mühlenbau)\nKundennummer: K-20585\nKunde seit 2015\n\nAnsprechpartner:\n- Thorsten Lorenz, Strategischer Einkauf, t.lorenz@brandtmuehlenbau.example, Tel. 0797 67538-84\n- Karin Petersen, Geschäftsführung, k.petersen@brandtmuehlenbau.example, Tel. 0864 84717-64\n- Kerstin Dreyer, Werksleitung, k.dreyer@brandtmuehlenbau.example, Tel. 0867 82147-85\n\nRahmenvertrag RV-2022-214: 01.04.2022 bis 31.03.2027, Rabatt 6 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Brandt Mühlenbau_neu/Verträge"
+   },
+   {
+    "abschnitt": "Brandt & Söhne Mühlenbau GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-09",
+    "text": "Angebot ANG-2026-1322, Volumen ca. 620.000 EUR\n- v1 vom 06.07.2026: 6 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 27.07.2026: 7 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 09.09.2026: 8 % Rabatt, +4,5 % – offen\n\nStand 09.09.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Allgemein",
+    "seite": "Persönliche Notizen (privat)",
+    "datum": "2026-09-28",
+    "text": "Private Notiz von Jonas Hechler – nur für mich.\nZiele 2027: Neukunden im Gebiet, weniger Reisetage.\nUrlaub: 22.12.–05.01."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "AW: Angebot ANG-2026-1093",
+    "von_name": "Miriam Zimmer",
+    "von_mail": "m.zimmer@albers.example",
+    "datum": "2026-07-24",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nMiriam Zimmer\nInstandhaltung, Albers Fördertechnik GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1093 – Version 2",
+    "von_name": "Miriam Zimmer",
+    "von_mail": "m.zimmer@albers.example",
+    "datum": "2026-08-20",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 7 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 415.000 EUR für 2027 zusagen.\n\nGruß\nMiriam Zimmer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1093 v3 – Rückmeldung",
+    "von_name": "Miriam Zimmer",
+    "von_mail": "m.zimmer@albers.example",
+    "datum": "2026-09-07",
+    "text": "Hallo Jonas,\n\nwir nehmen Version 3 an: 7 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nMiriam Zimmer"
+   },
+   {
+    "betreff": "Reklamation Charge 24-8155",
+    "von_name": "Miriam Zimmer",
+    "von_mail": "m.zimmer@albers.example",
+    "datum": "2026-06-26",
+    "text": "Sehr geehrter Herr Hechler,\n\nbei der Lieferung Charge 24-8155 (Steuermodule Serie SM-400) sind 24 Einheiten nach wenigen Betriebsstunden ausgefallen. Wir fordern einen 8D-Bericht bis 10.07.2026 und Ersatzlieferung.\n\nMiriam Zimmer\nInstandhaltung"
+   },
+   {
+    "betreff": "Vorbereitung Besuch Albers",
+    "von_name": "Ingo Bauer",
+    "von_mail": "Ingo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-03",
+    "text": "Hi Jonas,\n\nich bringe für Albers das Demo-Kit SR-200 mit. Kannst du mit Miriam Zimmer klären, ob die Steuerung auf Firmware 3.2 ist?\n\nViele Grüße\nIngo Bauer\nAnwendungstechnik\nKAM-Pilot GmbH\ningo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1093 v2 für Albers anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-14",
+    "text": "Hallo Jonas,\n\nist angelegt und an Miriam Zimmer raus. PDF liegt im Kanal Albers.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1318",
+    "von_name": "Nils Claasen",
+    "von_mail": "n.claasen@hanseverpackung.example",
+    "datum": "2026-08-17",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nNils Claasen\nLeitung Einkauf, Hanse Verpackung AG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1318 – Version 2",
+    "von_name": "Nils Claasen",
+    "von_mail": "n.claasen@hanseverpackung.example",
+    "datum": "2026-09-07",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 7 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 653.000 EUR für 2027 zusagen.\n\nGruß\nNils Claasen"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1318 v3 – Rückmeldung",
+    "von_name": "Nils Claasen",
+    "von_mail": "n.claasen@hanseverpackung.example",
+    "datum": "2026-10-02",
+    "text": "Hallo Jonas,\n\nwir nehmen Version 3 an: 7 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nNils Claasen"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1318 v2 für Hanse Verpackung anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-31",
+    "text": "Hallo Jonas,\n\nist angelegt und an Nils Claasen raus. PDF liegt im Kanal Hanse Verpackung.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1100",
+    "von_name": "Tobias Rademacher",
+    "von_mail": "t.rademacher@kruse.example",
+    "datum": "2026-08-17",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nTobias Rademacher\nKonstruktion, Kruse Lebensmitteltechnik KG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1100 – Version 2",
+    "von_name": "Tobias Rademacher",
+    "von_mail": "t.rademacher@kruse.example",
+    "datum": "2026-09-08",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 10 % Rabatt und maximal 3,9 % Preiserhöhung, dann können wir das Volumen von 347.000 EUR für 2027 zusagen.\n\nGruß\nTobias Rademacher"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1100 v3 – Rückmeldung",
+    "von_name": "Tobias Rademacher",
+    "von_mail": "t.rademacher@kruse.example",
+    "datum": "2026-10-20",
+    "text": "Hallo Jonas,\n\nzu Version 3 (10 % Rabatt, 3,9 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nTobias Rademacher"
+   },
+   {
+    "betreff": "Lieferverzug Bestellung 4510-4015",
+    "von_name": "Tobias Rademacher",
+    "von_mail": "t.rademacher@kruse.example",
+    "datum": "2026-10-28",
+    "text": "Hallo Jonas,\n\nunsere Bestellung 4510-4015 (Pumpenantriebe PA-50) ist seit 4 Wochen überfällig. Wir brauchen einen verbindlichen Liefertermin, sonst steht unsere Montage.\n\nTobias Rademacher"
+   },
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4510-4015 (Kruse)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-29",
+    "text": "Hallo Jonas,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4510-4015: 11.11.2026, Teillieferung 50 % schon am 02.11.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1939",
+    "von_name": "Tobias Böttcher",
+    "von_mail": "t.boettcher@weseragrar.example",
+    "datum": "2026-08-31",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nTobias Böttcher\nStrategischer Einkauf, Weser Agrartechnik AG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1939 – Version 2",
+    "von_name": "Tobias Böttcher",
+    "von_mail": "t.boettcher@weseragrar.example",
+    "datum": "2026-09-22",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 8 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 596.000 EUR für 2027 zusagen.\n\nGruß\nTobias Böttcher"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1939 v3 – Rückmeldung",
+    "von_name": "Tobias Böttcher",
+    "von_mail": "t.boettcher@weseragrar.example",
+    "datum": "2026-10-15",
+    "text": "Hallo Jonas,\n\nwir nehmen Version 3 an: 8 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nTobias Böttcher"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1551",
+    "von_name": "Andreas Tiedemann",
+    "von_mail": "a.tiedemann@lindholm.example",
+    "datum": "2026-08-31",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nAndreas Tiedemann\nLeitung Einkauf, Lindholm Windservice GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1551 – Version 2",
+    "von_name": "Andreas Tiedemann",
+    "von_mail": "a.tiedemann@lindholm.example",
+    "datum": "2026-09-22",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 12 % Rabatt und maximal 3,9 % Preiserhöhung, dann können wir das Volumen von 774.000 EUR für 2027 zusagen.\n\nGruß\nAndreas Tiedemann"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1551 v3 – Rückmeldung",
+    "von_name": "Andreas Tiedemann",
+    "von_mail": "a.tiedemann@lindholm.example",
+    "datum": "2026-10-29",
+    "text": "Hallo Jonas,\n\nwir nehmen Version 3 an: 11 % Rabatt, Preisanpassung 3,9 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nAndreas Tiedemann"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1322",
+    "von_name": "Thorsten Lorenz",
+    "von_mail": "t.lorenz@brandtmuehlenbau.example",
+    "datum": "2026-07-13",
+    "text": "Guten Tag Jonas Hechler,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nThorsten Lorenz\nStrategischer Einkauf, Brandt & Söhne Mühlenbau GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1322 – Version 2",
+    "von_name": "Thorsten Lorenz",
+    "von_mail": "t.lorenz@brandtmuehlenbau.example",
+    "datum": "2026-07-31",
+    "text": "Hallo Jonas,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 8 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 620.000 EUR für 2027 zusagen.\n\nGruß\nThorsten Lorenz"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1322 v3 – Rückmeldung",
+    "von_name": "Thorsten Lorenz",
+    "von_mail": "t.lorenz@brandtmuehlenbau.example",
+    "datum": "2026-09-14",
+    "text": "Hallo Jonas,\n\nzu Version 3 (8 % Rabatt, 4,5 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nThorsten Lorenz"
+   },
+   {
+    "betreff": "Kündigung Rahmenvertrag RV-2022-214",
+    "von_name": "Thorsten Lorenz",
+    "von_mail": "t.lorenz@brandtmuehlenbau.example",
+    "datum": "2026-09-01",
+    "text": "Sehr geehrte Damen und Herren,\n\nhiermit kündigen wir den Rahmenvertrag RV-2022-214 fristgerecht zum Laufzeitende 31.03.2027. Gesprächen über einen neuen Vertrag zu angepassten Konditionen stehen wir offen gegenüber.\n\nThorsten Lorenz\nStrategischer Einkauf"
+   },
+   {
+    "betreff": "Vorbereitung Strategiegespräch Vossberg",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-12",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Vossberg am 17.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Preisrunde 2027 – Leitplanken",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Bella@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-07-01",
+    "text": "Hallo zusammen,\n\nfür die Preisrunde 2027 gilt: Listenpreiserhöhung 6,5 %, Untergrenze 3,9 %. Rabatterhöhungen über +2 Punkte nur mit meiner Freigabe, über +3 Punkte mit Heinrich.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "WG: Reklamation Charge 24-8155 – Albers",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-06-26",
+    "text": "Hallo Herbert,\n\nbitte übernimm die Reklamation von Albers Fördertechnik GmbH, Charge 24-8155. Kunde will 8D bis 10.07.2026.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1093 v2 für Albers anlegen",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-12",
+    "text": "Hallo Sally,\n\nbitte lege für Albers Fördertechnik GmbH die Version 2 von ANG-2026-1093 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 415.000 EUR.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1318 v2 für Hanse Verpackung anlegen",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-27",
+    "text": "Hallo Sally,\n\nbitte lege für Hanse Verpackung AG die Version 2 von ANG-2026-1318 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 653.000 EUR.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4510-4015 (Kruse)",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-28",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4510-4015 geben? Kunde macht Druck.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Brandt Mühlenbau hat RV-2022-214 gekündigt",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-01",
+    "text": "Hallo Ingrid,\n\nBrandt & Söhne Mühlenbau GmbH hat zum 31.03.2027 gekündigt, will aber neu verhandeln. Vorschlag: Termin mit Einkauf im November.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [
+   {
+    "betreff": "Kundenbesuch Albers – Technik SR-200",
+    "tag": "2026-11-11",
+    "von": "09:30",
+    "bis": "12:00",
+    "ort": "Albers Fördertechnik GmbH, Bremen",
+    "teilnehmer": [
+     "Ingo@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Mit Miriam Zimmer (Instandhaltung). Themen: Inbetriebnahme Servoregler SR-200, Schnittstellen, Schulung Instandhaltung."
+   },
+   {
+    "betreff": "Projekt-Jour-fixe Hanse Verpackung Neubau Halle Süd",
+    "tag": "2026-11-13",
+    "von": "14:00",
+    "bis": "15:00",
+    "ort": "Teams-Besprechung",
+    "teilnehmer": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Stand Neubau Halle Süd, Musterlieferung, offene Punkte von Ralf Pohl."
+   },
+   {
+    "betreff": "Projekt-Jour-fixe Lindholm Pilot Condition Monitoring",
+    "tag": "2026-11-06",
+    "von": "14:00",
+    "bis": "15:00",
+    "ort": "Teams-Besprechung",
+    "teilnehmer": [
+     "Ingo@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Stand Pilot Condition Monitoring, Musterlieferung, offene Punkte von Anke Wendt."
+   }
+  ],
+  "onedrive": [
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Kundenprofil Albers.docx",
+    "ziel": "Kunden/Albers/Kundenprofil Albers.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/_alt/ANG-2026-1093_Albers_v1.docx",
+    "ziel": "Kunden/Albers/_alt/ANG-2026-1093_Albers_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Preise/ANG-2026-1093_Albers_v2_überarbeitet.docx",
+    "ziel": "Kunden/Albers/Preise/ANG-2026-1093_Albers_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Preise/ANG-2026-1093_Albers_v3_FINAL.pdf",
+    "ziel": "Kunden/Albers/Preise/ANG-2026-1093_Albers_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Desktop-Ablage/Angebot Albers final_neu.pdf",
+    "ziel": "Desktop-Ablage/Angebot Albers final_neu.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Preise/Kalkulation Albers 2027.xlsx",
+    "ziel": "Kunden/Albers/Preise/Kalkulation Albers 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Korrespondenz/AW Angebot ANG-2026-1093.eml",
+    "ziel": "Kunden/Albers/Korrespondenz/AW Angebot ANG-2026-1093.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Korrespondenz/Angebot ANG-2026-1093 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Albers/Korrespondenz/Angebot ANG-2026-1093 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Vertrag/RV-2023-229_Albers_unterschrieben.pdf",
+    "ziel": "Kunden/Albers/Vertrag/RV-2023-229_Albers_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/_alt/RV-2023-229_Entwurf_v2.docx",
+    "ziel": "Kunden/Albers/_alt/RV-2023-229_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/tel albers.txt",
+    "ziel": "Kunden/Albers/tel albers.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Korrespondenz/Reklamation Charge 24-8155.eml",
+    "ziel": "Kunden/Albers/Korrespondenz/Reklamation Charge 24-8155.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Albers/Reklamation 24-8155/8D-Bericht_24-8155_final.docx",
+    "ziel": "Kunden/Albers/Reklamation 24-8155/8D-Bericht_24-8155_final.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Desktop-Ablage/8D_24-8155 (2).docx",
+    "ziel": "Desktop-Ablage/8D_24-8155 (2).docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Kundenprofil Hanse Verpackung.docx",
+    "ziel": "Kunden/Hanse Verpackung/Kundenprofil Hanse Verpackung.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v1.docx",
+    "ziel": "Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v2_überarbeitet.docx",
+    "ziel": "Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v3_FINAL.pdf",
+    "ziel": "Kunden/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/sonstiges/ANG-2026-1318_Hanse_Verpackung_v3_FINAL (1).pdf",
+    "ziel": "Kunden/Hanse Verpackung/sonstiges/ANG-2026-1318_Hanse_Verpackung_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Kalkulation Hanse Verpackung 2027.xlsx",
+    "ziel": "Kunden/Hanse Verpackung/Kalkulation Hanse Verpackung 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Korrespondenz/AW Angebot ANG-2026-1318.eml",
+    "ziel": "Kunden/Hanse Verpackung/Korrespondenz/AW Angebot ANG-2026-1318.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Korrespondenz/AW AW Angebot ANG-2026-1318 – Version 2.eml",
+    "ziel": "Kunden/Hanse Verpackung/Korrespondenz/AW AW Angebot ANG-2026-1318 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/RV-2023-356_Hanse_Verpackung_unterschrieben.pdf",
+    "ziel": "Kunden/Hanse Verpackung/RV-2023-356_Hanse_Verpackung_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/RV-2023-356_Entwurf_v2.docx",
+    "ziel": "Kunden/Hanse Verpackung/RV-2023-356_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Notizen Hanse Verpackung.txt",
+    "ziel": "Kunden/Hanse Verpackung/Notizen Hanse Verpackung.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Projekt Neubau Halle Süd/Projektplan Neubau Halle Süd.docx",
+    "ziel": "Kunden/Hanse Verpackung/Projekt Neubau Halle Süd/Projektplan Neubau Halle Süd.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Hanse Verpackung/Projekt Neubau Halle Süd/Präsentation Neubau Halle Süd Kick-off.pptx",
+    "ziel": "Kunden/Hanse Verpackung/Projekt Neubau Halle Süd/Präsentation Neubau Halle Süd Kick-off.pptx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Kruse Steckbrief (alt).docx",
+    "ziel": "01_Kunden/Kruse/Kruse Steckbrief (alt).docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/ANG-2026-1100_Kruse_v1.docx",
+    "ziel": "01_Kunden/Kruse/ANG-2026-1100_Kruse_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Preise/ANG-2026-1100_Kruse_v2_überarbeitet.docx",
+    "ziel": "01_Kunden/Kruse/Preise/ANG-2026-1100_Kruse_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Preise/ANG-2026-1100_Kruse_v3_FINAL.pdf",
+    "ziel": "01_Kunden/Kruse/Preise/ANG-2026-1100_Kruse_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Desktop-Ablage/ANG-2026-1100_Kruse_v3_FINAL (1).pdf",
+    "ziel": "Desktop-Ablage/ANG-2026-1100_Kruse_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Preise/Kalkulation Kruse 2027.xlsx",
+    "ziel": "01_Kunden/Kruse/Preise/Kalkulation Kruse 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/AW Angebot ANG-2026-1100.eml",
+    "ziel": "01_Kunden/Kruse/AW Angebot ANG-2026-1100.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Angebot ANG-2026-1100 v3 – Rückmeldung.eml",
+    "ziel": "01_Kunden/Kruse/Angebot ANG-2026-1100 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Verträge/RV-2023-125_Kruse_unterschrieben.pdf",
+    "ziel": "01_Kunden/Kruse/Verträge/RV-2023-125_Kruse_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Verträge/RV-2023-125_Entwurf_v3.docx",
+    "ziel": "01_Kunden/Kruse/Verträge/RV-2023-125_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/01_Kunden/Kruse/Notizen Kruse.txt",
+    "ziel": "01_Kunden/Kruse/Notizen Kruse.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Profil_Weser_Agrar_2024.docx",
+    "ziel": "Kunden/Weser Agrar/Profil_Weser_Agrar_2024.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Angebote/alt/ANG-2026-1939_Weser_Agrar_v1.docx",
+    "ziel": "Kunden/Weser Agrar/Angebote/alt/ANG-2026-1939_Weser_Agrar_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Preise/ANG-2026-1939_Weser_Agrar_v2_überarbeitet.docx",
+    "ziel": "Kunden/Weser Agrar/Preise/ANG-2026-1939_Weser_Agrar_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Preise/ANG-2026-1939_Weser_Agrar_v3_FINAL.pdf",
+    "ziel": "Kunden/Weser Agrar/Preise/ANG-2026-1939_Weser_Agrar_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/sonstiges/Angebot Weser Agrar final_neu.pdf",
+    "ziel": "Kunden/Weser Agrar/sonstiges/Angebot Weser Agrar final_neu.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Preise/Kalkulation Weser Agrar 2027.xlsx",
+    "ziel": "Kunden/Weser Agrar/Preise/Kalkulation Weser Agrar 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/AW Angebot ANG-2026-1939.eml",
+    "ziel": "Kunden/Weser Agrar/AW Angebot ANG-2026-1939.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/AW AW Angebot ANG-2026-1939 – Version 2.eml",
+    "ziel": "Kunden/Weser Agrar/AW AW Angebot ANG-2026-1939 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Angebot ANG-2026-1939 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Weser Agrar/Angebot ANG-2026-1939 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/RV/RV-2024-382_Weser_Agrar_unterschrieben.pdf",
+    "ziel": "Kunden/Weser Agrar/RV/RV-2024-382_Weser_Agrar_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/Angebote/alt/RV-2024-382_Entwurf_v3.docx",
+    "ziel": "Kunden/Weser Agrar/Angebote/alt/RV-2024-382_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Weser Agrar/sonstiges/tel weser agrar.txt",
+    "ziel": "Kunden/Weser Agrar/sonstiges/tel weser agrar.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Kundenprofil Lindholm.docx",
+    "ziel": "Kunden/Lindholm/Kundenprofil Lindholm.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/_alt/ANG-2026-1551_Lindholm_v1.docx",
+    "ziel": "Kunden/Lindholm/_alt/ANG-2026-1551_Lindholm_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Angebote 2026/ANG-2026-1551_Lindholm_v2_überarbeitet.docx",
+    "ziel": "Kunden/Lindholm/Angebote 2026/ANG-2026-1551_Lindholm_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Angebote 2026/ANG-2026-1551_Lindholm_v3_FINAL.pdf",
+    "ziel": "Kunden/Lindholm/Angebote 2026/ANG-2026-1551_Lindholm_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Neuer Ordner/Angebot Lindholm final_neu.pdf",
+    "ziel": "Neuer Ordner/Angebot Lindholm final_neu.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Angebote 2026/Kalkulation Lindholm 2027.xlsx",
+    "ziel": "Kunden/Lindholm/Angebote 2026/Kalkulation Lindholm 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/AW Angebot ANG-2026-1551.eml",
+    "ziel": "Kunden/Lindholm/AW Angebot ANG-2026-1551.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/AW AW Angebot ANG-2026-1551 – Version 2.eml",
+    "ziel": "Kunden/Lindholm/AW AW Angebot ANG-2026-1551 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Verträge/RV-2024-156_Lindholm_unterschrieben.pdf",
+    "ziel": "Kunden/Lindholm/Verträge/RV-2024-156_Lindholm_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/_alt/RV-2024-156_Entwurf_v2.docx",
+    "ziel": "Kunden/Lindholm/_alt/RV-2024-156_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Notizen Lindholm.txt",
+    "ziel": "Kunden/Lindholm/Notizen Lindholm.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Projekt Pilot Condition Monitoring/Projektplan Pilot Condition Monitoring.docx",
+    "ziel": "Kunden/Lindholm/Projekt Pilot Condition Monitoring/Projektplan Pilot Condition Monitoring.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Lindholm/Projekt Pilot Condition Monitoring/Präsentation Pilot Condition Monitoring Kick-off.pptx",
+    "ziel": "Kunden/Lindholm/Projekt Pilot Condition Monitoring/Präsentation Pilot Condition Monitoring Kick-off.pptx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Profil_Brandt_Mühlenbau_2024.docx",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Profil_Brandt_Mühlenbau_2024.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/ANG-2026-1322_Brandt_Mühlenbau_v1.docx",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/ANG-2026-1322_Brandt_Mühlenbau_v1.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Preise/ANG-2026-1322_Brandt_Mühlenbau_v2_überarbeitet.docx",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Preise/ANG-2026-1322_Brandt_Mühlenbau_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Preise/ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL.pdf",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Preise/ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/sonstiges/ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL (1).pdf",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/sonstiges/ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Preise/Kalkulation Brandt Mühlenbau 2027.xlsx",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Preise/Kalkulation Brandt Mühlenbau 2027.xlsx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Mails/AW Angebot ANG-2026-1322.eml",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Mails/AW Angebot ANG-2026-1322.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Mails/AW AW Angebot ANG-2026-1322 – Version 2.eml",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Mails/AW AW Angebot ANG-2026-1322 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Mails/Angebot ANG-2026-1322 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Mails/Angebot ANG-2026-1322 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Verträge/RV-2022-214_Brandt_Mühlenbau_unterschrieben.pdf",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Verträge/RV-2022-214_Brandt_Mühlenbau_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Verträge/RV-2022-214_Entwurf_v3.docx",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Verträge/RV-2022-214_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/sonstiges/notiz telefonat 11.8.txt",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/sonstiges/notiz telefonat 11.8.txt"
+   },
+   {
+    "datei": "dateien/jonas/OneDrive/Kunden/Brandt Mühlenbau_neu/Verträge/Kündigung RV-2022-214.eml",
+    "ziel": "Kunden/Brandt Mühlenbau_neu/Verträge/Kündigung RV-2022-214.eml"
+   }
+  ],
+  "kanal_posts": [
+   {
+    "kanal": "Albers",
+    "datum": "2026-07-15",
+    "text": "Preisrunde 2027 für Albers gestartet: Angebot ANG-2026-1093 v1 ist raus (5 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Albers",
+    "datum": "2026-09-11",
+    "text": "Update Albers: v3 mit 7 % Rabatt und +4,5 % – Status: angenommen."
+   },
+   {
+    "kanal": "Hanse Verpackung",
+    "datum": "2026-03-19",
+    "text": "Projekt Neubau Halle Süd bei Hanse Verpackung ist offiziell gestartet. Projektplan liegt in meinem OneDrive, schicke ich bei Bedarf."
+   },
+   {
+    "kanal": "Hanse Verpackung",
+    "datum": "2026-08-10",
+    "text": "Preisrunde 2027 für Hanse Verpackung gestartet: Angebot ANG-2026-1318 v1 ist raus (5 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Hanse Verpackung",
+    "datum": "2026-10-05",
+    "text": "Update Hanse Verpackung: v3 mit 7 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Kruse",
+    "datum": "2026-08-10",
+    "text": "Preisrunde 2027 für Kruse gestartet: Angebot ANG-2026-1100 v1 ist raus (8 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Kruse",
+    "datum": "2026-10-23",
+    "text": "Update Kruse: v3 mit 10 % Rabatt und +3,9 % – Status: offen."
+   },
+   {
+    "kanal": "Weser Agrar",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Weser Agrar gestartet: Angebot ANG-2026-1939 v1 ist raus (6 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Weser Agrar",
+    "datum": "2026-10-20",
+    "text": "Update Weser Agrar: v3 mit 8 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Lindholm",
+    "datum": "2026-03-04",
+    "text": "Projekt Pilot Condition Monitoring bei Lindholm ist offiziell gestartet. Projektplan liegt in meinem OneDrive, schicke ich bei Bedarf."
+   },
+   {
+    "kanal": "Lindholm",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Lindholm gestartet: Angebot ANG-2026-1551 v1 ist raus (10 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Lindholm",
+    "datum": "2026-11-03",
+    "text": "Update Lindholm: v3 mit 11 % Rabatt und +3,9 % – Status: angenommen."
+   },
+   {
+    "kanal": "Brandt Mühlenbau",
+    "datum": "2026-07-06",
+    "text": "Preisrunde 2027 für Brandt Mühlenbau gestartet: Angebot ANG-2026-1322 v1 ist raus (6 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Brandt Mühlenbau",
+    "datum": "2026-09-16",
+    "text": "Update Brandt Mühlenbau: v3 mit 8 % Rabatt und +4,5 % – Status: offen."
+   }
+  ],
+  "kanal_dateien": [
+   {
+    "kanal": "Albers",
+    "datei": "dateien/_teams/Albers/RV-2023-229_Albers_unterschrieben.pdf",
+    "name": "RV-2023-229_Albers_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Hanse Verpackung",
+    "datei": "dateien/_teams/Hanse Verpackung/RV-2023-356_Hanse_Verpackung_unterschrieben.pdf",
+    "name": "RV-2023-356_Hanse_Verpackung_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Hanse Verpackung",
+    "datei": "dateien/_teams/Hanse Verpackung/ANG-2026-1318_Hanse_Verpackung_v3_FINAL.pdf",
+    "name": "ANG-2026-1318_Hanse_Verpackung_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Kruse",
+    "datei": "dateien/_teams/Kruse/RV-2023-125_Kruse_unterschrieben.pdf",
+    "name": "RV-2023-125_Kruse_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Kruse",
+    "datei": "dateien/_teams/Kruse/ANG-2026-1100_Kruse_v3_FINAL.pdf",
+    "name": "ANG-2026-1100_Kruse_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Weser Agrar",
+    "datei": "dateien/_teams/Weser Agrar/RV-2024-382_Weser_Agrar_unterschrieben.pdf",
+    "name": "RV-2024-382_Weser_Agrar_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Weser Agrar",
+    "datei": "dateien/_teams/Weser Agrar/ANG-2026-1939_Weser_Agrar_v3_FINAL.pdf",
+    "name": "ANG-2026-1939_Weser_Agrar_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Lindholm",
+    "datei": "dateien/_teams/Lindholm/RV-2024-156_Lindholm_unterschrieben.pdf",
+    "name": "RV-2024-156_Lindholm_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Lindholm",
+    "datei": "dateien/_teams/Lindholm/ANG-2026-1551_Lindholm_v3_FINAL.pdf",
+    "name": "ANG-2026-1551_Lindholm_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Brandt Mühlenbau",
+    "datei": "dateien/_teams/Brandt Mühlenbau/RV-2022-214_Brandt_Mühlenbau_unterschrieben.pdf",
+    "name": "RV-2022-214_Brandt_Mühlenbau_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Brandt Mühlenbau",
+    "datei": "dateien/_teams/Brandt Mühlenbau/ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL.pdf",
+    "name": "ANG-2026-1322_Brandt_Mühlenbau_v3_FINAL.pdf"
+   }
+  ],
+  "chats": []
+ },
+ "bella": {
+  "onenote": [
+   {
+    "abschnitt": "Lechner Präzisionsteile GmbH",
+    "seite": "Kundenprofil Lechner Präzisionsteile GmbH",
+    "datum": "2023-03-02",
+    "text": "Kunde: Lechner Präzisionsteile GmbH, Augsburg (Zerspanung)\nKundennummer: K-20622\nKunde seit 2012\n\nAnsprechpartner:\n- Holger Rademacher, Leitung Einkauf, h.rademacher@lechner.example, Tel. 0418 49858-53\n- Carola Oltmanns, Leitung Technik, c.oltmanns@lechner.example, Tel. 0691 82191-18\n- Miriam Tiedemann, Konstruktion, m.tiedemann@lechner.example, Tel. 0302 16864-18\n\nRahmenvertrag RV-2023-368: 01.04.2023 bis 31.03.2028, Rabatt 8 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 12 Monate.\nAblage Vertrag: OneDrive > Kunden/Lechner Präzisionsteile GmbH/RV"
+   },
+   {
+    "abschnitt": "Lechner Präzisionsteile GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-15",
+    "text": "Angebot ANG-2026-1899, Volumen ca. 615.000 EUR\n- v1 vom 18.08.2026: 8 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 17.09.2026: 9 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 15.10.2026: 10 % Rabatt, +4,2 % – offen\n\nStand 15.10.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Kessler Antriebstechnik GmbH",
+    "seite": "Kundenprofil Kessler Antriebstechnik GmbH",
+    "datum": "2023-12-02",
+    "text": "Kunde: Kessler Antriebstechnik GmbH, Heilbronn (Antriebstechnik)\nKundennummer: K-20659\nKunde seit 2012\n\nAnsprechpartner:\n- Frank Sommer, Geschäftsführung, f.sommer@kessler.example, Tel. 0728 75252-46\n- Bernd Engel, Werksleitung, b.engel@kessler.example, Tel. 0319 70003-28\n- Monika Seidel, Leitung Technik, m.seidel@kessler.example, Tel. 0923 99619-69\n\nRahmenvertrag RV-2024-227: 01.01.2024 bis 31.12.2027, Rabatt 10 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > 01_Kunden/Kessler"
+   },
+   {
+    "abschnitt": "Kessler Antriebstechnik GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-15",
+    "text": "Angebot ANG-2026-1799, Volumen ca. 184.000 EUR\n- v1 vom 08.08.2026: 10 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 29.08.2026: 11 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 15.10.2026: 12 % Rabatt, +3,9 % – angenommen\n\nStand 15.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Alpina Fördersysteme GmbH",
+    "seite": "Kundenprofil Alpina Fördersysteme GmbH",
+    "datum": "2024-03-02",
+    "text": "Kunde: Alpina Fördersysteme GmbH, Kempten (Seil- und Fördersysteme)\nKundennummer: K-20696\nKunde seit 2021\n\nAnsprechpartner:\n- Ines Zimmer, Werksleitung, i.zimmer@alpina.example, Tel. 0632 70727-49\n- Nils Imhoff, Geschäftsführung, n.imhoff@alpina.example, Tel. 0791 67048-54\n- Holger Claasen, Konstruktion, h.claasen@alpina.example, Tel. 0878 18837-46\n\nRahmenvertrag RV-2024-322: 01.04.2024 bis 31.03.2029, Rabatt 6 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > Kunden/Alpina_neu/Vertrag"
+   },
+   {
+    "abschnitt": "Alpina Fördersysteme GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-23",
+    "text": "Angebot ANG-2026-1647, Volumen ca. 347.000 EUR\n- v1 vom 24.08.2026: 6 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 23.09.2026: 7 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 23.10.2026: 8 % Rabatt, +4,2 % – angenommen\n\nStand 23.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Donau Kunststoffwerk Riedl GmbH",
+    "seite": "Kundenprofil Donau Kunststoffwerk Riedl GmbH",
+    "datum": "2023-09-01",
+    "text": "Kunde: Donau Kunststoffwerk Riedl GmbH, Regensburg (Kunststoffverarbeitung)\nKundennummer: K-20733\nKunde seit 2012\n\nAnsprechpartner:\n- Ralf Hartmann, Strategischer Einkauf, r.hartmann@riedl.example, Tel. 0965 43628-50\n- Yvonne Engel, Instandhaltung, y.engel@riedl.example, Tel. 0868 41046-85\n- Gabriele Brückner, Geschäftsführung, g.brueckner@riedl.example, Tel. 0624 28464-80\n\nRahmenvertrag RV-2023-295: 01.10.2023 bis 30.09.2028, Rabatt 10 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > Kunden/RIEDL/Verträge"
+   },
+   {
+    "abschnitt": "Donau Kunststoffwerk Riedl GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-24",
+    "text": "Angebot ANG-2026-1938, Volumen ca. 572.000 EUR\n- v1 vom 21.07.2026: 10 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 19.08.2026: 11 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 24.09.2026: 12 % Rabatt, +4,2 % – angenommen\n\nStand 24.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Merz Feinwerktechnik GmbH",
+    "seite": "Kundenprofil Merz Feinwerktechnik GmbH",
+    "datum": "2024-06-01",
+    "text": "Kunde: Merz Feinwerktechnik GmbH, Villingen-Schwenningen (Feinwerktechnik)\nKundennummer: K-20770\nKunde seit 2019\n\nAnsprechpartner:\n- Nils Quast, Leitung Einkauf, n.quast@merz.example, Tel. 0342 51136-65\n- Frank Sommer, Qualitätsmanagement, f.sommer@merz.example, Tel. 0317 78479-89\n- Doris Rademacher, Leitung Technik, d.rademacher@merz.example, Tel. 0584 73839-14\n\nRahmenvertrag RV-2024-376: 01.07.2024 bis 30.06.2027, Rabatt 9 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Merz_neu"
+   },
+   {
+    "abschnitt": "Merz Feinwerktechnik GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-08-29",
+    "text": "Angebot ANG-2026-1394, Volumen ca. 173.000 EUR\n- v1 vom 11.07.2026: 9 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 03.08.2026: 10 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 29.08.2026: 11 % Rabatt, +4,5 % – angenommen\n\nStand 29.08.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Bodensee Medizinprodukte AG",
+    "seite": "Kundenprofil Bodensee Medizinprodukte AG",
+    "datum": "2024-03-02",
+    "text": "Kunde: Bodensee Medizinprodukte AG, Konstanz (Medizintechnik)\nKundennummer: K-20807\nKunde seit 2019\n\nAnsprechpartner:\n- Andreas Krämer, Instandhaltung, a.kraemer@bodenseemedical.example, Tel. 0326 19877-24\n- Wiebke Dreyer, Geschäftsführung, w.dreyer@bodenseemedical.example, Tel. 0614 97720-84\n- Wiebke Rademacher, Qualitätsmanagement, w.rademacher@bodenseemedical.example, Tel. 0629 63814-94\n\nRahmenvertrag RV-2024-193: 01.04.2024 bis 31.03.2029, Rabatt 7 %, Zahlungsziel 60 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > 01_Kunden/Bodensee Medical/RV"
+   },
+   {
+    "abschnitt": "Bodensee Medizinprodukte AG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-11",
+    "text": "Angebot ANG-2026-1732, Volumen ca. 408.000 EUR\n- v1 vom 10.07.2026: 7 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 30.07.2026: 8 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 11.09.2026: 8 % Rabatt, +4,2 % – angenommen\n\nStand 11.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Isar Robotics GmbH",
+    "seite": "Kundenprofil Isar Robotics GmbH",
+    "datum": "2024-06-01",
+    "text": "Kunde: Isar Robotics GmbH, München (Robotik)\nKundennummer: K-20844\nKunde seit 2021\n\nAnsprechpartner:\n- Kerstin Imhoff, Werksleitung, k.imhoff@isarrobotics.example, Tel. 0781 84398-48\n- Thorsten Böttcher, Qualitätsmanagement, t.boettcher@isarrobotics.example, Tel. 0614 29259-15\n- Holger Pohl, Leitung Technik, h.pohl@isarrobotics.example, Tel. 0922 23455-88\n\nRahmenvertrag RV-2024-180: 01.07.2024 bis 30.06.2029, Rabatt 8 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > 01_Kunden/Isar Robotics"
+   },
+   {
+    "abschnitt": "Isar Robotics GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-21",
+    "text": "Angebot ANG-2026-1688, Volumen ca. 812.000 EUR\n- v1 vom 22.08.2026: 8 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 14.09.2026: 9 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 21.10.2026: 10 % Rabatt, +4,5 % – angenommen\n\nStand 21.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Allgemein",
+    "seite": "Persönliche Notizen (privat)",
+    "datum": "2026-09-28",
+    "text": "Private Notiz von Bella Froh – nur für mich.\nZiele 2027: Neukunden im Gebiet, weniger Reisetage.\nUrlaub: 22.12.–05.01."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "AW: Angebot ANG-2026-1899",
+    "von_name": "Holger Rademacher",
+    "von_mail": "h.rademacher@lechner.example",
+    "datum": "2026-08-24",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nHolger Rademacher\nLeitung Einkauf, Lechner Präzisionsteile GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1899 – Version 2",
+    "von_name": "Holger Rademacher",
+    "von_mail": "h.rademacher@lechner.example",
+    "datum": "2026-09-23",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 10 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 615.000 EUR für 2027 zusagen.\n\nGruß\nHolger Rademacher"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1899 v3 – Rückmeldung",
+    "von_name": "Holger Rademacher",
+    "von_mail": "h.rademacher@lechner.example",
+    "datum": "2026-10-19",
+    "text": "Hallo Bella,\n\nzu Version 3 (10 % Rabatt, 4,2 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nHolger Rademacher"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1899 v2 für Lechner anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-17",
+    "text": "Hallo Bella,\n\nist angelegt und an Holger Rademacher raus. PDF liegt im Kanal Lechner.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1799",
+    "von_name": "Frank Sommer",
+    "von_mail": "f.sommer@kessler.example",
+    "datum": "2026-08-12",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nFrank Sommer\nGeschäftsführung, Kessler Antriebstechnik GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1799 – Version 2",
+    "von_name": "Frank Sommer",
+    "von_mail": "f.sommer@kessler.example",
+    "datum": "2026-09-07",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 12 % Rabatt und maximal 3,9 % Preiserhöhung, dann können wir das Volumen von 184.000 EUR für 2027 zusagen.\n\nGruß\nFrank Sommer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1799 v3 – Rückmeldung",
+    "von_name": "Frank Sommer",
+    "von_mail": "f.sommer@kessler.example",
+    "datum": "2026-10-19",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 12 % Rabatt, Preisanpassung 3,9 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nFrank Sommer"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1647",
+    "von_name": "Ines Zimmer",
+    "von_mail": "i.zimmer@alpina.example",
+    "datum": "2026-09-01",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nInes Zimmer\nWerksleitung, Alpina Fördersysteme GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1647 – Version 2",
+    "von_name": "Ines Zimmer",
+    "von_mail": "i.zimmer@alpina.example",
+    "datum": "2026-09-29",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 8 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 347.000 EUR für 2027 zusagen.\n\nGruß\nInes Zimmer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1647 v3 – Rückmeldung",
+    "von_name": "Ines Zimmer",
+    "von_mail": "i.zimmer@alpina.example",
+    "datum": "2026-10-29",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 8 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nInes Zimmer"
+   },
+   {
+    "betreff": "Vorbereitung Besuch Alpina",
+    "von_name": "Ingo Bauer",
+    "von_mail": "Ingo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-03",
+    "text": "Hi Bella,\n\nich bringe für Alpina das Demo-Kit SensPak mit. Kannst du mit Nils Imhoff klären, ob die Steuerung auf Firmware 3.2 ist?\n\nViele Grüße\nIngo Bauer\nAnwendungstechnik\nKAM-Pilot GmbH\ningo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1938",
+    "von_name": "Ralf Hartmann",
+    "von_mail": "r.hartmann@riedl.example",
+    "datum": "2026-07-30",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nRalf Hartmann\nStrategischer Einkauf, Donau Kunststoffwerk Riedl GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1938 – Version 2",
+    "von_name": "Ralf Hartmann",
+    "von_mail": "r.hartmann@riedl.example",
+    "datum": "2026-08-25",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 12 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 572.000 EUR für 2027 zusagen.\n\nGruß\nRalf Hartmann"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1938 v3 – Rückmeldung",
+    "von_name": "Ralf Hartmann",
+    "von_mail": "r.hartmann@riedl.example",
+    "datum": "2026-09-30",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 12 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nRalf Hartmann"
+   },
+   {
+    "betreff": "Reklamation Charge 26-7070",
+    "von_name": "Yvonne Engel",
+    "von_mail": "y.engel@riedl.example",
+    "datum": "2026-06-24",
+    "text": "Sehr geehrter Herr Froh,\n\nbei der Lieferung Charge 26-7070 (Pumpenantriebe PA-50) sind 35 Einheiten nach wenigen Betriebsstunden ausgefallen. Wir fordern einen 8D-Bericht bis 08.07.2026 und Ersatzlieferung.\n\nYvonne Engel\nInstandhaltung"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1394",
+    "von_name": "Nils Quast",
+    "von_mail": "n.quast@merz.example",
+    "datum": "2026-07-17",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nNils Quast\nLeitung Einkauf, Merz Feinwerktechnik GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1394 – Version 2",
+    "von_name": "Nils Quast",
+    "von_mail": "n.quast@merz.example",
+    "datum": "2026-08-10",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 11 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 173.000 EUR für 2027 zusagen.\n\nGruß\nNils Quast"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1394 v3 – Rückmeldung",
+    "von_name": "Nils Quast",
+    "von_mail": "n.quast@merz.example",
+    "datum": "2026-09-04",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 11 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nNils Quast"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1732",
+    "von_name": "Andreas Krämer",
+    "von_mail": "a.kraemer@bodenseemedical.example",
+    "datum": "2026-07-14",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nAndreas Krämer\nInstandhaltung, Bodensee Medizinprodukte AG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1732 – Version 2",
+    "von_name": "Andreas Krämer",
+    "von_mail": "a.kraemer@bodenseemedical.example",
+    "datum": "2026-08-03",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 9 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 408.000 EUR für 2027 zusagen.\n\nGruß\nAndreas Krämer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1732 v3 – Rückmeldung",
+    "von_name": "Andreas Krämer",
+    "von_mail": "a.kraemer@bodenseemedical.example",
+    "datum": "2026-09-14",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 8 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nAndreas Krämer"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1688",
+    "von_name": "Kerstin Imhoff",
+    "von_mail": "k.imhoff@isarrobotics.example",
+    "datum": "2026-08-28",
+    "text": "Guten Tag Bella Froh,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nKerstin Imhoff\nWerksleitung, Isar Robotics GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1688 – Version 2",
+    "von_name": "Kerstin Imhoff",
+    "von_mail": "k.imhoff@isarrobotics.example",
+    "datum": "2026-09-18",
+    "text": "Hallo Bella,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 10 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 812.000 EUR für 2027 zusagen.\n\nGruß\nKerstin Imhoff"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1688 v3 – Rückmeldung",
+    "von_name": "Kerstin Imhoff",
+    "von_mail": "k.imhoff@isarrobotics.example",
+    "datum": "2026-10-26",
+    "text": "Hallo Bella,\n\nwir nehmen Version 3 an: 10 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nKerstin Imhoff"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1688 v2 für Isar Robotics anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Bella,\n\nist angelegt und an Kerstin Imhoff raus. PDF liegt im Kanal Isar Robotics.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Preisrunde 2027 – Leitplanken",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Bella@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-07-01",
+    "text": "Hallo zusammen,\n\nfür die Preisrunde 2027 gilt: Listenpreiserhöhung 6,5 %, Untergrenze 3,9 %. Rabatterhöhungen über +2 Punkte nur mit meiner Freigabe, über +3 Punkte mit Heinrich.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "Angebot ANG-2026-1899 v2 für Lechner anlegen",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-15",
+    "text": "Hallo Sally,\n\nbitte lege für Lechner Präzisionsteile GmbH die Version 2 von ANG-2026-1899 an: 9 % Rabatt, +5,0 % Preisanpassung, Volumen 615.000 EUR.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Übergabe Kessler Antriebstechnik",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-20",
+    "text": "Hallo Peter,\n\nanbei die Übergabe für Kessler (liegt auch im Kanal). Wichtig: Frank Sommer entscheidet im Einkauf, v3 steht bei 12 %.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Reklamation Charge 26-7070 – Riedl",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-06-24",
+    "text": "Hallo Herbert,\n\nbitte übernimm die Reklamation von Donau Kunststoffwerk Riedl GmbH, Charge 26-7070. Kunde will 8D bis 08.07.2026.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1688 v2 für Isar Robotics anlegen",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Sally,\n\nbitte lege für Isar Robotics GmbH die Version 2 von ANG-2026-1688 an: 9 % Rabatt, +5,0 % Preisanpassung, Volumen 812.000 EUR.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [
+   {
+    "betreff": "Übergabegespräch Kessler",
+    "tag": "2026-10-22",
+    "von": "10:00",
+    "bis": "11:00",
+    "ort": "Teams-Besprechung",
+    "teilnehmer": [
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Übergabe Kessler von Bella an Peter, Ingrid als Vertriebsleitung dabei."
+   },
+   {
+    "betreff": "Kundenbesuch Alpina – Technik SensPak",
+    "tag": "2026-11-12",
+    "von": "09:30",
+    "bis": "12:00",
+    "ort": "Alpina Fördersysteme GmbH, Kempten",
+    "teilnehmer": [
+     "Ingo@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Mit Nils Imhoff (Geschäftsführung). Themen: Inbetriebnahme Sensorpaket SensPak-S, Schnittstellen, Schulung Instandhaltung."
+   },
+   {
+    "betreff": "Projekt-Jour-fixe Isar Robotics Neubau Halle Süd",
+    "tag": "2026-11-13",
+    "von": "14:00",
+    "bis": "15:00",
+    "ort": "Teams-Besprechung",
+    "teilnehmer": [
+     "Ingo@KAMPilot.onmicrosoft.com",
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Stand Neubau Halle Süd, Musterlieferung, offene Punkte von Holger Pohl."
+   }
+  ],
+  "onedrive": [
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/Profil_Lechner_2024.docx",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/Profil_Lechner_2024.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/ANG-2026-1899_Lechner_v1.docx",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/ANG-2026-1899_Lechner_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/Preise/ANG-2026-1899_Lechner_v2_überarbeitet.docx",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/Preise/ANG-2026-1899_Lechner_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/Preise/ANG-2026-1899_Lechner_v3_FINAL.pdf",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/Preise/ANG-2026-1899_Lechner_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Neuer Ordner/Kopie von ANG-2026-1899_v3_FINAL.pdf",
+    "ziel": "Neuer Ordner/Kopie von ANG-2026-1899_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/Preise/Kalkulation Lechner 2027.xlsx",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/Preise/Kalkulation Lechner 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/AW AW Angebot ANG-2026-1899 – Version 2.eml",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/AW AW Angebot ANG-2026-1899 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/Angebot ANG-2026-1899 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/Angebot ANG-2026-1899 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/RV/RV-2023-368_Lechner_unterschrieben.pdf",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/RV/RV-2023-368_Lechner_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/RV/RV-2023-368_Entwurf_v2.docx",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/RV/RV-2023-368_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Lechner Präzisionsteile GmbH/tel lechner.txt",
+    "ziel": "Kunden/Lechner Präzisionsteile GmbH/tel lechner.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Kundenprofil Kessler.docx",
+    "ziel": "01_Kunden/Kessler/Kundenprofil Kessler.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Angebote/alt/ANG-2026-1799_Kessler_v1.docx",
+    "ziel": "01_Kunden/Kessler/Angebote/alt/ANG-2026-1799_Kessler_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Preise/ANG-2026-1799_Kessler_v2_überarbeitet.docx",
+    "ziel": "01_Kunden/Kessler/Preise/ANG-2026-1799_Kessler_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Preise/ANG-2026-1799_Kessler_v3_FINAL.pdf",
+    "ziel": "01_Kunden/Kessler/Preise/ANG-2026-1799_Kessler_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/Kopie von ANG-2026-1799_v3_FINAL.pdf",
+    "ziel": "Desktop-Ablage/Kopie von ANG-2026-1799_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Preise/Kalkulation Kessler 2027.xlsx",
+    "ziel": "01_Kunden/Kessler/Preise/Kalkulation Kessler 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/AW Angebot ANG-2026-1799.eml",
+    "ziel": "01_Kunden/Kessler/AW Angebot ANG-2026-1799.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/RV-2024-227_Kessler_unterschrieben.pdf",
+    "ziel": "01_Kunden/Kessler/RV-2024-227_Kessler_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/RV-2024-227_Entwurf_v3.docx",
+    "ziel": "01_Kunden/Kessler/RV-2024-227_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/tel kessler.txt",
+    "ziel": "Desktop-Ablage/tel kessler.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Kessler/Übergabe Kessler an Peter.docx",
+    "ziel": "01_Kunden/Kessler/Übergabe Kessler an Peter.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Kundenprofil Alpina.docx",
+    "ziel": "Kunden/Alpina_neu/Kundenprofil Alpina.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/ANG-2026-1647_Alpina_v1.docx",
+    "ziel": "Kunden/Alpina_neu/ANG-2026-1647_Alpina_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Angebote 2026/ANG-2026-1647_Alpina_v2_überarbeitet.docx",
+    "ziel": "Kunden/Alpina_neu/Angebote 2026/ANG-2026-1647_Alpina_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Angebote 2026/ANG-2026-1647_Alpina_v3_FINAL.pdf",
+    "ziel": "Kunden/Alpina_neu/Angebote 2026/ANG-2026-1647_Alpina_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Neuer Ordner/Kopie von ANG-2026-1647_v3_FINAL.pdf",
+    "ziel": "Neuer Ordner/Kopie von ANG-2026-1647_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Angebote 2026/Kalkulation Alpina 2027.xlsx",
+    "ziel": "Kunden/Alpina_neu/Angebote 2026/Kalkulation Alpina 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/AW AW Angebot ANG-2026-1647 – Version 2.eml",
+    "ziel": "Kunden/Alpina_neu/AW AW Angebot ANG-2026-1647 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Angebot ANG-2026-1647 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Alpina_neu/Angebot ANG-2026-1647 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Vertrag/RV-2024-322_Alpina_unterschrieben.pdf",
+    "ziel": "Kunden/Alpina_neu/Vertrag/RV-2024-322_Alpina_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/Vertrag/RV-2024-322_Entwurf_v2.docx",
+    "ziel": "Kunden/Alpina_neu/Vertrag/RV-2024-322_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Alpina_neu/notiz telefonat 5.10.txt",
+    "ziel": "Kunden/Alpina_neu/notiz telefonat 5.10.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Kundenprofil Riedl.docx",
+    "ziel": "Kunden/RIEDL/Kundenprofil Riedl.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/ANG-2026-1938_Riedl_v1.docx",
+    "ziel": "Kunden/RIEDL/ANG-2026-1938_Riedl_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Angebote/ANG-2026-1938_Riedl_v2_überarbeitet.docx",
+    "ziel": "Kunden/RIEDL/Angebote/ANG-2026-1938_Riedl_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Angebote/ANG-2026-1938_Riedl_v3_FINAL.pdf",
+    "ziel": "Kunden/RIEDL/Angebote/ANG-2026-1938_Riedl_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/ANG-2026-1938_Riedl_v3_FINAL (1).pdf",
+    "ziel": "Desktop-Ablage/ANG-2026-1938_Riedl_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Angebote/Kalkulation Riedl 2027.xlsx",
+    "ziel": "Kunden/RIEDL/Angebote/Kalkulation Riedl 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/AW Angebot ANG-2026-1938.eml",
+    "ziel": "Kunden/RIEDL/AW Angebot ANG-2026-1938.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/AW AW Angebot ANG-2026-1938 – Version 2.eml",
+    "ziel": "Kunden/RIEDL/AW AW Angebot ANG-2026-1938 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Angebot ANG-2026-1938 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/RIEDL/Angebot ANG-2026-1938 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Verträge/RV-2023-295_Riedl_unterschrieben.pdf",
+    "ziel": "Kunden/RIEDL/Verträge/RV-2023-295_Riedl_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/RV-2023-295_Entwurf_v3.docx",
+    "ziel": "Kunden/RIEDL/RV-2023-295_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/tel riedl.txt",
+    "ziel": "Kunden/RIEDL/tel riedl.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Reklamation Charge 26-7070.eml",
+    "ziel": "Kunden/RIEDL/Reklamation Charge 26-7070.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/RIEDL/Reklamation 26-7070/8D-Bericht_26-7070_final.docx",
+    "ziel": "Kunden/RIEDL/Reklamation 26-7070/8D-Bericht_26-7070_final.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/8D_26-7070 (2).docx",
+    "ziel": "Desktop-Ablage/8D_26-7070 (2).docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/Profil_Merz_2024.docx",
+    "ziel": "Kunden/Merz_neu/Profil_Merz_2024.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/Angebote/alt/ANG-2026-1394_Merz_v1.docx",
+    "ziel": "Kunden/Merz_neu/Angebote/alt/ANG-2026-1394_Merz_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/ANG-2026-1394_Merz_v2_überarbeitet.docx",
+    "ziel": "Kunden/Merz_neu/ANG-2026-1394_Merz_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/ANG-2026-1394_Merz_v3_FINAL.pdf",
+    "ziel": "Kunden/Merz_neu/ANG-2026-1394_Merz_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/Angebot Merz final_neu.pdf",
+    "ziel": "Desktop-Ablage/Angebot Merz final_neu.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/Kalkulation Merz 2027.xlsx",
+    "ziel": "Kunden/Merz_neu/Kalkulation Merz 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/AW Angebot ANG-2026-1394.eml",
+    "ziel": "Kunden/Merz_neu/AW Angebot ANG-2026-1394.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/Angebot ANG-2026-1394 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Merz_neu/Angebot ANG-2026-1394 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/RV-2024-376_Merz_unterschrieben.pdf",
+    "ziel": "Kunden/Merz_neu/RV-2024-376_Merz_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Kunden/Merz_neu/Angebote/alt/RV-2024-376_Entwurf_v2.docx",
+    "ziel": "Kunden/Merz_neu/Angebote/alt/RV-2024-376_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/notiz telefonat 17.8.txt",
+    "ziel": "Desktop-Ablage/notiz telefonat 17.8.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Profil_Bodensee_Medical_2024.docx",
+    "ziel": "01_Kunden/Bodensee Medical/Profil_Bodensee_Medical_2024.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/alt (nicht löschen)/ANG-2026-1732_Bodensee_Medical_v1.docx",
+    "ziel": "01_Kunden/Bodensee Medical/alt (nicht löschen)/ANG-2026-1732_Bodensee_Medical_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Angebote/ANG-2026-1732_Bodensee_Medical_v2_überarbeitet.docx",
+    "ziel": "01_Kunden/Bodensee Medical/Angebote/ANG-2026-1732_Bodensee_Medical_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Angebote/ANG-2026-1732_Bodensee_Medical_v3_FINAL.pdf",
+    "ziel": "01_Kunden/Bodensee Medical/Angebote/ANG-2026-1732_Bodensee_Medical_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Neuer Ordner/Kopie von ANG-2026-1732_v3_FINAL.pdf",
+    "ziel": "Neuer Ordner/Kopie von ANG-2026-1732_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Angebote/Kalkulation Bodensee Medical 2027.xlsx",
+    "ziel": "01_Kunden/Bodensee Medical/Angebote/Kalkulation Bodensee Medical 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Korrespondenz/AW AW Angebot ANG-2026-1732 – Version 2.eml",
+    "ziel": "01_Kunden/Bodensee Medical/Korrespondenz/AW AW Angebot ANG-2026-1732 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/RV/RV-2024-193_Bodensee_Medical_unterschrieben.pdf",
+    "ziel": "01_Kunden/Bodensee Medical/RV/RV-2024-193_Bodensee_Medical_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/alt (nicht löschen)/RV-2024-193_Entwurf_v2.docx",
+    "ziel": "01_Kunden/Bodensee Medical/alt (nicht löschen)/RV-2024-193_Entwurf_v2.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Notizen Bodensee Medical.txt",
+    "ziel": "01_Kunden/Bodensee Medical/Notizen Bodensee Medical.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Bodensee Medical/Audit/Auditplan Bodensee Medical 2026.pdf",
+    "ziel": "01_Kunden/Bodensee Medical/Audit/Auditplan Bodensee Medical 2026.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Isar Robotics Steckbrief (alt).docx",
+    "ziel": "01_Kunden/Isar Robotics/Isar Robotics Steckbrief (alt).docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/alt (nicht löschen)/ANG-2026-1688_Isar_Robotics_v1.docx",
+    "ziel": "01_Kunden/Isar Robotics/alt (nicht löschen)/ANG-2026-1688_Isar_Robotics_v1.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/ANG-2026-1688_Isar_Robotics_v2_überarbeitet.docx",
+    "ziel": "01_Kunden/Isar Robotics/ANG-2026-1688_Isar_Robotics_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/ANG-2026-1688_Isar_Robotics_v3_FINAL.pdf",
+    "ziel": "01_Kunden/Isar Robotics/ANG-2026-1688_Isar_Robotics_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/Kopie von ANG-2026-1688_v3_FINAL.pdf",
+    "ziel": "Desktop-Ablage/Kopie von ANG-2026-1688_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Kalkulation Isar Robotics 2027.xlsx",
+    "ziel": "01_Kunden/Isar Robotics/Kalkulation Isar Robotics 2027.xlsx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Korrespondenz/AW Angebot ANG-2026-1688.eml",
+    "ziel": "01_Kunden/Isar Robotics/Korrespondenz/AW Angebot ANG-2026-1688.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Korrespondenz/Angebot ANG-2026-1688 v3 – Rückmeldung.eml",
+    "ziel": "01_Kunden/Isar Robotics/Korrespondenz/Angebot ANG-2026-1688 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/RV-2024-180_Isar_Robotics_unterschrieben.pdf",
+    "ziel": "01_Kunden/Isar Robotics/RV-2024-180_Isar_Robotics_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/alt (nicht löschen)/RV-2024-180_Entwurf_v3.docx",
+    "ziel": "01_Kunden/Isar Robotics/alt (nicht löschen)/RV-2024-180_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/Desktop-Ablage/tel isar robotics.txt",
+    "ziel": "Desktop-Ablage/tel isar robotics.txt"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Projekt Neubau Halle Süd/Projektplan Neubau Halle Süd.docx",
+    "ziel": "01_Kunden/Isar Robotics/Projekt Neubau Halle Süd/Projektplan Neubau Halle Süd.docx"
+   },
+   {
+    "datei": "dateien/bella/OneDrive/01_Kunden/Isar Robotics/Projekt Neubau Halle Süd/Präsentation Neubau Halle Süd Kick-off.pptx",
+    "ziel": "01_Kunden/Isar Robotics/Projekt Neubau Halle Süd/Präsentation Neubau Halle Süd Kick-off.pptx"
+   }
+  ],
+  "kanal_posts": [
+   {
+    "kanal": "Lechner",
+    "datum": "2026-08-18",
+    "text": "Preisrunde 2027 für Lechner gestartet: Angebot ANG-2026-1899 v1 ist raus (8 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Lechner",
+    "datum": "2026-10-22",
+    "text": "Update Lechner: v3 mit 10 % Rabatt und +4,2 % – Status: offen."
+   },
+   {
+    "kanal": "Kessler",
+    "datum": "2026-08-10",
+    "text": "Preisrunde 2027 für Kessler gestartet: Angebot ANG-2026-1799 v1 ist raus (10 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Kessler",
+    "datum": "2026-10-22",
+    "text": "Update Kessler: v3 mit 12 % Rabatt und +3,9 % – Status: angenommen."
+   },
+   {
+    "kanal": "Alpina",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Alpina gestartet: Angebot ANG-2026-1647 v1 ist raus (6 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Alpina",
+    "datum": "2026-10-30",
+    "text": "Update Alpina: v3 mit 8 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Riedl",
+    "datum": "2026-07-21",
+    "text": "Preisrunde 2027 für Riedl gestartet: Angebot ANG-2026-1938 v1 ist raus (10 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Riedl",
+    "datum": "2026-10-01",
+    "text": "Update Riedl: v3 mit 12 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Merz",
+    "datum": "2026-07-13",
+    "text": "Preisrunde 2027 für Merz gestartet: Angebot ANG-2026-1394 v1 ist raus (9 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Merz",
+    "datum": "2026-09-07",
+    "text": "Update Merz: v3 mit 11 % Rabatt und +4,5 % – Status: angenommen."
+   },
+   {
+    "kanal": "Bodensee Medical",
+    "datum": "2026-07-10",
+    "text": "Preisrunde 2027 für Bodensee Medical gestartet: Angebot ANG-2026-1732 v1 ist raus (7 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Bodensee Medical",
+    "datum": "2026-09-18",
+    "text": "Update Bodensee Medical: v3 mit 8 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Isar Robotics",
+    "datum": "2026-04-05",
+    "text": "Projekt Neubau Halle Süd bei Isar Robotics ist offiziell gestartet. Projektplan liegt in meinem OneDrive, schicke ich bei Bedarf."
+   },
+   {
+    "kanal": "Isar Robotics",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Isar Robotics gestartet: Angebot ANG-2026-1688 v1 ist raus (8 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Isar Robotics",
+    "datum": "2026-10-28",
+    "text": "Update Isar Robotics: v3 mit 10 % Rabatt und +4,5 % – Status: angenommen."
+   }
+  ],
+  "kanal_dateien": [
+   {
+    "kanal": "Lechner",
+    "datei": "dateien/_teams/Lechner/RV-2023-368_Lechner_unterschrieben.pdf",
+    "name": "RV-2023-368_Lechner_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Lechner",
+    "datei": "dateien/_teams/Lechner/ANG-2026-1899_Lechner_v3_FINAL.pdf",
+    "name": "ANG-2026-1899_Lechner_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Kessler",
+    "datei": "dateien/_teams/Kessler/Übergabe Kessler an Peter.docx",
+    "name": "Übergabe Kessler an Peter.docx"
+   },
+   {
+    "kanal": "Kessler",
+    "datei": "dateien/_teams/Kessler/RV-2024-227_Kessler_unterschrieben.pdf",
+    "name": "RV-2024-227_Kessler_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Kessler",
+    "datei": "dateien/_teams/Kessler/ANG-2026-1799_Kessler_v3_FINAL.pdf",
+    "name": "ANG-2026-1799_Kessler_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Alpina",
+    "datei": "dateien/_teams/Alpina/RV-2024-322_Alpina_unterschrieben.pdf",
+    "name": "RV-2024-322_Alpina_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Alpina",
+    "datei": "dateien/_teams/Alpina/ANG-2026-1647_Alpina_v3_FINAL.pdf",
+    "name": "ANG-2026-1647_Alpina_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Riedl",
+    "datei": "dateien/_teams/Riedl/RV-2023-295_Riedl_unterschrieben.pdf",
+    "name": "RV-2023-295_Riedl_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Merz",
+    "datei": "dateien/_teams/Merz/RV-2024-376_Merz_unterschrieben.pdf",
+    "name": "RV-2024-376_Merz_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Bodensee Medical",
+    "datei": "dateien/_teams/Bodensee Medical/RV-2024-193_Bodensee_Medical_unterschrieben.pdf",
+    "name": "RV-2024-193_Bodensee_Medical_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Isar Robotics",
+    "datei": "dateien/_teams/Isar Robotics/RV-2024-180_Isar_Robotics_unterschrieben.pdf",
+    "name": "RV-2024-180_Isar_Robotics_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Isar Robotics",
+    "datei": "dateien/_teams/Isar Robotics/ANG-2026-1688_Isar_Robotics_v3_FINAL.pdf",
+    "name": "ANG-2026-1688_Isar_Robotics_v3_FINAL.pdf"
+   }
+  ],
+  "chats": [
+   {
+    "mit": "Peter@KAMPilot.onmicrosoft.com",
+    "datum": "2026-10-30",
+    "text": "Oh, nein – das stand nirgends. Mein Stand war noch das alte Organigramm."
+   }
+  ]
+ },
+ "peter": {
+  "onenote": [
+   {
+    "abschnitt": "Kessler Antriebstechnik GmbH",
+    "seite": "Übernahme Kessler",
+    "datum": "2026-10-29",
+    "text": "Telefonat mit Dr. Simone Rautenberg, seit 01.10.2026 neue Leitung Einkauf bei Kessler Antriebstechnik GmbH (Nachfolge Frank Sommer, wechselt intern).\nSie will v3 nachverhandeln: Ziel 13 % Rabatt statt 12 %. Noch nichts zugesagt, Rücksprache mit Ingrid."
+   },
+   {
+    "abschnitt": "Rheintal Pharma AG",
+    "seite": "Kundenprofil Rheintal Pharma AG",
+    "datum": "2022-09-01",
+    "text": "Kunde: Rheintal Pharma AG, Mannheim (Pharma)\nKundennummer: K-20881\nKunde seit 2021\n\nAnsprechpartner:\n- Sabine Böttcher, Konstruktion, s.boettcher@rheintalpharma.example, Tel. 0813 50113-77\n- Matthias Engel, Leitung Technik, m.engel@rheintalpharma.example, Tel. 0509 61712-30\n- Dirk Gerdes, Instandhaltung, d.gerdes@rheintalpharma.example, Tel. 0606 56384-57\n\nRahmenvertrag RV-2022-234: 01.10.2022 bis 30.09.2027, Rabatt 9 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > Kunden/Rheintal Pharma/RV"
+   },
+   {
+    "abschnitt": "Rheintal Pharma AG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-29",
+    "text": "Angebot ANG-2026-1724, Volumen ca. 81.000 EUR\n- v1 vom 24.08.2026: 9 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 18.09.2026: 10 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 29.10.2026: 10 % Rabatt, +4,2 % – angenommen\n\nStand 29.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Moselland Getränketechnik GmbH",
+    "seite": "Kundenprofil Moselland Getränketechnik GmbH",
+    "datum": "2023-03-02",
+    "text": "Kunde: Moselland Getränketechnik GmbH, Trier (Getränkeabfüllung)\nKundennummer: K-20918\nKunde seit 2012\n\nAnsprechpartner:\n- Karin Dreyer, Leitung Einkauf, k.dreyer@moselland.example, Tel. 0969 84079-70\n- Doris Böttcher, Geschäftsführung, d.boettcher@moselland.example, Tel. 0569 51711-59\n- Volker Fischer, Werksleitung, v.fischer@moselland.example, Tel. 0858 64522-93\n\nRahmenvertrag RV-2023-183: 01.04.2023 bis 31.03.2027, Rabatt 5 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > Kunden/Moselland/RV"
+   },
+   {
+    "abschnitt": "Moselland Getränketechnik GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-01",
+    "text": "Angebot ANG-2026-1580, Volumen ca. 158.000 EUR\n- v1 vom 18.07.2026: 5 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 07.08.2026: 6 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 01.09.2026: 6 % Rabatt, +4,5 % – angenommen\n\nStand 01.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Ruhrstahl Komponenten GmbH",
+    "seite": "Kundenprofil Ruhrstahl Komponenten GmbH",
+    "datum": "2023-03-02",
+    "text": "Kunde: Ruhrstahl Komponenten GmbH, Bochum (Stahlverarbeitung)\nKundennummer: K-20955\nKunde seit 2015\n\nAnsprechpartner:\n- Matthias Sommer, Leitung Technik, m.sommer@ruhrstahl.example, Tel. 0513 64286-21\n- Karin Haas, Geschäftsführung, k.haas@ruhrstahl.example, Tel. 0718 88289-38\n- Monika Böttcher, Werksleitung, m.boettcher@ruhrstahl.example, Tel. 0347 35644-18\n\nRahmenvertrag RV-2023-237: 01.04.2023 bis 31.03.2027, Rabatt 10 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Ruhrstahl_neu"
+   },
+   {
+    "abschnitt": "Ruhrstahl Komponenten GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-10-25",
+    "text": "Angebot ANG-2026-1224, Volumen ca. 341.000 EUR\n- v1 vom 22.08.2026: 10 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 15.09.2026: 11 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 25.10.2026: 12 % Rabatt, +4,5 % – angenommen\n\nStand 25.10.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Eifel Papierfabrik Schuster KG",
+    "seite": "Kundenprofil Eifel Papierfabrik Schuster KG",
+    "datum": "2024-09-01",
+    "text": "Kunde: Eifel Papierfabrik Schuster KG, Düren (Papierherstellung)\nKundennummer: K-20992\nKunde seit 2009\n\nAnsprechpartner:\n- Sven Krämer, Instandhaltung, s.kraemer@schusterpapier.example, Tel. 0975 45190-68\n- Andreas Imhoff, Konstruktion, a.imhoff@schusterpapier.example, Tel. 0933 21386-61\n- Frank Jansen, Qualitätsmanagement, f.jansen@schusterpapier.example, Tel. 0581 92221-52\n\nRahmenvertrag RV-2024-147: 01.10.2024 bis 30.09.2028, Rabatt 9 %, Zahlungsziel 30 Tage netto, Kündigungsfrist 6 Monate.\nAblage Vertrag: OneDrive > Kunden/Schuster Papier_neu/Vertrag"
+   },
+   {
+    "abschnitt": "Eifel Papierfabrik Schuster KG",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-03",
+    "text": "Angebot ANG-2026-1522, Volumen ca. 495.000 EUR\n- v1 vom 10.07.2026: 9 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 04.08.2026: 10 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 03.09.2026: 10 % Rabatt, +4,5 % – offen\n\nStand 03.09.2026: Version 3 noch offen, Kunde wartet auf GF-Freigabe."
+   },
+   {
+    "abschnitt": "Niederrhein Logistiksysteme GmbH",
+    "seite": "Kundenprofil Niederrhein Logistiksysteme GmbH",
+    "datum": "2022-09-01",
+    "text": "Kunde: Niederrhein Logistiksysteme GmbH, Krefeld (Intralogistik)\nKundennummer: K-21029\nKunde seit 2021\n\nAnsprechpartner:\n- Monika Lorenz, Strategischer Einkauf, m.lorenz@niederrheinlogistik.example, Tel. 0402 58660-95\n- Sabine Mertens, Qualitätsmanagement, s.mertens@niederrheinlogistik.example, Tel. 0823 66148-39\n- Ralf Claasen, Leitung Technik, r.claasen@niederrheinlogistik.example, Tel. 0968 64657-88\n\nRahmenvertrag RV-2022-156: 01.10.2022 bis 30.09.2027, Rabatt 5 %, Zahlungsziel 45 Tage netto, Kündigungsfrist 3 Monate.\nAblage Vertrag: OneDrive > Kunden/Niederrhein Logistik_neu/Vertrag"
+   },
+   {
+    "abschnitt": "Niederrhein Logistiksysteme GmbH",
+    "seite": "Preisverhandlung 2027",
+    "datum": "2026-09-05",
+    "text": "Angebot ANG-2026-1807, Volumen ca. 330.000 EUR\n- v1 vom 08.07.2026: 5 % Rabatt, +6,5 % – abgelehnt\n- v2 vom 04.08.2026: 6 % Rabatt, +5,0 % – Gegenangebot Kunde\n- v3 vom 05.09.2026: 7 % Rabatt, +4,5 % – angenommen\n\nStand 05.09.2026: Version 3 angenommen."
+   },
+   {
+    "abschnitt": "Allgemein",
+    "seite": "Persönliche Notizen (privat)",
+    "datum": "2026-09-28",
+    "text": "Private Notiz von Peter Maier – nur für mich.\nZiele 2027: Neukunden im Gebiet, weniger Reisetage.\nUrlaub: 22.12.–05.01."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "Übergabe Kessler Antriebstechnik",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com",
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-20",
+    "text": "Hallo Peter,\n\nanbei die Übergabe für Kessler (liegt auch im Kanal). Wichtig: Frank Sommer entscheidet im Einkauf, v3 steht bei 12 %.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1724",
+    "von_name": "Sabine Böttcher",
+    "von_mail": "s.boettcher@rheintalpharma.example",
+    "datum": "2026-08-31",
+    "text": "Guten Tag Peter Maier,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nSabine Böttcher\nKonstruktion, Rheintal Pharma AG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1724 – Version 2",
+    "von_name": "Sabine Böttcher",
+    "von_mail": "s.boettcher@rheintalpharma.example",
+    "datum": "2026-09-21",
+    "text": "Hallo Peter,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 11 % Rabatt und maximal 4,2 % Preiserhöhung, dann können wir das Volumen von 81.000 EUR für 2027 zusagen.\n\nGruß\nSabine Böttcher"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1724 v3 – Rückmeldung",
+    "von_name": "Sabine Böttcher",
+    "von_mail": "s.boettcher@rheintalpharma.example",
+    "datum": "2026-11-02",
+    "text": "Hallo Peter,\n\nwir nehmen Version 3 an: 10 % Rabatt, Preisanpassung 4,2 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nSabine Böttcher"
+   },
+   {
+    "betreff": "AW: Freigabe Rabatt Rheintal Pharma 2027",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-27",
+    "text": "Freigegeben bis maximal 10 % Rabatt, Preisanpassung nicht unter 3,7 %.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1580",
+    "von_name": "Karin Dreyer",
+    "von_mail": "k.dreyer@moselland.example",
+    "datum": "2026-07-24",
+    "text": "Guten Tag Peter Maier,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nKarin Dreyer\nLeitung Einkauf, Moselland Getränketechnik GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1580 – Version 2",
+    "von_name": "Karin Dreyer",
+    "von_mail": "k.dreyer@moselland.example",
+    "datum": "2026-08-14",
+    "text": "Hallo Peter,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 7 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 158.000 EUR für 2027 zusagen.\n\nGruß\nKarin Dreyer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1580 v3 – Rückmeldung",
+    "von_name": "Karin Dreyer",
+    "von_mail": "k.dreyer@moselland.example",
+    "datum": "2026-09-07",
+    "text": "Hallo Peter,\n\nwir nehmen Version 3 an: 6 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nKarin Dreyer"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1580 v2 für Moselland anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-07",
+    "text": "Hallo Peter,\n\nist angelegt und an Karin Dreyer raus. PDF liegt im Kanal Moselland.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1224",
+    "von_name": "Matthias Sommer",
+    "von_mail": "m.sommer@ruhrstahl.example",
+    "datum": "2026-08-31",
+    "text": "Guten Tag Peter Maier,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nMatthias Sommer\nLeitung Technik, Ruhrstahl Komponenten GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1224 – Version 2",
+    "von_name": "Matthias Sommer",
+    "von_mail": "m.sommer@ruhrstahl.example",
+    "datum": "2026-09-23",
+    "text": "Hallo Peter,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 12 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 341.000 EUR für 2027 zusagen.\n\nGruß\nMatthias Sommer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1224 v3 – Rückmeldung",
+    "von_name": "Matthias Sommer",
+    "von_mail": "m.sommer@ruhrstahl.example",
+    "datum": "2026-10-28",
+    "text": "Hallo Peter,\n\nwir nehmen Version 3 an: 12 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nMatthias Sommer"
+   },
+   {
+    "betreff": "Lieferverzug Bestellung 4587-3505",
+    "von_name": "Matthias Sommer",
+    "von_mail": "m.sommer@ruhrstahl.example",
+    "datum": "2026-10-23",
+    "text": "Hallo Peter,\n\nunsere Bestellung 4587-3505 (Servoregler SR-200) ist seit 4 Wochen überfällig. Wir brauchen einen verbindlichen Liefertermin, sonst steht unsere Montage.\n\nMatthias Sommer"
+   },
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4587-3505 (Ruhrstahl)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Hallo Peter,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4587-3505: 02.11.2026, Teillieferung 50 % schon am 28.10.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1522",
+    "von_name": "Sven Krämer",
+    "von_mail": "s.kraemer@schusterpapier.example",
+    "datum": "2026-07-15",
+    "text": "Guten Tag Peter Maier,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nSven Krämer\nInstandhaltung, Eifel Papierfabrik Schuster KG"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1522 – Version 2",
+    "von_name": "Sven Krämer",
+    "von_mail": "s.kraemer@schusterpapier.example",
+    "datum": "2026-08-07",
+    "text": "Hallo Peter,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 11 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 495.000 EUR für 2027 zusagen.\n\nGruß\nSven Krämer"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1522 v3 – Rückmeldung",
+    "von_name": "Sven Krämer",
+    "von_mail": "s.kraemer@schusterpapier.example",
+    "datum": "2026-09-07",
+    "text": "Hallo Peter,\n\nzu Version 3 (10 % Rabatt, 4,5 %) brauchen wir noch eine interne Freigabe unserer Geschäftsführung. Rückmeldung voraussichtlich in KW 48.\n\nGruß\nSven Krämer"
+   },
+   {
+    "betreff": "Kündigung Rahmenvertrag RV-2024-147",
+    "von_name": "Sven Krämer",
+    "von_mail": "s.kraemer@schusterpapier.example",
+    "datum": "2026-09-14",
+    "text": "Sehr geehrte Damen und Herren,\n\nhiermit kündigen wir den Rahmenvertrag RV-2024-147 fristgerecht zum Laufzeitende 30.09.2028. Gesprächen über einen neuen Vertrag zu angepassten Konditionen stehen wir offen gegenüber.\n\nSven Krämer\nInstandhaltung"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1807",
+    "von_name": "Monika Lorenz",
+    "von_mail": "m.lorenz@niederrheinlogistik.example",
+    "datum": "2026-07-17",
+    "text": "Guten Tag Peter Maier,\n\nvielen Dank für Ihr Angebot. Eine Preiserhöhung von 6,5 % können wir für 2027 nicht akzeptieren. Wettbewerber liegen deutlich darunter. Bitte prüfen Sie Rabatt und Erhöhung noch einmal.\n\nMit freundlichen Grüßen\nMonika Lorenz\nStrategischer Einkauf, Niederrhein Logistiksysteme GmbH"
+   },
+   {
+    "betreff": "AW: AW: Angebot ANG-2026-1807 – Version 2",
+    "von_name": "Monika Lorenz",
+    "von_mail": "m.lorenz@niederrheinlogistik.example",
+    "datum": "2026-08-10",
+    "text": "Hallo Peter,\n\ndie Version 2 geht in die richtige Richtung. Unser Vorschlag: 7 % Rabatt und maximal 4,5 % Preiserhöhung, dann können wir das Volumen von 330.000 EUR für 2027 zusagen.\n\nGruß\nMonika Lorenz"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1807 v3 – Rückmeldung",
+    "von_name": "Monika Lorenz",
+    "von_mail": "m.lorenz@niederrheinlogistik.example",
+    "datum": "2026-09-10",
+    "text": "Hallo Peter,\n\nwir nehmen Version 3 an: 7 % Rabatt, Preisanpassung 4,5 % zum 01.01.2027. Die Bestellung für Q1 folgt bis Ende November.\n\nGruß\nMonika Lorenz"
+   },
+   {
+    "betreff": "Lieferverzug Bestellung 4545-2180",
+    "von_name": "Monika Lorenz",
+    "von_mail": "m.lorenz@niederrheinlogistik.example",
+    "datum": "2026-10-26",
+    "text": "Hallo Peter,\n\nunsere Bestellung 4545-2180 (Steuermodule Serie SM-400) ist seit 4 Wochen überfällig. Wir brauchen einen verbindlichen Liefertermin, sonst steht unsere Montage.\n\nMonika Lorenz"
+   },
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4545-2180 (Niederrhein Logistik)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-27",
+    "text": "Hallo Peter,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4545-2180: 09.11.2026, Teillieferung 50 % schon am 02.11.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1807 v2 für Niederrhein Logistik anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-04",
+    "text": "Hallo Peter,\n\nist angelegt und an Monika Lorenz raus. PDF liegt im Kanal Niederrhein Logistik.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Vorbereitung Strategiegespräch Talheim Chemie",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-04",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Talheim Chemie am 09.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Preisrunde 2027 – Leitplanken",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com",
+     "Bella@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-07-01",
+    "text": "Hallo zusammen,\n\nfür die Preisrunde 2027 gilt: Listenpreiserhöhung 6,5 %, Untergrenze 3,9 %. Rabatterhöhungen über +2 Punkte nur mit meiner Freigabe, über +3 Punkte mit Heinrich.\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "Freigabe Rabatt Rheintal Pharma 2027",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Hallo Ingrid,\n\nfür Rheintal Pharma AG brauche ich deine Freigabe: 10 % Rabatt bei +4,2 % Preisanpassung, Volumen 81.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1580 v2 für Moselland anlegen",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-05",
+    "text": "Hallo Sally,\n\nbitte lege für Moselland Getränketechnik GmbH die Version 2 von ANG-2026-1580 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 158.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4587-3505 (Ruhrstahl)",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-23",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4587-3505 geben? Kunde macht Druck.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Schuster Papier hat RV-2024-147 gekündigt",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Ingrid,\n\nEifel Papierfabrik Schuster KG hat zum 30.09.2028 gekündigt, will aber neu verhandeln. Vorschlag: Termin mit Einkauf im November.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4545-2180 (Niederrhein Logistik)",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4545-2180 geben? Kunde macht Druck.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1807 v2 für Niederrhein Logistik anlegen",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-03",
+    "text": "Hallo Sally,\n\nbitte lege für Niederrhein Logistiksysteme GmbH die Version 2 von ANG-2026-1807 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 330.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [
+   {
+    "betreff": "Antrittsbesuch Kessler Heilbronn",
+    "tag": "2026-11-16",
+    "von": "10:00",
+    "bis": "12:30",
+    "ort": "Kessler Antriebstechnik GmbH, Heilbronn",
+    "teilnehmer": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Vorstellung Peter Maier bei Dr. Simone Rautenberg (neue Leitung Einkauf)."
+   }
+  ],
+  "onedrive": [
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Profil_Rheintal_Pharma_2024.docx",
+    "ziel": "Kunden/Rheintal Pharma/Profil_Rheintal_Pharma_2024.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Angebote/alt/ANG-2026-1724_Rheintal_Pharma_v1.docx",
+    "ziel": "Kunden/Rheintal Pharma/Angebote/alt/ANG-2026-1724_Rheintal_Pharma_v1.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/ANG-2026-1724_Rheintal_Pharma_v2_überarbeitet.docx",
+    "ziel": "Kunden/Rheintal Pharma/ANG-2026-1724_Rheintal_Pharma_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/ANG-2026-1724_Rheintal_Pharma_v3_FINAL.pdf",
+    "ziel": "Kunden/Rheintal Pharma/ANG-2026-1724_Rheintal_Pharma_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Neuer Ordner/ANG-2026-1724_Rheintal_Pharma_v3_FINAL (1).pdf",
+    "ziel": "Neuer Ordner/ANG-2026-1724_Rheintal_Pharma_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Kalkulation Rheintal Pharma 2027.xlsx",
+    "ziel": "Kunden/Rheintal Pharma/Kalkulation Rheintal Pharma 2027.xlsx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Korrespondenz/AW Angebot ANG-2026-1724.eml",
+    "ziel": "Kunden/Rheintal Pharma/Korrespondenz/AW Angebot ANG-2026-1724.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Korrespondenz/Angebot ANG-2026-1724 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Rheintal Pharma/Korrespondenz/Angebot ANG-2026-1724 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/RV/RV-2022-234_Rheintal_Pharma_unterschrieben.pdf",
+    "ziel": "Kunden/Rheintal Pharma/RV/RV-2022-234_Rheintal_Pharma_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/RV/RV-2022-234_Entwurf_v3.docx",
+    "ziel": "Kunden/Rheintal Pharma/RV/RV-2022-234_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/tel rheintal pharma.txt",
+    "ziel": "Kunden/Rheintal Pharma/tel rheintal pharma.txt"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Rheintal Pharma/Audit/Auditplan Rheintal Pharma 2026.pdf",
+    "ziel": "Kunden/Rheintal Pharma/Audit/Auditplan Rheintal Pharma 2026.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/Moselland Steckbrief (alt).docx",
+    "ziel": "Kunden/Moselland/Moselland Steckbrief (alt).docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/_alt/ANG-2026-1580_Moselland_v1.docx",
+    "ziel": "Kunden/Moselland/_alt/ANG-2026-1580_Moselland_v1.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/ANG-2026-1580_Moselland_v2_überarbeitet.docx",
+    "ziel": "Kunden/Moselland/ANG-2026-1580_Moselland_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/ANG-2026-1580_Moselland_v3_FINAL.pdf",
+    "ziel": "Kunden/Moselland/ANG-2026-1580_Moselland_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Desktop-Ablage/ANG-2026-1580_Moselland_v3_FINAL (1).pdf",
+    "ziel": "Desktop-Ablage/ANG-2026-1580_Moselland_v3_FINAL (1).pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/Kalkulation Moselland 2027.xlsx",
+    "ziel": "Kunden/Moselland/Kalkulation Moselland 2027.xlsx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/AW Angebot ANG-2026-1580.eml",
+    "ziel": "Kunden/Moselland/AW Angebot ANG-2026-1580.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/AW AW Angebot ANG-2026-1580 – Version 2.eml",
+    "ziel": "Kunden/Moselland/AW AW Angebot ANG-2026-1580 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/RV/RV-2023-183_Moselland_unterschrieben.pdf",
+    "ziel": "Kunden/Moselland/RV/RV-2023-183_Moselland_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/_alt/RV-2023-183_Entwurf_v3.docx",
+    "ziel": "Kunden/Moselland/_alt/RV-2023-183_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Moselland/Notizen Moselland.txt",
+    "ziel": "Kunden/Moselland/Notizen Moselland.txt"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Kundenprofil Ruhrstahl.docx",
+    "ziel": "Kunden/Ruhrstahl_neu/Kundenprofil Ruhrstahl.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Angebote/alt/ANG-2026-1224_Ruhrstahl_v1.docx",
+    "ziel": "Kunden/Ruhrstahl_neu/Angebote/alt/ANG-2026-1224_Ruhrstahl_v1.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Preise/ANG-2026-1224_Ruhrstahl_v2_überarbeitet.docx",
+    "ziel": "Kunden/Ruhrstahl_neu/Preise/ANG-2026-1224_Ruhrstahl_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Preise/ANG-2026-1224_Ruhrstahl_v3_FINAL.pdf",
+    "ziel": "Kunden/Ruhrstahl_neu/Preise/ANG-2026-1224_Ruhrstahl_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Neuer Ordner/Kopie von ANG-2026-1224_v3_FINAL.pdf",
+    "ziel": "Neuer Ordner/Kopie von ANG-2026-1224_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Preise/Kalkulation Ruhrstahl 2027.xlsx",
+    "ziel": "Kunden/Ruhrstahl_neu/Preise/Kalkulation Ruhrstahl 2027.xlsx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Mails/AW Angebot ANG-2026-1224.eml",
+    "ziel": "Kunden/Ruhrstahl_neu/Mails/AW Angebot ANG-2026-1224.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Mails/AW AW Angebot ANG-2026-1224 – Version 2.eml",
+    "ziel": "Kunden/Ruhrstahl_neu/Mails/AW AW Angebot ANG-2026-1224 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Mails/Angebot ANG-2026-1224 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Ruhrstahl_neu/Mails/Angebot ANG-2026-1224 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/RV-2023-237_Ruhrstahl_unterschrieben.pdf",
+    "ziel": "Kunden/Ruhrstahl_neu/RV-2023-237_Ruhrstahl_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Ruhrstahl_neu/Angebote/alt/RV-2023-237_Entwurf_v3.docx",
+    "ziel": "Kunden/Ruhrstahl_neu/Angebote/alt/RV-2023-237_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Neuer Ordner/notiz telefonat 28.9.txt",
+    "ziel": "Neuer Ordner/notiz telefonat 28.9.txt"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Kundenprofil Schuster Papier.docx",
+    "ziel": "Kunden/Schuster Papier_neu/Kundenprofil Schuster Papier.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/_alt/ANG-2026-1522_Schuster_Papier_v1.docx",
+    "ziel": "Kunden/Schuster Papier_neu/_alt/ANG-2026-1522_Schuster_Papier_v1.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Angebote 2026/ANG-2026-1522_Schuster_Papier_v2_überarbeitet.docx",
+    "ziel": "Kunden/Schuster Papier_neu/Angebote 2026/ANG-2026-1522_Schuster_Papier_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Angebote 2026/ANG-2026-1522_Schuster_Papier_v3_FINAL.pdf",
+    "ziel": "Kunden/Schuster Papier_neu/Angebote 2026/ANG-2026-1522_Schuster_Papier_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/sonstiges/Kopie von ANG-2026-1522_v3_FINAL.pdf",
+    "ziel": "Kunden/Schuster Papier_neu/sonstiges/Kopie von ANG-2026-1522_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Angebote 2026/Kalkulation Schuster Papier 2027.xlsx",
+    "ziel": "Kunden/Schuster Papier_neu/Angebote 2026/Kalkulation Schuster Papier 2027.xlsx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Korrespondenz/AW Angebot ANG-2026-1522.eml",
+    "ziel": "Kunden/Schuster Papier_neu/Korrespondenz/AW Angebot ANG-2026-1522.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Korrespondenz/Angebot ANG-2026-1522 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Schuster Papier_neu/Korrespondenz/Angebot ANG-2026-1522 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Vertrag/RV-2024-147_Schuster_Papier_unterschrieben.pdf",
+    "ziel": "Kunden/Schuster Papier_neu/Vertrag/RV-2024-147_Schuster_Papier_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/_alt/RV-2024-147_Entwurf_v3.docx",
+    "ziel": "Kunden/Schuster Papier_neu/_alt/RV-2024-147_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/tel schuster papier.txt",
+    "ziel": "Kunden/Schuster Papier_neu/tel schuster papier.txt"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Schuster Papier_neu/Vertrag/Kündigung RV-2024-147.eml",
+    "ziel": "Kunden/Schuster Papier_neu/Vertrag/Kündigung RV-2024-147.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Profil_Niederrhein_Logistik_2024.docx",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Profil_Niederrhein_Logistik_2024.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/alt (nicht löschen)/ANG-2026-1807_Niederrhein_Logistik_v1.docx",
+    "ziel": "Kunden/Niederrhein Logistik_neu/alt (nicht löschen)/ANG-2026-1807_Niederrhein_Logistik_v1.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Angebote 2026/ANG-2026-1807_Niederrhein_Logistik_v2_überarbeitet.docx",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Angebote 2026/ANG-2026-1807_Niederrhein_Logistik_v2_überarbeitet.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Angebote 2026/ANG-2026-1807_Niederrhein_Logistik_v3_FINAL.pdf",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Angebote 2026/ANG-2026-1807_Niederrhein_Logistik_v3_FINAL.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Neuer Ordner/Angebot Niederrhein Logistik final_neu.pdf",
+    "ziel": "Neuer Ordner/Angebot Niederrhein Logistik final_neu.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Angebote 2026/Kalkulation Niederrhein Logistik 2027.xlsx",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Angebote 2026/Kalkulation Niederrhein Logistik 2027.xlsx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Mails/AW Angebot ANG-2026-1807.eml",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Mails/AW Angebot ANG-2026-1807.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Mails/AW AW Angebot ANG-2026-1807 – Version 2.eml",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Mails/AW AW Angebot ANG-2026-1807 – Version 2.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Mails/Angebot ANG-2026-1807 v3 – Rückmeldung.eml",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Mails/Angebot ANG-2026-1807 v3 – Rückmeldung.eml"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/Vertrag/RV-2022-156_Niederrhein_Logistik_unterschrieben.pdf",
+    "ziel": "Kunden/Niederrhein Logistik_neu/Vertrag/RV-2022-156_Niederrhein_Logistik_unterschrieben.pdf"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Kunden/Niederrhein Logistik_neu/alt (nicht löschen)/RV-2022-156_Entwurf_v3.docx",
+    "ziel": "Kunden/Niederrhein Logistik_neu/alt (nicht löschen)/RV-2022-156_Entwurf_v3.docx"
+   },
+   {
+    "datei": "dateien/peter/OneDrive/Neuer Ordner/tel niederrhein logistik.txt",
+    "ziel": "Neuer Ordner/tel niederrhein logistik.txt"
+   }
+  ],
+  "kanal_posts": [
+   {
+    "kanal": "Rheintal Pharma",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Rheintal Pharma gestartet: Angebot ANG-2026-1724 v1 ist raus (9 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Rheintal Pharma",
+    "datum": "2026-11-05",
+    "text": "Update Rheintal Pharma: v3 mit 10 % Rabatt und +4,2 % – Status: angenommen."
+   },
+   {
+    "kanal": "Moselland",
+    "datum": "2026-07-20",
+    "text": "Preisrunde 2027 für Moselland gestartet: Angebot ANG-2026-1580 v1 ist raus (5 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Moselland",
+    "datum": "2026-09-08",
+    "text": "Update Moselland: v3 mit 6 % Rabatt und +4,5 % – Status: angenommen."
+   },
+   {
+    "kanal": "Ruhrstahl",
+    "datum": "2026-08-24",
+    "text": "Preisrunde 2027 für Ruhrstahl gestartet: Angebot ANG-2026-1224 v1 ist raus (10 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Ruhrstahl",
+    "datum": "2026-11-02",
+    "text": "Update Ruhrstahl: v3 mit 12 % Rabatt und +4,5 % – Status: angenommen."
+   },
+   {
+    "kanal": "Schuster Papier",
+    "datum": "2026-07-10",
+    "text": "Preisrunde 2027 für Schuster Papier gestartet: Angebot ANG-2026-1522 v1 ist raus (9 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Schuster Papier",
+    "datum": "2026-09-10",
+    "text": "Update Schuster Papier: v3 mit 10 % Rabatt und +4,5 % – Status: offen."
+   },
+   {
+    "kanal": "Niederrhein Logistik",
+    "datum": "2026-07-08",
+    "text": "Preisrunde 2027 für Niederrhein Logistik gestartet: Angebot ANG-2026-1807 v1 ist raus (5 % Rabatt, +6,5 %)."
+   },
+   {
+    "kanal": "Niederrhein Logistik",
+    "datum": "2026-09-14",
+    "text": "Update Niederrhein Logistik: v3 mit 7 % Rabatt und +4,5 % – Status: angenommen."
+   }
+  ],
+  "kanal_dateien": [
+   {
+    "kanal": "Rheintal Pharma",
+    "datei": "dateien/_teams/Rheintal Pharma/RV-2022-234_Rheintal_Pharma_unterschrieben.pdf",
+    "name": "RV-2022-234_Rheintal_Pharma_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Rheintal Pharma",
+    "datei": "dateien/_teams/Rheintal Pharma/ANG-2026-1724_Rheintal_Pharma_v3_FINAL.pdf",
+    "name": "ANG-2026-1724_Rheintal_Pharma_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Moselland",
+    "datei": "dateien/_teams/Moselland/RV-2023-183_Moselland_unterschrieben.pdf",
+    "name": "RV-2023-183_Moselland_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Moselland",
+    "datei": "dateien/_teams/Moselland/ANG-2026-1580_Moselland_v3_FINAL.pdf",
+    "name": "ANG-2026-1580_Moselland_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Ruhrstahl",
+    "datei": "dateien/_teams/Ruhrstahl/RV-2023-237_Ruhrstahl_unterschrieben.pdf",
+    "name": "RV-2023-237_Ruhrstahl_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Ruhrstahl",
+    "datei": "dateien/_teams/Ruhrstahl/ANG-2026-1224_Ruhrstahl_v3_FINAL.pdf",
+    "name": "ANG-2026-1224_Ruhrstahl_v3_FINAL.pdf"
+   },
+   {
+    "kanal": "Schuster Papier",
+    "datei": "dateien/_teams/Schuster Papier/RV-2024-147_Schuster_Papier_unterschrieben.pdf",
+    "name": "RV-2024-147_Schuster_Papier_unterschrieben.pdf"
+   },
+   {
+    "kanal": "Niederrhein Logistik",
+    "datei": "dateien/_teams/Niederrhein Logistik/RV-2022-156_Niederrhein_Logistik_unterschrieben.pdf",
+    "name": "RV-2022-156_Niederrhein_Logistik_unterschrieben.pdf"
+   }
+  ],
+  "chats": [
+   {
+    "mit": "Bella@KAMPilot.onmicrosoft.com",
+    "datum": "2026-10-29",
+    "text": "Wusstest du, dass Frank Sommer nicht mehr im Einkauf ist? Jetzt ist Dr. Simone Rautenberg zuständig."
+   }
+  ]
+ },
+ "sally": {
+  "onenote": [
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Albers – Angebote 2027",
+    "datum": "2026-08-14",
+    "text": "ANG-2026-1093 für Albers Fördertechnik GmbH (KAM Jonas Hechler)\n- v1 15.07.2026\n- v2 14.08.2026 angelegt nach Mail von Jonas\n- v3 04.09.2026\nKundennummer K-20400, Bestellungen laufen über EDI."
+   },
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Hanse Verpackung – Angebote 2027",
+    "datum": "2026-08-29",
+    "text": "ANG-2026-1318 für Hanse Verpackung AG (KAM Jonas Hechler)\n- v1 09.08.2026\n- v2 29.08.2026 angelegt nach Mail von Jonas\n- v3 26.09.2026\nKundennummer K-20437, Bestellungen laufen über Mail an den Innendienst."
+   },
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Lechner – Angebote 2027",
+    "datum": "2026-09-17",
+    "text": "ANG-2026-1899 für Lechner Präzisionsteile GmbH (KAM Bella Froh)\n- v1 18.08.2026\n- v2 17.09.2026 angelegt nach Mail von Bella\n- v3 15.10.2026\nKundennummer K-20622, Bestellungen laufen über das Kundenportal."
+   },
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Isar Robotics – Angebote 2027",
+    "datum": "2026-09-14",
+    "text": "ANG-2026-1688 für Isar Robotics GmbH (KAM Bella Froh)\n- v1 22.08.2026\n- v2 14.09.2026 angelegt nach Mail von Bella\n- v3 21.10.2026\nKundennummer K-20844, Bestellungen laufen über EDI."
+   },
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Moselland – Angebote 2027",
+    "datum": "2026-08-07",
+    "text": "ANG-2026-1580 für Moselland Getränketechnik GmbH (KAM Peter Maier)\n- v1 18.07.2026\n- v2 07.08.2026 angelegt nach Mail von Peter\n- v3 01.09.2026\nKundennummer K-20918, Bestellungen laufen über das Kundenportal."
+   },
+   {
+    "abschnitt": "Auftragsabwicklung",
+    "seite": "Niederrhein Logistik – Angebote 2027",
+    "datum": "2026-08-04",
+    "text": "ANG-2026-1807 für Niederrhein Logistiksysteme GmbH (KAM Peter Maier)\n- v1 08.07.2026\n- v2 04.08.2026 angelegt nach Mail von Peter\n- v3 05.09.2026\nKundennummer K-21029, Bestellungen laufen über Mail an den Innendienst."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "Angebot ANG-2026-1093 v2 für Albers anlegen",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-12",
+    "text": "Hallo Sally,\n\nbitte lege für Albers Fördertechnik GmbH die Version 2 von ANG-2026-1093 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 415.000 EUR.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1318 v2 für Hanse Verpackung anlegen",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-27",
+    "text": "Hallo Sally,\n\nbitte lege für Hanse Verpackung AG die Version 2 von ANG-2026-1318 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 653.000 EUR.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1899 v2 für Lechner anlegen",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-15",
+    "text": "Hallo Sally,\n\nbitte lege für Lechner Präzisionsteile GmbH die Version 2 von ANG-2026-1899 an: 9 % Rabatt, +5,0 % Preisanpassung, Volumen 615.000 EUR.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1688 v2 für Isar Robotics anlegen",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Sally,\n\nbitte lege für Isar Robotics GmbH die Version 2 von ANG-2026-1688 an: 9 % Rabatt, +5,0 % Preisanpassung, Volumen 812.000 EUR.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1580 v2 für Moselland anlegen",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-05",
+    "text": "Hallo Sally,\n\nbitte lege für Moselland Getränketechnik GmbH die Version 2 von ANG-2026-1580 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 158.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Angebot ANG-2026-1807 v2 für Niederrhein Logistik anlegen",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Sally@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-03",
+    "text": "Hallo Sally,\n\nbitte lege für Niederrhein Logistiksysteme GmbH die Version 2 von ANG-2026-1807 an: 6 % Rabatt, +5,0 % Preisanpassung, Volumen 330.000 EUR.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "AW: Angebot ANG-2026-1093 v2 für Albers anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-14",
+    "text": "Hallo Jonas,\n\nist angelegt und an Miriam Zimmer raus. PDF liegt im Kanal Albers.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1318 v2 für Hanse Verpackung anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-31",
+    "text": "Hallo Jonas,\n\nist angelegt und an Nils Claasen raus. PDF liegt im Kanal Hanse Verpackung.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1899 v2 für Lechner anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-17",
+    "text": "Hallo Bella,\n\nist angelegt und an Holger Rademacher raus. PDF liegt im Kanal Lechner.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1688 v2 für Isar Robotics anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-14",
+    "text": "Hallo Bella,\n\nist angelegt und an Kerstin Imhoff raus. PDF liegt im Kanal Isar Robotics.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1580 v2 für Moselland anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-07",
+    "text": "Hallo Peter,\n\nist angelegt und an Karin Dreyer raus. PDF liegt im Kanal Moselland.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: Angebot ANG-2026-1807 v2 für Niederrhein Logistik anlegen",
+    "von_name": "Sally Mongo",
+    "von_mail": "Sally@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-08-04",
+    "text": "Hallo Peter,\n\nist angelegt und an Monika Lorenz raus. PDF liegt im Kanal Niederrhein Logistik.\n\nViele Grüße\nSally Mongo\nVertriebsinnendienst\nKAM-Pilot GmbH\nsally@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [],
+  "onedrive": [],
+  "kanal_posts": [],
+  "kanal_dateien": [],
+  "chats": [
+   {
+    "mit": "Joki@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-02",
+    "text": "Kurze Info: Preislisten 2027 sind im System, Angebote ab sofort mit neuem Listenpreis."
+   },
+   {
+    "mit": "Bella@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-02",
+    "text": "Kurze Info: Preislisten 2027 sind im System, Angebote ab sofort mit neuem Listenpreis."
+   },
+   {
+    "mit": "Peter@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-02",
+    "text": "Kurze Info: Preislisten 2027 sind im System, Angebote ab sofort mit neuem Listenpreis."
+   }
+  ]
+ },
+ "ingo": {
+  "onenote": [
+   {
+    "abschnitt": "Technik Kunden",
+    "seite": "Albers – Inbetriebnahme",
+    "datum": "2026-10-16",
+    "text": "Albers Fördertechnik GmbH: Ansprechpartner Technik Miriam Zimmer.\nFirmware-Stand unklar (3.1 oder 3.2?).\nBesuch geplant am 11.11.2026 mit Jonas Hechler."
+   },
+   {
+    "abschnitt": "Technik Kunden",
+    "seite": "Alpina – Inbetriebnahme",
+    "datum": "2026-10-16",
+    "text": "Alpina Fördersysteme GmbH: Ansprechpartner Technik Nils Imhoff.\nFirmware-Stand unklar (3.1 oder 3.2?).\nBesuch geplant am 12.11.2026 mit Bella Froh."
+   }
+  ],
+  "inbox": [],
+  "gesendet": [
+   {
+    "betreff": "Vorbereitung Besuch Albers",
+    "von_name": "Ingo Bauer",
+    "von_mail": "Ingo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-03",
+    "text": "Hi Jonas,\n\nich bringe für Albers das Demo-Kit SR-200 mit. Kannst du mit Miriam Zimmer klären, ob die Steuerung auf Firmware 3.2 ist?\n\nViele Grüße\nIngo Bauer\nAnwendungstechnik\nKAM-Pilot GmbH\ningo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Vorbereitung Besuch Alpina",
+    "von_name": "Ingo Bauer",
+    "von_mail": "Ingo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-03",
+    "text": "Hi Bella,\n\nich bringe für Alpina das Demo-Kit SensPak mit. Kannst du mit Nils Imhoff klären, ob die Steuerung auf Firmware 3.2 ist?\n\nViele Grüße\nIngo Bauer\nAnwendungstechnik\nKAM-Pilot GmbH\ningo@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [],
+  "onedrive": [],
+  "kanal_posts": [],
+  "kanal_dateien": [],
+  "chats": [
+   {
+    "mit": "Joki@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-04",
+    "text": "Steht der Termin bei Albers am 11.11.2026? Dann buche ich das Hotel."
+   },
+   {
+    "mit": "Bella@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-04",
+    "text": "Steht der Termin bei Alpina am 12.11.2026? Dann buche ich das Hotel."
+   }
+  ]
+ },
+ "udo": {
+  "onenote": [
+   {
+    "abschnitt": "Lieferplanung",
+    "seite": "Rückstand Kruse 4510-4015",
+    "datum": "2026-10-28",
+    "text": "Bestellung 4510-4015 von Kruse Lebensmitteltechnik KG, Engpass Leistungshalbleiter.\nTeillieferung 50 %: 02.11.2026\nRest: 11.11.2026\nKAM informiert: Jonas Hechler"
+   },
+   {
+    "abschnitt": "Lieferplanung",
+    "seite": "Rückstand Ruhrstahl 4587-3505",
+    "datum": "2026-10-23",
+    "text": "Bestellung 4587-3505 von Ruhrstahl Komponenten GmbH, Engpass Leistungshalbleiter.\nTeillieferung 50 %: 28.10.2026\nRest: 02.11.2026\nKAM informiert: Peter Maier"
+   },
+   {
+    "abschnitt": "Lieferplanung",
+    "seite": "Rückstand Niederrhein Logistik 4545-2180",
+    "datum": "2026-10-26",
+    "text": "Bestellung 4545-2180 von Niederrhein Logistiksysteme GmbH, Engpass Leistungshalbleiter.\nTeillieferung 50 %: 02.11.2026\nRest: 09.11.2026\nKAM informiert: Peter Maier"
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4510-4015 (Kruse)",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-28",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4510-4015 geben? Kunde macht Druck.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4587-3505 (Ruhrstahl)",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-23",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4587-3505 geben? Kunde macht Druck.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Lieferverzug Bestellung 4545-2180 (Niederrhein Logistik)",
+    "von_name": "Peter Maier",
+    "von_mail": "Peter@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Udo@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Udo, kannst du mir bis morgen einen Termin für 4545-2180 geben? Kunde macht Druck.\n\nViele Grüße\nPeter Maier\nKey-Account-Manager West\nKAM-Pilot GmbH\npeter@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4510-4015 (Kruse)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-29",
+    "text": "Hallo Jonas,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4510-4015: 11.11.2026, Teillieferung 50 % schon am 02.11.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4587-3505 (Ruhrstahl)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-26",
+    "text": "Hallo Peter,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4587-3505: 02.11.2026, Teillieferung 50 % schon am 28.10.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "AW: WG: Lieferverzug Bestellung 4545-2180 (Niederrhein Logistik)",
+    "von_name": "Udo Heußer",
+    "von_mail": "Udo@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-10-27",
+    "text": "Hallo Peter,\n\nUrsache ist ein Engpass bei Leistungshalbleitern. Neuer Liefertermin für 4545-2180: 09.11.2026, Teillieferung 50 % schon am 02.11.2026.\n\nViele Grüße\nUdo Heußer\nSupply Chain / Disposition\nKAM-Pilot GmbH\nudo@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [],
+  "onedrive": [],
+  "kanal_posts": [
+   {
+    "kanal": "Kruse",
+    "datum": "2026-10-29",
+    "text": "Lieferverzug 4510-4015: neuer Termin 11.11.2026, Teillieferung vorher."
+   },
+   {
+    "kanal": "Ruhrstahl",
+    "datum": "2026-10-26",
+    "text": "Lieferverzug 4587-3505: neuer Termin 02.11.2026, Teillieferung vorher."
+   },
+   {
+    "kanal": "Niederrhein Logistik",
+    "datum": "2026-10-27",
+    "text": "Lieferverzug 4545-2180: neuer Termin 09.11.2026, Teillieferung vorher."
+   }
+  ],
+  "kanal_dateien": [],
+  "chats": [
+   {
+    "mit": "Joki@KAMPilot.onmicrosoft.com",
+    "datum": "2026-11-02",
+    "text": "Teillieferung 4510-4015 für Kruse geht morgen raus."
+   },
+   {
+    "mit": "Peter@KAMPilot.onmicrosoft.com",
+    "datum": "2026-10-27",
+    "text": "Teillieferung 4587-3505 für Ruhrstahl geht morgen raus."
+   },
+   {
+    "mit": "Peter@KAMPilot.onmicrosoft.com",
+    "datum": "2026-10-30",
+    "text": "Teillieferung 4545-2180 für Niederrhein Logistik geht morgen raus."
+   }
+  ]
+ },
+ "herbert": {
+  "onenote": [
+   {
+    "abschnitt": "Reklamationen",
+    "seite": "Albers – Charge 24-8155",
+    "datum": "2026-06-26",
+    "text": "Kunde Albers Fördertechnik GmbH, gemeldet von Miriam Zimmer am 26.06.2026 über Jonas Hechler.\nUrsache: Lötpaste Zulieferer. 8D am 08.07.2026 verschickt.\nGutschrift 4.800 EUR, Ersatzlieferung 06.07.2026.\nStatus: abgeschlossen."
+   },
+   {
+    "abschnitt": "Reklamationen",
+    "seite": "Riedl – Charge 26-7070",
+    "datum": "2026-06-24",
+    "text": "Kunde Donau Kunststoffwerk Riedl GmbH, gemeldet von Yvonne Engel am 24.06.2026 über Bella Froh.\nUrsache: Lötpaste Zulieferer. 8D am 06.07.2026 verschickt.\nGutschrift 4.800 EUR, Ersatzlieferung 03.07.2026.\nStatus: abgeschlossen."
+   },
+   {
+    "abschnitt": "Audits",
+    "seite": "Audit Bodensee Medical 16.11.2026",
+    "datum": "2026-10-26",
+    "text": "Kundenaudit Bodensee Medizinprodukte AG am 16.11.2026. Vorbereitung: Prüfprotokolle der letzten 12 Monate, Rückverfolgbarkeit. KAM Bella Froh kommt zum Abschlussgespräch."
+   },
+   {
+    "abschnitt": "Audits",
+    "seite": "Audit Rheintal Pharma 17.11.2026",
+    "datum": "2026-10-26",
+    "text": "Kundenaudit Rheintal Pharma AG am 17.11.2026. Vorbereitung: Prüfprotokolle der letzten 12 Monate, Rückverfolgbarkeit. KAM Peter Maier kommt zum Abschlussgespräch."
+   },
+   {
+    "abschnitt": "Audits",
+    "seite": "Audit Talheim Chemie 17.11.2026",
+    "datum": "2026-10-26",
+    "text": "Kundenaudit Talheim Chemie AG am 17.11.2026. Vorbereitung: Prüfprotokolle der letzten 12 Monate, Rückverfolgbarkeit. KAM Ingrid Heller kommt zum Abschlussgespräch."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "WG: Reklamation Charge 24-8155 – Albers",
+    "von_name": "Jonas Hechler",
+    "von_mail": "Joki@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-06-26",
+    "text": "Hallo Herbert,\n\nbitte übernimm die Reklamation von Albers Fördertechnik GmbH, Charge 24-8155. Kunde will 8D bis 10.07.2026.\n\nViele Grüße\nJonas Hechler\nKey-Account-Manager Nord\nKAM-Pilot GmbH\njoki@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "WG: Reklamation Charge 26-7070 – Riedl",
+    "von_name": "Bella Froh",
+    "von_mail": "Bella@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-06-24",
+    "text": "Hallo Herbert,\n\nbitte übernimm die Reklamation von Donau Kunststoffwerk Riedl GmbH, Charge 26-7070. Kunde will 8D bis 08.07.2026.\n\nViele Grüße\nBella Froh\nKey-Account-Managerin Süd\nKAM-Pilot GmbH\nbella@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [],
+  "termine": [
+   {
+    "betreff": "Lieferantenaudit durch Bodensee Medical",
+    "tag": "2026-11-16",
+    "von": "08:30",
+    "bis": "16:00",
+    "ort": "KAM-Pilot GmbH, Werk 1",
+    "teilnehmer": [
+     "Bella@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Audit nach ISO 13485 durch Bodensee Medizinprodukte AG. Auditor beim Kunden: Andreas Krämer."
+   },
+   {
+    "betreff": "Lieferantenaudit durch Rheintal Pharma",
+    "tag": "2026-11-17",
+    "von": "08:30",
+    "bis": "16:00",
+    "ort": "KAM-Pilot GmbH, Werk 1",
+    "teilnehmer": [
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Audit nach GMP-Anforderungen durch Rheintal Pharma AG. Auditor beim Kunden: Matthias Engel."
+   },
+   {
+    "betreff": "Lieferantenaudit durch Talheim Chemie",
+    "tag": "2026-11-17",
+    "von": "08:30",
+    "bis": "16:00",
+    "ort": "KAM-Pilot GmbH, Werk 1",
+    "teilnehmer": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Audit nach GMP-Anforderungen durch Talheim Chemie AG. Auditor beim Kunden: Karin Pohl."
+   }
+  ],
+  "onedrive": [],
+  "kanal_posts": [
+   {
+    "kanal": "Albers",
+    "datum": "2026-07-08",
+    "text": "8D-Bericht zu Charge 24-8155 ist an Miriam Zimmer raus. Ursache Lötpaste, Maßnahmen umgesetzt."
+   },
+   {
+    "kanal": "Riedl",
+    "datum": "2026-07-06",
+    "text": "8D-Bericht zu Charge 26-7070 ist an Yvonne Engel raus. Ursache Lötpaste, Maßnahmen umgesetzt."
+   }
+  ],
+  "kanal_dateien": [
+   {
+    "kanal": "Albers",
+    "datei": "dateien/_teams/Albers/8D-Bericht_24-8155_final.docx",
+    "name": "8D-Bericht_24-8155_final.docx"
+   },
+   {
+    "kanal": "Riedl",
+    "datei": "dateien/_teams/Riedl/8D-Bericht_26-7070_final.docx",
+    "name": "8D-Bericht_26-7070_final.docx"
+   },
+   {
+    "kanal": "Bodensee Medical",
+    "datei": "dateien/_teams/Bodensee Medical/Auditplan Bodensee Medical 2026.pdf",
+    "name": "Auditplan Bodensee Medical 2026.pdf"
+   },
+   {
+    "kanal": "Rheintal Pharma",
+    "datei": "dateien/_teams/Rheintal Pharma/Auditplan Rheintal Pharma 2026.pdf",
+    "name": "Auditplan Rheintal Pharma 2026.pdf"
+   },
+   {
+    "kanal": "Talheim Chemie",
+    "datei": "dateien/_teams/Talheim Chemie/Auditplan Talheim Chemie 2026.pdf",
+    "name": "Auditplan Talheim Chemie 2026.pdf"
+   }
+  ],
+  "chats": []
+ },
+ "heinrich": {
+  "onenote": [
+   {
+    "abschnitt": "Strategische Kunden",
+    "seite": "Vossberg Fahrzeugtechnik SE",
+    "datum": "2026-10-06",
+    "text": "Vossberg Fahrzeugtechnik SE: Umsatz 2025 3.10 Mio. EUR, Verantwortung Ingrid Heller.\nZiel: Mehrjahresvertrag bis 2029. Strategiegespräch am 17.11.2026."
+   },
+   {
+    "abschnitt": "Preisfreigaben",
+    "seite": "Vossberg 2027",
+    "datum": "2026-09-21",
+    "text": "Anfrage Ingrid Heller am 21.09.2026: 6 % Rabatt.\nFreigabe bis 7 %, Preisanpassung mind. 3,4 %."
+   },
+   {
+    "abschnitt": "Strategische Kunden",
+    "seite": "Talheim Chemie AG",
+    "datum": "2026-10-06",
+    "text": "Talheim Chemie AG: Umsatz 2025 3.70 Mio. EUR, Verantwortung Ingrid Heller.\nZiel: Mehrjahresvertrag bis 2029. Strategiegespräch am 09.11.2026."
+   }
+  ],
+  "inbox": [
+   {
+    "betreff": "Vorbereitung Strategiegespräch Vossberg",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Joki@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-12",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Vossberg am 17.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Freigabe Rabatt Vossberg 2027",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-21",
+    "text": "Heinrich,\n\nfür Vossberg Fahrzeugtechnik SE bitte ich um Freigabe von 6 % Rabatt (+3,9 %).\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   },
+   {
+    "betreff": "Vorbereitung Strategiegespräch Talheim Chemie",
+    "von_name": "Ingrid Heller",
+    "von_mail": "Ingrid@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Heinrich@KAMPilot.onmicrosoft.com",
+     "Peter@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-11-04",
+    "text": "Hallo zusammen,\n\nzum Strategiegespräch Talheim Chemie am 09.11.2026 bitte die Zahlen aus dem Account-Plan prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\nViele Grüße\nIngrid Heller\nVertriebsleitung\nKAM-Pilot GmbH\ningrid@kampilot.onmicrosoft.com"
+   }
+  ],
+  "gesendet": [
+   {
+    "betreff": "AW: Freigabe Rabatt Vossberg 2027",
+    "von_name": "Heinrich Frei",
+    "von_mail": "Heinrich@KAMPilot.onmicrosoft.com",
+    "an": [
+     "Ingrid@KAMPilot.onmicrosoft.com"
+    ],
+    "datum": "2026-09-22",
+    "text": "Freigegeben bis maximal 7 % Rabatt, Preisanpassung nicht unter 3,4 %.\n\nViele Grüße\nHeinrich Frei\nGeschäftsführung\nKAM-Pilot GmbH\nheinrich@kampilot.onmicrosoft.com"
+   }
+  ],
+  "termine": [
+   {
+    "betreff": "Managementrunde Lieferfähigkeit",
+    "tag": "2026-11-12",
+    "von": "11:00",
+    "bis": "12:00",
+    "ort": "Raum Vorstand",
+    "teilnehmer": [
+     "Ingrid@KAMPilot.onmicrosoft.com",
+     "Udo@KAMPilot.onmicrosoft.com",
+     "Herbert@KAMPilot.onmicrosoft.com"
+    ],
+    "text": "Halbleiterengpass, Reklamationsquote, Audits."
+   }
+  ],
+  "onedrive": [],
+  "kanal_posts": [],
+  "kanal_dateien": [],
+  "chats": []
+ }
+}
