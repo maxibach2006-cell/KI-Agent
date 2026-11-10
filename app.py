@@ -13,7 +13,10 @@ Aufbau der Seite:
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
     Im Serverbetrieb davor: Stand des automatischen Einlesens mit dem Anmeldecode (einlesen.py)
     3. Bei einer Frage: die Bausteine des Agenten aufrufen und Zwischenstände anzeigen
-       (verstanden als ..., zusätzlich gesucht nach ..., gestreamte Antwort, Quellen, Textauszüge)
+       (verstanden als ..., zusätzlich gesucht nach ..., gestreamte Antwort, Quellen, Textauszüge).
+       Wurde dieselbe Frage im Gespräch schon gestellt, verweist der Agent darauf und schlägt ähnliche Fragen vor
+       (wiederholung.py); neu beantworten geht per Knopf.
+       Enthält die Antwort Zahlen, bietet er eine Grafik an, die auf Wunsch erstellt wird (grafik.py).
     4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
 """
 import time
@@ -25,7 +28,9 @@ import ablage
 import agent
 import config
 import einlesen
+import grafik
 import strom
+import wiederholung
 from ingest import ingest, oeffne_collection
 
 st.set_page_config(page_title="KAM Informations-Agent", page_icon="🔎", layout="wide")
@@ -129,6 +134,48 @@ def einlese_status(email: str, war_aktiv: bool) -> None:
             st.rerun()
 
 
+def frage_stellen(text: str, neu_beantworten: bool = False) -> None:
+    """Knopf-Rückruf: Vorschlag oder 'Trotzdem neu beantworten' wird beim nächsten Durchlauf als Frage gestellt."""
+    st.session_state.naechste_frage = text
+    st.session_state.neu_beantworten = neu_beantworten
+
+
+def zeige_extras(i: int, e: dict) -> None:
+    """Knöpfe unter einer Antwort: ähnliche Fragen, neu beantworten, Grafik anbieten/erstellen/anzeigen.
+    i = Position im Verlauf (eindeutige Schlüssel für Streamlit), e = Eintrag der Antwort."""
+    if e.get("vorschlaege"):
+        st.markdown("**Ähnliche Fragen** – zum Stellen anklicken:")
+        for n, v in enumerate(e["vorschlaege"]):  # untereinander, damit lange Fragen lesbar bleiben
+            st.button(f"💬 {v}", key=f"vorschlag_{i}_{n}", on_click=frage_stellen, args=(v,))
+    if e.get("wiederholung"):
+        st.button("🔄 Trotzdem neu beantworten", key=f"neu_{i}", on_click=frage_stellen, args=(e["frage"], True),
+                  type="tertiary", help="Sucht erneut in den Quellen, z. B. wenn sich die Daten inzwischen geändert haben.")
+    if not e.get("grafik_angebot"):
+        return
+    daten = e.get("grafik")
+    if daten is None:
+        # Angebot: Der Nutzer wählt die Darstellung und bestätigt; erst dann rechnet das Modell
+        with st.container(border=True):
+            st.markdown("📊 **Diese Antwort enthält Zahlen.** Soll ich sie als Grafik darstellen?")
+            links, rechts = st.columns([3, 1])
+            art = links.segmented_control("Darstellung", ["Automatisch", "Verlauf (Linie)", "Vergleich (Balken)"],
+                                          default="Automatisch", key=f"grafik_art_{i}", label_visibility="collapsed")
+            if rechts.button("Grafik erstellen", key=f"grafik_los_{i}", type="primary", width="stretch"):
+                with st.spinner("Lese die Zahlen aus den Quellen …"):
+                    e["grafik"] = grafik.erstelle(e["verstanden"], e["text"], e["treffer"], model)
+                e["grafik_art"] = {"Verlauf (Linie)": "linie", "Vergleich (Balken)": "balken"}.get(art or "", "auto")
+                st.rerun()
+        return
+    if daten["fehler"]:
+        st.info(f"📊 {daten['fehler']} Es werden nur Zahlen gezeigt, die wörtlich in den Quellen stehen.")
+        return
+    dunkel = getattr(getattr(st.context, "theme", None), "type", "light") == "dark"
+    st.altair_chart(grafik.diagramm(daten, e.get("grafik_art", "auto"), dunkel), width="stretch")
+    st.caption(grafik.quellen_text(daten, e["treffer"]))
+    with st.expander("Werte als Tabelle"):
+        st.dataframe(grafik.tabelle(daten), hide_index=True, width="stretch")
+
+
 # --- 2. Hauptbereich ---------------------------------------------------------
 modell_laden(model)
 st.title("🔎 Informations-Agent Key-Account-Management")
@@ -156,23 +203,46 @@ for spalte, frage in zip(spalten, BEISPIELFRAGEN):
     if spalte.button(frage, use_container_width=True):
         geklickt = frage
 
-# bisherigen Verlauf anzeigen (wird bei jedem Durchlauf neu gezeichnet)
-for eintrag in st.session_state.verlauf:
+# bisherigen Verlauf anzeigen (wird bei jedem Durchlauf neu gezeichnet), mit Vorschlägen und Grafik
+for i, eintrag in enumerate(st.session_state.verlauf):
     with st.chat_message(eintrag["rolle"]):
         st.markdown(eintrag["text"])
+        if eintrag["rolle"] == "assistant":
+            zeige_extras(i, eintrag)
 
 # --- 3. Neue Frage beantworten -----------------------------------------------
-frage = st.chat_input("Ihre Frage …") or geklickt  # getippte Frage oder geklickte Beispielfrage
+# getippte Frage, geklickte Beispielfrage oder ein angeklickter Vorschlag / "Trotzdem neu beantworten"
+frage = st.chat_input("Ihre Frage …") or geklickt or st.session_state.pop("naechste_frage", None)
+neu_beantworten = st.session_state.pop("neu_beantworten", False)
 if frage and user:
     # bisherige Runden (Frage + Antwort) für Folgefragen wie "Und bis wann läuft der?".
     # Nur direkt aufeinanderfolgende Paare: Nach einem Fehler kann eine Frage ohne Antwort im Verlauf stehen.
+    # Hinweise auf wiederholte Fragen sind keine Antworten und zählen nicht als Runde.
     eintraege = st.session_state.verlauf
     runden = [{"frage": f["text"], "antwort": a["text"]} for f, a in zip(eintraege, eintraege[1:])
-              if f["rolle"] == "user" and a["rolle"] == "assistant"]
-    st.session_state.verlauf.append({"rolle": "user", "text": frage})
+              if f["rolle"] == "user" and a["rolle"] == "assistant" and not a.get("wiederholung")]
+    frueher = None if neu_beantworten else wiederholung.finde_wiederholung(frage, eintraege)
+    st.session_state.verlauf.append({"rolle": "user", "text": frage, "zeit": time.strftime("%H:%M"),
+                                     "wiederholung": frueher is not None})
     with st.chat_message("user"):
         st.markdown(frage)
 
+if frage and user and frueher is not None:
+    # Schon gefragt: auf die frühere Antwort verweisen und ähnliche Fragen vorschlagen statt neu zu suchen
+    with st.chat_message("assistant"):
+        antwort_frueher = next((e for e in eintraege[frueher + 1:] if e["rolle"] == "assistant"), None)
+        gestellt = [e["text"] for e in eintraege if e["rolle"] == "user"]
+        with st.spinner("Suche ähnliche Fragen …"):
+            vorschlaege = wiederholung.vorschlaege(frage, (antwort_frueher or {}).get("treffer", []), gestellt, model)
+        nummer = sum(1 for e in eintraege[:frueher + 1] if e["rolle"] == "user" and not e.get("wiederholung"))
+        # Vorschläge erscheinen als Knöpfe (zeige_extras), nicht zusätzlich als Liste im Text
+        text = wiederholung.hinweis_markdown(eintraege[frueher]["text"], antwort_frueher, nummer,
+                                             eintraege[frueher].get("zeit"), [])
+        st.markdown(text)
+        eintrag = {"rolle": "assistant", "text": text, "frage": frage, "wiederholung": True, "vorschlaege": vorschlaege}
+        st.session_state.verlauf.append(eintrag)
+        zeige_extras(len(st.session_state.verlauf) - 1, eintrag)
+elif frage and user:
     # Dieselben Bausteine wie agent.antworte(), aber mit Zwischenständen und gestreamter Antwort
     with st.chat_message("assistant"):
         start = time.perf_counter()
@@ -210,7 +280,12 @@ if frage and user:
         if messung:
             st.caption(strom.text_anfrage(messung))
 
-    st.session_state.verlauf.append({"rolle": "assistant", "text": antwort + quellen})
+        # Grafik nur anbieten; erstellt wird sie erst nach Bestätigung (zeige_extras)
+        eintrag = {"rolle": "assistant", "text": antwort + quellen, "frage": frage, "verstanden": verstanden,
+                   "treffer": [{"text": t["text"], "meta": t["meta"]} for t in treffer],
+                   "grafik_angebot": grafik.bietet_grafik(verstanden, antwort, treffer)}
+        st.session_state.verlauf.append(eintrag)
+        zeige_extras(len(st.session_state.verlauf) - 1, eintrag)
 elif frage:
     st.warning("Bitte zuerst den angemeldeten Nutzer angeben und die Daten einlesen.")
 
