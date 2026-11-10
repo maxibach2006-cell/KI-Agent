@@ -57,6 +57,10 @@ Teil 1–3 schreibt das Sprachmodell. Teil 4 und 5 erzeugt der Code aus den Meta
 
 **Fehlerfälle:** Kann eine Quelle beim Einlesen nicht vollständig gelesen werden (z. B. vorübergehender Fehler 401, defekte Datei, gesperrter Kanal), behält sie ihre bisherigen Abschnitte im Index, und die App zeigt eine Warnung. Test ohne Ollama: `python evaluation/test_robustheit.py`
 
+**Wiederholte Fragen:** Stellt jemand im selben Gespräch dieselbe Frage noch einmal, sucht der Agent nicht neu. Er verweist auf die frühere Antwort (mit Uhrzeit und Kurzantwort) und schlägt drei ähnliche Fragen als Knöpfe vor; „Trotzdem neu beantworten“ sucht erneut. Gleich heißt: dieselben Wörter nach Vereinfachung, Namen und Zahlen identisch („Umsatz 2024“ ≠ „Umsatz 2025“). Die Vorschläge formuliert das Modell zu den gefundenen Quellen, der Code verwirft erfundene Namen ([wiederholung.py](wiederholung.py)).
+
+**Grafik zu Zahlen:** Enthält eine Antwort Zahlen (Umsatz, Kosten, Preise, Rabatte …), bietet die App eine Grafik an. Der Nutzer wählt *Automatisch*, *Verlauf (Linie)* oder *Vergleich (Balken)* und bestätigt. Erst dann liest das Modell die Datenpunkte aus; der Code prüft jeden gegen die Quelle (Zahl und Beschriftung müssen dort stehen) und zeichnet mit einer geprüften Farbpalette, Werten direkt an den Punkten, Belegzeile und Tabelle ([grafik.py](grafik.py)). Test ohne Ollama, inklusive Ablauf in der Oberfläche: `python evaluation/test_wiederholung_grafik.py`
+
 **Widerspruchsprüfung als eigener Schritt:** Ein 7B-Modell übersieht Widersprüche leicht, wenn es gleichzeitig die Antwort schreibt. Deshalb läuft sie getrennt:
 1. **Kandidaten:** Ein kurzer LLM-Aufruf (`format="json"`) meldet mögliche Widersprüche. Zusätzlich schlägt der Code Paare vor: unterschiedliche Daten in zwei Quellen, deren Sätze ein gemeinsames Fachwort haben.
 2. **Belegprüfung (Code):** Beide Werte müssen wörtlich in einer Quelle stehen und sich wirklich unterscheiden.
@@ -197,6 +201,8 @@ Die Demo-Kalendertermine liegen relativ zum heutigen Tag (letzte, diese und näc
 | [agent.py](agent.py) | Suche, Antwort, Quellenliste |
 | [ablage.py](ablage.py) | persönliche Ablage: Ordner je Kunde/Thema, wächst mit jeder Frage |
 | [steckbrief.py](steckbrief.py) | Steckbrief je Vertrag (_Stand.md): aktueller Stand mit Quellen und Fristen |
+| [wiederholung.py](wiederholung.py) | wiederholte Fragen erkennen, ähnliche Fragen vorschlagen |
+| [grafik.py](grafik.py) | Grafik zu Zahlen: Angebot, Datenpunkte mit Belegprüfung, Diagramm |
 | [app.py](app.py) | Streamlit-Oberfläche |
 | [strom.py](strom.py) | Strom-Tracker: Verbrauch je Antwort und Summe in Euro |
 | [seed_graph.py](seed_graph.py) | Test-Tenant mit Demo-Daten befüllen |

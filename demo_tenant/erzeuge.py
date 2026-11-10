@@ -296,7 +296,7 @@ def kunde_erzeugen(k: dict) -> list[str]:
         f"Rabatt: {vt['rabatt']} % auf den jeweils gültigen Listenpreis für {', '.join(PRODUKTE[p] for p in k['produkte'])}",
         f"Zahlungsziel: {vt['zahlungsziel']} Tage netto, {vt['skonto']} % Skonto bei Zahlung innerhalb 10 Tagen",
         f"Kündigungsfrist: {vt['kuendigung_monate']} Monate zum Laufzeitende",
-        f"Preisanpassung: jährlich zum 01.01., Ankündigung mindestens 8 Wochen vorher",
+        "Preisanpassung: jährlich zum 01.01., Ankündigung mindestens 8 Wochen vorher",
         f"Unterzeichnet am {d(vt['beginn'] - timedelta(days=12))} von {vt['unterzeichnet']} ({k['name']}) und "
         f"{person('heinrich')} ({FIRMA})"])
     ent = k["vertrag_entwurf"]

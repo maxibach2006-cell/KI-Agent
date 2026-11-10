@@ -113,8 +113,8 @@ def main():
         stand_md = (ordner / "_Stand.md").read_text(encoding="utf-8")
         pruefe("8 %" in stand_md and "45 Tagen netto" in stand_md and "31.03.2027" in stand_md,
                "Steckbrief enthält Werte aus beiden Fragen")
-        links = [unquote(l) for l in re.findall(r"\]\((Quellen/[^)]+)\)", stand_md)]
-        pruefe(links and all((ordner / l).exists() for l in links),
+        links = [unquote(link) for link in re.findall(r"\]\((Quellen/[^)]+)\)", stand_md)]
+        pruefe(links and all((ordner / link).exists() for link in links),
                f"alle {len(links)} Quellenlinks zeigen auf abgelegte Originalquellen")
         pruefe((ordner / "Quellen").glob("*.url") and any((ordner / "Quellen").glob("*.url")),
                "Web-Quelle zusätzlich als Verknüpfung zum Original")

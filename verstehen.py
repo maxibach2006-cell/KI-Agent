@@ -59,6 +59,11 @@ def json_wert(antwort, schluessel: str, ersatz):
     return wert if isinstance(wert, type(ersatz)) else ersatz
 
 
+def _vergleichsform(frage: str) -> str:
+    """Frage ohne Groß-/Kleinschreibung, Satzzeichen und doppelte Leerzeichen (für den Vergleich mit dem Verlauf)."""
+    return " ".join(re.findall(r"[\wäöüß]+", frage.lower()))
+
+
 def umschreiben(frage: str, verlauf: list[dict], model: str = config.CHAT_MODEL) -> str:
     """Macht aus einer Folgefrage eine eigenständige Frage.
 
@@ -70,6 +75,10 @@ def umschreiben(frage: str, verlauf: list[dict], model: str = config.CHAT_MODEL)
         Ohne Verlauf (erste Frage) wird die Frage ohne Modellaufruf unverändert zurückgegeben.
     """
     if not verlauf:
+        return frage
+    # Dieselbe Frage noch einmal (z. B. "Trotzdem neu beantworten"): Sie ist schon eigenständig. Mit sich selbst als
+    # Verlauf machte das Modell daraus gelegentlich eine andere Frage, und die Suche fand nichts mehr.
+    if any(_vergleichsform(runde["frage"]) == _vergleichsform(frage) for runde in verlauf):
         return frage
     # Nur die letzten Runden, Antworten gekürzt auf die Kurzantwort -> kurzer, schneller Prompt
     zeilen = []
