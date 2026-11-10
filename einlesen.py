@@ -73,7 +73,7 @@ def _arbeite(nutzer: str) -> None:
         _setze(nutzer, link=flow["verification_uri"], code=flow["user_code"])
 
     try:
-        graph = GraphClient(config.READ_SCOPES, nutzer, melde_anmeldung=melde_anmeldung)
+        graph = GraphClient(config.EINLESE_SCOPES, nutzer, melde_anmeldung=melde_anmeldung)
         graph.anmelden()  # vor der Sperre: Wer seinen Code nicht eingibt, hält niemanden auf
         _setze(nutzer, zustand="wartet", link=None, code=None)
         with _sperre_einlesen:
