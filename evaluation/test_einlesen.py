@@ -175,6 +175,7 @@ def client(konto: str, melde=None, datei: Path | None = None):
     c = echter.__new__(echter)
     c.scopes, c.nutzer, c.melde_anmeldung = ["x"], ANNA.lower(), melde
     c.app, c.cache, c.cache_datei = FalscheMsalApp(konto), FalscherCache(), datei
+    c.interaktiv = True  # seit dem OneDrive-Abgleich: False = nie per Gerätecode anmelden
     return c
 
 

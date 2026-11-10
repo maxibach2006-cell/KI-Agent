@@ -113,6 +113,10 @@ def token_cache(nutzer: str | None = None) -> Path:
 
 # Serverbetrieb (docker-compose.yml): Der Nutzer kommt aus der Anmeldung, Modell und Einlesen sind nicht wählbar
 SERVER_MODUS = os.getenv("SERVER_MODUS", "0") == "1"
+# Ziel des Knopfs "Abmelden" im Serverbetrieb. Standard: Abmeldeseite von Cloudflare Access für diese Adresse; sie beendet
+# die Cloudflare-Sitzung, beim nächsten Öffnen fragt Cloudflare wieder nach dem Konto. Damit Microsoft dann nicht still
+# dasselbe Konto nimmt, in Cloudflare beim Anbieter Microsoft Entra ID die Kontoauswahl erzwingen (siehe README).
+ABMELDEN_URL = os.getenv("ABMELDEN_URL", "/cdn-cgi/access/logout")
 # Einlesen bei der Anmeldung (einlesen.py). Ohne CLIENT_ID oder mit AUTO_EINLESEN=0 bleibt es bei den Demo-Daten
 # und dem Einlesen von Hand, z. B. für die Vorführung, wenn der befristete Test-Tenant abgelaufen ist.
 AUTO_EINLESEN = SERVER_MODUS and bool(CLIENT_ID) and os.getenv("AUTO_EINLESEN", "1") != "0"

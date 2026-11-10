@@ -35,6 +35,7 @@ Nutzung:
     ablage_onedrive.anstossen("anna@firma.de")                       # nach ablage.ablegen()
     ablage_onedrive.status("anna@firma.de")   # {"zustand", "zeit", "meldung", "link"} für die Anzeige
     ablage_onedrive.lebenszeichen("anna@firma.de")                   # jede Minute, solange die Sitzung offen ist
+    ablage_onedrive.sitzung_beenden("anna@firma.de")                 # Knopf "Abmelden": Sitzung sofort beendet
     ablage_onedrive.starte_aufraeumen()        # einmal je Serverprozess: löscht Arbeitskopien beendeter Sitzungen
 
 Test ohne Microsoft 365: python evaluation/test_ablage_onedrive.py
@@ -61,6 +62,7 @@ TEIL = 320 * 1024 * 16           # 5 MB je Teil; Graph verlangt ein Vielfaches v
 _sperre = threading.Lock()       # schützt _zustaende
 _zustaende: dict[str, dict] = {}  # Schlüssel: Nutzer in Kleinschreibung
 _lebenszeichen: dict[str, float] = {}  # Nutzer in Kleinschreibung -> Zeit des letzten Lebenszeichens
+_abgemeldet: dict[str, float] = {}     # Nutzer in Kleinschreibung -> Zeit der Abmeldung (Knopf in der App)
 _START = time.time()             # nach einem Neustart zählt die Sitzung ab hier (es gibt noch kein Lebenszeichen)
 _aufraeumen_gestartet = False
 
@@ -283,11 +285,26 @@ def lebenszeichen(nutzer: str) -> None:
             _lebenszeichen[nutzer.lower()] = time.time()
 
 
+def sitzung_beenden(nutzer: str) -> None:
+    """Der Nutzer hat sich abgemeldet: Die Sitzung gilt sofort als beendet, nicht erst nach
+    ABLAGE_SITZUNG_ENDE_MINUTEN. Der nächste aufraeumen()-Durchgang (spätestens nach einer Minute) gleicht ab und
+    löscht die Arbeitskopie. Ist derselbe Nutzer noch in einem anderen Tab offen, macht dessen nächstes
+    Lebenszeichen die Sitzung wieder offen."""
+    if aktiv(nutzer):
+        with _sperre:
+            _abgemeldet[nutzer.lower()] = time.time()
+
+
 def _sitzung_offen(nutzer: str, jetzt: float) -> bool:
     with _sperre:
         letztes = max(_lebenszeichen.get(nutzer.lower(), 0.0), _START)
+        # abgemeldet, solange seit der Abmeldung kein neues Lebenszeichen kam (z. B. aus einem zweiten Tab)
+        abmeldung = _abgemeldet.get(nutzer.lower())
+        abgemeldet = abmeldung is not None and abmeldung >= _lebenszeichen.get(nutzer.lower(), 0.0)
         laeuft = (_zustaende.get(nutzer.lower()) or {}).get("zustand") == "laeuft"
-    return laeuft or jetzt - letztes < config.ABLAGE_SITZUNG_ENDE_MINUTEN * 60
+    if laeuft:
+        return True
+    return not abgemeldet and jetzt - letztes < config.ABLAGE_SITZUNG_ENDE_MINUTEN * 60
 
 
 def _loeschen_wenn_abgeglichen(wurzel: Path, nutzer: str, jetzt: float) -> bool:
