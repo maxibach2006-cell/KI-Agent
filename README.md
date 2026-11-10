@@ -121,6 +121,8 @@ Danach ist die App unter http://localhost:8510 erreichbar. Im Serverbetrieb (`SE
 
 Eingelesen wird dort automatisch ([einlesen.py](einlesen.py)): Beim ersten Öffnen der App gibt der Nutzer mit Link und Code einmal den Zugriff auf seine Microsoft-365-Daten frei, bis zum Abschluss gibt es keinen Chat. Danach frischt die App die Daten bei Bedarf im Hintergrund auf, höchstens alle 8 Stunden (`EINLESEN_ALLE_STUNDEN`). Mit `AUTO_EINLESEN=0` oder ohne `CLIENT_ID` gibt es nur die Demo-Daten und das Einlesen von Hand. Test ohne Ollama: `python evaluation/test_einlesen.py`
 
+**Abmelden / Konto wechseln:** Im Serverbetrieb steht unter dem angemeldeten Konto der Knopf „🚪 Abmelden / Konto wechseln“. Er leert den Verlauf, beendet die Sitzung (die Arbeitskopie der Ablage wird beim nächsten Aufräumen gesichert und gelöscht) und leitet zur Abmeldeseite von Cloudflare Access weiter (`ABMELDEN_URL`, Standard `/cdn-cgi/access/logout`). Das Microsoft-Token für das automatische Einlesen bleibt erhalten. Damit Microsoft beim nächsten Öffnen nicht still dasselbe Konto nimmt, einmalig in Cloudflare Zero Trust beim Login-Anbieter Microsoft Entra ID die Kontoauswahl erzwingen (Einstellung *Prompt* bzw. „Anmeldeaufforderung“ auf `select_account`). Test ohne Ollama: `python evaluation/test_abmelden.py`
+
 ### Persönliche Ablage
 Nach jeder Antwort ordnet der Agent die Frage einem Kunden und einem Thema (Projekt, Verhandlung, Vertrag …) zu und baut daraus eine Ordnerstruktur auf, die mit jeder Frage wächst. Standardort ist `<Benutzerordner>\KAM-Ablage\<nutzer>`, änderbar mit `ABLAGE_DIR` in der `.env`.
 ```

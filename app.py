@@ -9,7 +9,8 @@ Funktionsweise von Streamlit (wichtig zum Verständnis dieser Datei):
     @st.cache_resource zwischengespeichert.
 
 Aufbau der Seite:
-    1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus
+    1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus;
+                      im Serverbetrieb stattdessen das angemeldete Konto und "Abmelden / Konto wechseln"
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
     Im Serverbetrieb davor: Stand des automatischen Einlesens mit dem Anmeldecode (einlesen.py)
     3. Bei einer Frage: die Bausteine des Agenten aufrufen und Zwischenstände anzeigen
@@ -19,6 +20,7 @@ Aufbau der Seite:
        Enthält die Antwort Zahlen, bietet er eine Grafik an, die auf Wunsch erstellt wird (grafik.py).
     4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
 """
+import html
 import time
 
 import ollama
@@ -46,6 +48,29 @@ BEISPIELFRAGEN = [
     "Welche Termine habe ich nächste Woche?",
 ]
 
+def abmelden(email: str) -> None:
+    """Knopf-Rückruf "Abmelden": Sitzung sofort beenden (die Arbeitskopie der Ablage wird beim nächsten Aufräumen
+    gesichert und gelöscht) und den Verlauf leeren. Die Weiterleitung zu Cloudflare folgt im nächsten Durchlauf.
+    Das Microsoft-Token für das Einlesen bleibt: Sonst müsste der Nutzer den Datenzugriff jedes Mal neu freigeben."""
+    ablage_onedrive.sitzung_beenden(email)
+    st.session_state.clear()
+    st.session_state.abgemeldet = True
+
+
+def weiterleitung_abmelden() -> None:
+    """Seite zur Abmeldung von Cloudflare Access umleiten (config.ABMELDEN_URL) und hier nichts mehr ausführen.
+    Weiterleitung per meta-refresh, dazu ein Link, falls der Browser sie blockiert."""
+    ziel = html.escape(config.ABMELDEN_URL, quote=True)
+    st.markdown(f'<meta http-equiv="refresh" content="0; url={ziel}">', unsafe_allow_html=True)
+    st.info("Du wirst abgemeldet … Zum Anmelden mit einem anderen Konto danach die Seite neu öffnen und bei Microsoft "
+            "„Anderes Konto verwenden“ wählen.")
+    st.markdown(f'<a href="{ziel}" target="_self">Weiter zur Abmeldung</a>', unsafe_allow_html=True)
+    st.stop()
+
+
+if st.session_state.get("abgemeldet"):
+    weiterleitung_abmelden()
+
 # --- 1. Seitenleiste -------------------------------------------------------
 with st.sidebar:
     st.header("Einstellungen")
@@ -59,6 +84,9 @@ with st.sidebar:
         st.caption(f"Angemeldet als **{email or 'Gast'}**")
         if user == email and email:
             st.caption(f"Stand der Daten: {time.strftime('%d.%m.%Y %H:%M', time.localtime(config.index_stand(email)))}")
+        if email:
+            st.button("🚪 Abmelden / Konto wechseln", on_click=abmelden, args=(email,), width="stretch",
+                      help="Beendet die Anmeldung in dieser App. Danach kannst du dich mit einem anderen Konto anmelden.")
     else:
         quelle = st.radio("Datenquelle", ["demo", "graph"],
                           format_func=lambda q: "Demo-Daten (lokal)" if q == "demo" else "Microsoft 365 (Graph)")
