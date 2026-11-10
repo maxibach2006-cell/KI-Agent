@@ -400,8 +400,10 @@ const VERSIONEN = [
     text: "Umsatz-, Kosten- und Preisverläufe in den Tenant-Testdaten, damit Fragen nach Verläufen eine Grafik ergeben." },
   { v: "0.15", titel: "Ablage im OneDrive", datum: "10.11.", wer: "Jonas", pr: 14, commit: "c6b7326", commits: 3, dateien: 11, plus: 722, minus: 10,
     text: "Die Ablage liegt im OneDrive des Nutzers, der Server hält nur eine Arbeitskopie (ablage_onedrive.py)." },
-  { v: "0.16", titel: "Abmelden / Konto wechseln", datum: "10.11.", wer: "Jonas", pr: null, commit: null, commits: null, dateien: null, plus: null, minus: null,
-    text: "Knopf in der Seitenleiste: beendet die Cloudflare-Sitzung und die Sitzung in der App, das Token für das Einlesen bleibt. Noch nicht in main." },
+  { v: "0.16", titel: "Abmelden / Konto wechseln", datum: "10.11.", wer: "Jonas", pr: 15, commit: "0da9e32", commits: 1, dateien: 7, plus: 172, minus: 13,
+    text: "Knopf in der Seitenleiste: beendet die Cloudflare-Sitzung und die Sitzung in der App, das Token für das Einlesen bleibt." },
+  { v: "0.17", titel: "Übersicht „Meine Ablage“", datum: "10.11.", wer: "Jonas", pr: null, commit: null, commits: null, dateien: null, plus: null, minus: null,
+    text: "Seitenleiste zeigt die gespeicherten Ordner und Dateien der Ablage, Dateien zum Herunterladen. Noch nicht in main." },
   { v: "next", titel: "Nächste Schritte", geplant: true, text: "Offene Ideen, noch keiner Version zugeordnet." },
 ];
 
@@ -556,6 +558,8 @@ const TREE = [
       why: "Ein eigenes Programm wirkt in der Abgabe überzeugender. Ollama läuft weiterhin unsichtbar im Hintergrund." },
     { v: "0.16", s: "gewaehlt", t: "Knopf „Abmelden / Konto wechseln“", k: "Beendet die Cloudflare-Sitzung (Abmeldeseite von Cloudflare Access) und die Sitzung in der App.",
       why: "Ein Kontowechsel ging vorher nur über ein privates Browserfenster. Der Knopf leert den Verlauf, die Arbeitskopie der Ablage wird beim nächsten Aufräumen gesichert und gelöscht (nicht erst nach 10 Minuten). Damit Microsoft danach nicht still dasselbe Konto nimmt, erzwingt Cloudflare beim Anbieter Microsoft Entra ID die Kontoauswahl." },
+    { v: "0.17", s: "gewaehlt", t: "Übersicht „Meine Ablage“ in der Seitenleiste", k: "Kunde auswählen, Ordner mit Steckbrief und den neuesten Antworten, Dateien herunterladen.",
+      why: "Die Ablage war bisher nur über den Ordner auf dem Rechner bzw. in OneDrive sichtbar. Gelesen wird ohne die Sperre der Ablage, damit die Seitenleiste nicht auf eine laufende Ablage samt Modellaufruf wartet. Liegt die Ablage nach Sitzungsende nur noch in OneDrive, holt ein Knopf sie für die Übersicht zurück, statt bei jedem Seitenaufbau OneDrive abzufragen." },
     { v: "0.16", zu: "Knopf „Abmelden / Konto wechseln“", s: "verworfen", t: "Beim Abmelden auch das Token für das Einlesen löschen", k: "Gespeichertes Microsoft-Token des Nutzers auf dem Server entfernen.",
       why: "Dann müsste der Nutzer bei jeder Anmeldung den Datenzugriff neu per Code freigeben, und das automatische Auffrischen alle 8 Stunden fiele weg. Abmelden heißt hier: die Sitzung beenden, nicht den Zugriff widerrufen." },
     { v: "0.16", zu: "Knopf „Abmelden / Konto wechseln“", s: "verworfen", t: "Abmelden bei Microsoft statt bei Cloudflare", k: "Zur Abmeldeseite von Microsoft weiterleiten.",
