@@ -528,6 +528,45 @@ def _ablegen(frage: str, treffer: list[dict], antwort: str, user: str, model: st
             "meldung": f"Abgelegt in {' / '.join(pfad.parts)}{neu}{stand}", "steckbrief": stand_meldungen}
 
 
+# =============================================================================
+# E. Übersicht für die Oberfläche (nur lesen)
+# =============================================================================
+
+def uebersicht(user: str) -> dict:
+    """Was liegt in der Ablage des Nutzers? Für die Anzeige in der Seitenleiste (app.py).
+
+    Liest Register und Ordner, schreibt nichts. Bewusst ohne _SPERRE: Die Sperre wird während einer Ablage samt
+    Modellaufruf gehalten, die Seitenleiste soll darauf nicht warten. Wird gerade geschrieben, zeigt der nächste
+    Seitenaufbau den neuen Stand.
+    Rückgabe: {"wurzel", "kunden": [{"name", "fragen", "zuletzt", "ordner": [{"name", "pfad", "dateien": [Path],
+               "quellen": int, "stand": Path | None}]}], "vorgemerkt": [Kundenname], "fragen": int}
+    """
+    wurzel = ablage_pfad(user)
+    try:
+        register = lade_register(wurzel)
+    except (OSError, ValueError):
+        register = {"kunden": []}
+    kunden, vorgemerkt, fragen_gesamt = [], [], 0
+    for k in sorted(register["kunden"], key=lambda k: k["name"].lower()):
+        eintraege = k["allgemein"] + [e for t in k["themen"] for e in t["eintraege"]]
+        fragen_gesamt += len(eintraege)
+        basis = wurzel / ordnername(k["name"])
+        if not k["ordner"] or not basis.is_dir():
+            vorgemerkt.append(k["name"])
+            continue
+        ordner = []
+        # Themenordner zuerst (alphabetisch), _Allgemein zuletzt
+        for unter in sorted((d for d in basis.iterdir() if d.is_dir()), key=lambda d: (d.name == ALLGEMEIN, d.name.lower())):
+            dateien = sorted((f for f in unter.glob("*.md") if not f.name.startswith("_")), reverse=True)  # neueste zuerst
+            quellen = unter / "Quellen"
+            ordner.append({"name": "Allgemein" if unter.name == ALLGEMEIN else unter.name, "pfad": unter, "dateien": dateien,
+                           "quellen": sum(1 for f in quellen.iterdir() if f.is_file()) if quellen.is_dir() else 0,
+                           "stand": unter / STAND if (unter / STAND).is_file() else None})
+        kunden.append({"name": k["name"], "fragen": len(eintraege), "ordner": ordner,
+                       "zuletzt": max((e["zeit"] for e in eintraege), default="")[:10]})
+    return {"wurzel": wurzel, "kunden": kunden, "vorgemerkt": vorgemerkt, "fragen": fragen_gesamt}
+
+
 if __name__ == "__main__":
     # Übersicht der Ablage per Kommandozeile: python ablage.py [nutzer]
     import sys

@@ -10,7 +10,8 @@ Funktionsweise von Streamlit (wichtig zum Verständnis dieser Datei):
 
 Aufbau der Seite:
     1. Seitenleiste:  Datenquelle, Nutzer, Sprachmodell, "Daten neu einlesen", "Neues Gespräch", Ablage an/aus;
-                      im Serverbetrieb stattdessen das angemeldete Konto und "Abmelden / Konto wechseln"
+                      im Serverbetrieb stattdessen das angemeldete Konto und "Abmelden / Konto wechseln";
+                      darunter "Meine Ablage": gespeicherte Ordner und Dateien zum Herunterladen
     2. Hauptbereich:  Beispielfragen, bisheriger Chatverlauf, Eingabefeld
     Im Serverbetrieb davor: Stand des automatischen Einlesens mit dem Anmeldecode (einlesen.py)
     3. Bei einer Frage: die Bausteine des Agenten aufrufen und Zwischenstände anzeigen
@@ -20,6 +21,7 @@ Aufbau der Seite:
        Enthält die Antwort Zahlen, bietet er eine Grafik an, die auf Wunsch erstellt wird (grafik.py).
     4. Danach (falls eingeschaltet): Frage und Antwort in die persönliche Ablage einordnen (ablage.py)
 """
+import hashlib
 import html
 import time
 
@@ -71,6 +73,73 @@ def weiterleitung_abmelden() -> None:
 if st.session_state.get("abgemeldet"):
     weiterleitung_abmelden()
 
+def _kurzname(datei, laenge: int = 27) -> str:
+    """'2026-11-10_1430 Wie hat sich der Umsatz entwickelt.md' -> '10.11. Wie hat sich der …' (passt in eine Zeile
+    der Seitenleiste; der volle Name mit Uhrzeit steht im Tooltip)."""
+    name = datei.stem
+    if len(name) > 16 and name[4] == "-" and name[10] == "_":
+        name = f"{name[8:10]}.{name[5:7]}. {name[16:]}"
+    return name if len(name) <= laenge else name[:laenge - 1].rstrip() + " …"
+
+
+def _anzahl(n: int, einzahl: str, mehrzahl: str) -> str:
+    return f"{n} {einzahl if n == 1 else mehrzahl}"
+
+
+def zeige_ablage(nutzer: str) -> None:
+    """Seitenleiste: gespeicherte Ordner und Dateien der persönlichen Ablage (ablage.uebersicht), Dateien zum
+    Herunterladen. Liegt die Ablage im Serverbetrieb nur in OneDrive (Arbeitskopie nach Sitzungsende gelöscht),
+    kann sie hier für die Übersicht geladen werden."""
+    if not nutzer:
+        return
+    with st.expander("📁 Meine Ablage"):
+        if ablage_onedrive.aktiv(nutzer) and not (ablage.ablage_pfad(nutzer) / ablage.REGISTER).exists():
+            st.caption("Deine Ablage liegt in deinem OneDrive. Für die Übersicht hier einmal laden.")
+            if st.button("Aus OneDrive laden", key="ablage_laden"):
+                try:
+                    with st.spinner("Hole die Ablage aus OneDrive …"):
+                        meldung = ablage_onedrive.wiederherstellen_falls_noetig(nutzer)
+                    st.session_state.ablage_meldung = meldung or "In OneDrive liegt noch keine Ablage."
+                except Exception as e:
+                    st.session_state.ablage_meldung = f"Laden fehlgeschlagen: {e}"
+                st.rerun()
+            if st.session_state.get("ablage_meldung"):
+                st.caption(st.session_state.ablage_meldung)
+            return
+        u = ablage.uebersicht(nutzer)
+        if not u["kunden"] and not u["vorgemerkt"]:
+            st.caption(f"Noch nichts abgelegt. Ab der {config.ABLAGE_MIN_FRAGEN}. Frage zu einem Kunden oder Projekt "
+                       "entsteht hier ein Ordner.")
+            return
+        st.caption(f"{_anzahl(len(u['kunden']), 'Kunde', 'Kunden')} mit Ordner · "
+                   f"{_anzahl(u['fragen'], 'Frage', 'Fragen')} abgelegt")
+        if u["kunden"]:
+            wahl = st.selectbox("Kunde", [k["name"] for k in u["kunden"]], key="ablage_kunde")
+            kunde = next(k for k in u["kunden"] if k["name"] == wahl)
+            zuletzt = kunde["zuletzt"]
+            st.caption(_anzahl(kunde["fragen"], "Frage", "Fragen") + (f" · zuletzt am {zuletzt[8:10]}.{zuletzt[5:7]}.{zuletzt[:4]}"
+                                                       if len(zuletzt) == 10 else ""))
+            for ordner in kunde["ordner"]:
+                st.markdown(f"**📂 {ordner['name']}**")
+                dateien = ([(ordner["stand"], "📋 Steckbrief des Vertrags")] if ordner["stand"] else []) + \
+                          [(d, f"📄 {_kurzname(d)}") for d in ordner["dateien"][:5]]
+                for datei, beschriftung in dateien:
+                    try:
+                        inhalt = datei.read_bytes()
+                    except OSError:
+                        continue  # gerade verschoben oder gelöscht (z. B. Umzug aus _Allgemein)
+                    st.download_button(beschriftung, inhalt, file_name=datei.name, mime="text/markdown",
+                                       key="datei_" + hashlib.sha1(str(datei).encode()).hexdigest()[:12],
+                                       type="tertiary", on_click="ignore", help=datei.name)
+                rest = len(ordner["dateien"]) - 5
+                hinweise = ([f"… und {_anzahl(rest, 'ältere Antwort', 'ältere Antworten')}"] if rest > 0 else []) + \
+                           ([f"{_anzahl(ordner['quellen'], 'Quelle', 'Quellen')} abgelegt"] if ordner["quellen"] else [])
+                if hinweise:
+                    st.caption(" · ".join(hinweise))
+        if u["vorgemerkt"]:
+            st.caption(f"Vorgemerkt (Ordner ab der {config.ABLAGE_MIN_FRAGEN}. Frage): " + ", ".join(u["vorgemerkt"]))
+
+
 # --- 1. Seitenleiste -------------------------------------------------------
 with st.sidebar:
     st.header("Einstellungen")
@@ -105,6 +174,7 @@ with st.sidebar:
                 st.warning(f"Nicht vollständig gelesen, bisherige Daten bleiben erhalten: {', '.join(unvollstaendig)}")
             else:
                 st.success("Index aktualisiert")
+    zeige_ablage(ablage_nutzer if ablage_nutzer != "demo" or not config.SERVER_MODUS else "")
     wartet_auf_index = config.AUTO_EINLESEN and email and user != email  # noch kein eigener Index, siehe Hauptbereich
     if user and not wartet_auf_index:
         st.caption(f"Abschnitte im Index von **{user}**: {oeffne_collection(user).count()}")
