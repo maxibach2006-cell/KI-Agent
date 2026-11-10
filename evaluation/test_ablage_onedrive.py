@@ -215,7 +215,7 @@ def main() -> int:
     print("Hintergrund-Abgleich")
     laeufe, freigabe = [], threading.Event()
 
-    def langsam(w, g):
+    def langsam(w, g, n=None):
         laeufe.append(time.time())
         if len(laeufe) == 1:
             freigabe.wait(5)
@@ -242,6 +242,51 @@ def main() -> int:
             time.sleep(0.05)
     pruefe(od.status(nutzer)["zustand"] == "fehler" and "Token" in od.status(nutzer)["meldung"],
            "Fehler landet im Status statt in der App")
+
+    print("Arbeitskopie nur für die Dauer der Sitzung")
+    config.ABLAGE_KOPIE_LOESCHEN = True
+    config.ABLAGE_SITZUNG_ENDE_MINUTEN = 10
+    od._START = 0.0
+    with od._sperre:
+        od._zustaende.clear()
+    schreibe(wurzel, "Firma X/Neu.md", "noch nicht in OneDrive")
+    schreibe(tmp / "demo", ablage.REGISTER, '{"kunden": []}')  # Demo: nie abgeglichen, kein Nutzer im Stand
+
+    def vor_minuten(minuten: float) -> None:
+        with od._sperre:
+            od._lebenszeichen[nutzer] = time.time() - minuten * 60
+
+    with mock.patch.object(od, "_graph", lambda n: drive):
+        od.lebenszeichen(nutzer)
+        pruefe(od.aufraeumen() == [] and wurzel.exists(), "Sitzung offen: Arbeitskopie bleibt")
+
+        vor_minuten(11)
+        with mock.patch.object(od, "abgleichen", side_effect=RuntimeError("Netz weg")):
+            pruefe(od.aufraeumen() == [] and wurzel.exists(), "Abgleich fehlgeschlagen: Arbeitskopie bleibt")
+
+        def kommt_zurueck(w, g, n):
+            od.lebenszeichen(nutzer)  # der Nutzer öffnet die App, während abgeglichen wird
+            return {}
+        with mock.patch.object(od, "abgleichen", kommt_zurueck):
+            pruefe(od.aufraeumen() == [] and wurzel.exists(), "Nutzer kommt während des Abgleichs zurück: bleibt")
+
+        vor_minuten(11)
+        with mock.patch.object(od, "abgleichen", lambda w, g, n: {}):  # Abgleich "erfolgreich", lädt aber nichts
+            pruefe(od.aufraeumen() == [] and wurzel.exists(), "Datei nicht in OneDrive: Arbeitskopie bleibt")
+
+        pruefe(od.aufraeumen() == [nutzer], "Sitzung beendet: abgeglichen und gelöscht")
+        pruefe(not wurzel.exists(), "Arbeitskopie vom Server entfernt")
+        pruefe(drive.dateien.get("KAM-Ablage/Firma X/Neu.md") == "noch nicht in OneDrive".encode(),
+               "letzte Änderung vorher in OneDrive gesichert")
+        pruefe((tmp / "demo" / ablage.REGISTER).exists(), "Demo-Ablage unangetastet")
+
+        od.lebenszeichen(nutzer)  # nächste Sitzung
+        od.wiederherstellen_falls_noetig(nutzer)
+        pruefe((wurzel / "Firma X/Neu.md").exists(), "nächste Sitzung: Arbeitskopie aus OneDrive zurück")
+
+    config.ABLAGE_KOPIE_LOESCHEN = False
+    vor_minuten(60)
+    pruefe(od.aufraeumen() == [] and wurzel.exists(), "ABLAGE_KOPIE_LOESCHEN=0 (lokaler PC): nichts gelöscht")
 
     print()
     if FEHLER:

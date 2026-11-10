@@ -128,6 +128,10 @@ ABLAGE_AKTIV = os.getenv("ABLAGE_AKTIV", "1") != "0"  # Voreinstellung des Schal
 # Ablage zusätzlich im OneDrive des Nutzers (ablage_onedrive.py). Nur mit App-Registrierung und nur für Graph-Konten.
 ABLAGE_ONEDRIVE = bool(CLIENT_ID) and os.getenv("ABLAGE_ONEDRIVE", "1") != "0"
 ABLAGE_ONEDRIVE_ORDNER = os.getenv("ABLAGE_ONEDRIVE_ORDNER", "KAM-Ablage")  # Ordner im Stamm des OneDrive
+# Arbeitskopie der Ablage nur für die Dauer der Sitzung (ablage_onedrive.aufraeumen). Im Serverbetrieb an: Danach
+# liegt die Ablage nur noch im OneDrive des Nutzers. Ende der Sitzung = so lange kein Lebenszeichen der App.
+ABLAGE_KOPIE_LOESCHEN = os.getenv("ABLAGE_KOPIE_LOESCHEN", "1" if SERVER_MODUS else "0") == "1"
+ABLAGE_SITZUNG_ENDE_MINUTEN = float(os.getenv("ABLAGE_SITZUNG_ENDE_MINUTEN", "10"))
 # Rechte beim Anmelden zum Einlesen: mit Ablage in OneDrive gleich das Schreibrecht dafür, eine Anmeldung für beides
 EINLESE_SCOPES = list(dict.fromkeys(READ_SCOPES + (ABLAGE_SCOPES if ABLAGE_ONEDRIVE else [])))
 ABLAGE_MIN_FRAGEN = 2       # Ordner für Kunde bzw. Thema erst ab so vielen Fragen (vorher nur vorgemerkt)

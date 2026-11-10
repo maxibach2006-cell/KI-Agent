@@ -36,6 +36,7 @@ from ingest import ingest, oeffne_collection
 
 st.set_page_config(page_title="KAM Informations-Agent", page_icon="🔎", layout="wide")
 strom.starte()  # Strommessung im Hintergrund, läuft nur einmal je Serverprozess
+ablage_onedrive.starte_aufraeumen()  # löscht Arbeitskopien der Ablage nach dem Ende einer Sitzung, einmal je Prozess
 
 # Feste Fragen für die Präsentation (siehe Demo-Ablauf im README)
 BEISPIELFRAGEN = [
@@ -86,6 +87,9 @@ with st.sidebar:
                           help=f"Ab der {config.ABLAGE_MIN_FRAGEN}. Frage zu einem Kunden oder Projekt entsteht dafür "
                                "ein Ordner mit allen Antworten und Quellen.")
     if ablage_onedrive.aktiv(ablage_nutzer):
+        # Lebenszeichen bei jedem Seitenaufbau und jede Minute, solange der Tab offen ist (nur dieser Teil läuft neu).
+        # Bleibt es aus, gilt die Sitzung als beendet und die Arbeitskopie der Ablage wird gelöscht.
+        st.fragment(ablage_onedrive.lebenszeichen, run_every=60)(ablage_nutzer)
         # Die Ablage gehört dem Nutzer: Sie liegt in seinem OneDrive, der Server hält nur eine Arbeitskopie
         abgleich = ablage_onedrive.status(ablage_nutzer)
         ordner = f"OneDrive / {config.ABLAGE_ONEDRIVE_ORDNER}"
