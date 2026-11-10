@@ -70,6 +70,12 @@ def test_grafik() -> None:
     print("Zahlen und Belegprüfung")
     pruefe([grafik.zahl(x) for x in ["1,72", "892.000", "8", "3.9", "+4,5 %", "abc"]] == [1.72, 892000, 8, 3.9, 4.5, None],
            "deutsche Zahlen lesen")
+    pruefe([grafik.zahl(x) for x in ["1,72 Mio. EUR", "ca. 415.000 EUR", 1720000]] == [1.72, 415000, 1720000],
+           "Zahl mit Einheit und Text drumherum, Zahl als JSON-Zahl")
+    u = grafik.pruefe_daten({"titel": "U", "einheit": "Mio. EUR", "reihen": [{"name": "U", "punkte": [
+        {"x": "2024", "wert": "1,55 Mio. EUR", "quelle": 1}, {"x": "2025", "wert": 1720000, "quelle": 1}]}]}, T)
+    pruefe([p["anzeige"] for p in u["reihen"][0]["punkte"]] == ["1,55", "1,72"] and u["verworfen"] == 0,
+           "'1,55 Mio. EUR' und umgerechnete 1720000 werden als Werte der Quelle erkannt")
     pruefe(grafik.anzeige(892000) == "892.000" and grafik.anzeige(1.72) == "1,72" and grafik.anzeige(3.9) == "3,9",
            "deutsche Schreibweise")
     roh = {"titel": "Umsatz Firma X", "einheit": "Mio. EUR", "reihen": [{"name": "Umsatz", "punkte": [

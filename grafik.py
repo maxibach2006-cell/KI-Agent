@@ -79,10 +79,18 @@ def bietet_grafik(frage: str, antwort: str, treffer: list[dict]) -> bool:
 # 2. Daten erstellen (Modell nennt Punkte, Code prüft sie)
 # =============================================================================
 
-def zahl(text: str) -> float | None:
-    """Deutsche Zahl -> float: '1,72' -> 1.72, '892.000' -> 892000, '8' -> 8, '3.9' -> 3.9. Sonst None."""
-    t = str(text).strip().replace(" ", "").replace(" ", "").lstrip("+")
-    t = re.sub(r"(%|eur|euro|€|mio\.?|stück|tsd\.?)$", "", t, flags=re.I)
+ZAHL = re.compile(r"-?\d{1,3}(?:\.\d{3})+(?:,\d+)?|-?\d+(?:[.,]\d+)?")
+
+
+def zahl(text) -> float | None:
+    """Deutsche Zahl -> float, auch mit Text drumherum: '1,72' -> 1.72, '892.000' -> 892000, '1,72 Mio. EUR' -> 1.72,
+    'ca. 415.000 EUR' -> 415000, '+3,9 %' -> 3.9. Maßgeblich ist die erste Zahl. Ohne Zahl: None."""
+    if isinstance(text, (int, float)) and not isinstance(text, bool):
+        return float(text)  # das Modell liefert "wert" manchmal als JSON-Zahl
+    treffer = ZAHL.search(str(text))
+    if not treffer:
+        return None
+    t = treffer.group()
     if re.fullmatch(r"-?\d{1,3}(\.\d{3})+(,\d+)?", t):        # 892.000 / 1.250.000,50
         return float(t.replace(".", "").replace(",", "."))
     if re.fullmatch(r"-?\d+,\d+", t):                           # 1,72
@@ -100,11 +108,24 @@ def anzeige(wert: float) -> str:
 
 def _zahlen_in(text: str) -> set[float]:
     gefunden = set()
-    for z in re.findall(r"\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:[.,]\d+)?", text):
-        w = zahl(z)
+    for z in ZAHL.findall(text):
+        w = zahl(z.lstrip("-"))
         if w is not None:
             gefunden.add(round(w, 6))
     return gefunden
+
+
+def _beleg_wert(wert: float, text: str) -> float | None:
+    """Wert, wie er in der Quelle steht, oder None. Akzeptiert auch umgerechnete Angaben: Steht in der Quelle
+    '1,72 Mio.', darf das Modell 1720000 liefern (ebenso Tsd.). Rückgabe ist dann der Wert aus der Quelle (1.72)."""
+    zahlen = _zahlen_in(text)
+    if round(wert, 6) in zahlen:
+        return wert
+    klein = text.lower()
+    for faktor, wort in ((1e6, "mio"), (1e3, "tsd")):
+        if wort in klein and round(wert / faktor, 6) in zahlen:
+            return wert / faktor
+    return None
 
 
 def _x_belegt(x: str, text: str) -> bool:
@@ -131,11 +152,12 @@ def pruefe_daten(roh: dict, treffer: list[dict]) -> dict:
             except (TypeError, ValueError):
                 genannt = []
             reihenfolge = [i for i in genannt if 0 <= i < len(texte)] + list(range(len(texte)))
-            beleg = next((i for i in reihenfolge if wert is not None and x
-                          and round(wert, 6) in _zahlen_in(texte[i]) and _x_belegt(x, texte[i])), None)
+            beleg = next((i for i in reihenfolge if wert is not None and x and _x_belegt(x, texte[i])
+                          and _beleg_wert(wert, texte[i]) is not None), None)
             if beleg is None:
                 verworfen += 1
                 continue
+            wert = _beleg_wert(wert, texte[beleg])  # Schreibweise der Quelle (1,72 statt 1720000)
             punkte.append({"x": x, "wert": wert, "anzeige": anzeige(wert), "quelle": beleg + 1})
         if punkte:
             reihen.append({"name": str(r.get("name") or "Wert").strip()[:40], "punkte": punkte})
