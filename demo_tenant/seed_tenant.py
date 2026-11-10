@@ -15,6 +15,7 @@ NUR für den Test-Tenant gedacht. Termine mit Teilnehmenden verschicken echte Ei
 import html
 import json
 import os
+import re
 import sys
 import time
 import zlib
@@ -118,6 +119,16 @@ def schritt(name: str, fehler: list):
 # Teilaufgaben
 # =============================================================================
 
+def seitentitel(g: Graph, seite: dict) -> str:
+    """Titel einer OneNote-Seite. Bei frisch angelegten Seiten liefert die Seitenliste den Titel teils noch leer
+    (OneNote indexiert verzögert). Dann aus dem Inhalt lesen, sonst würde die Seite als fehlend doppelt angelegt."""
+    if seite.get("title"):
+        return seite["title"]
+    r = g.request("GET", f"/me/onenote/pages/{seite['id']}/content")
+    treffer = re.search(r"<title>(.*?)</title>", r.text) if r.status_code == 200 else None
+    return html.unescape(treffer.group(1)) if treffer else ""
+
+
 def onenote(g: Graph, seiten: list[dict]) -> None:
     if not seiten:
         return
@@ -128,7 +139,7 @@ def onenote(g: Graph, seiten: list[dict]) -> None:
         name = s["abschnitt"].replace("&", "und")[:50]  # OneNote erlaubt kein & in Abschnittsnamen
         if name not in abschnitte:
             abschnitte[name] = g.ok("POST", f"/me/onenote/notebooks/{nb['id']}/sections", json={"displayName": name})
-        vorhanden = [p["title"] for p in g.alle(f"/me/onenote/sections/{abschnitte[name]['id']}/pages")]
+        vorhanden = [seitentitel(g, p) for p in g.alle(f"/me/onenote/sections/{abschnitte[name]['id']}/pages")]
         if s["seite"] in vorhanden:
             continue
         seite = (f"<html><head><title>{html.escape(s['seite'])}</title>"
