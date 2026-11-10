@@ -57,7 +57,7 @@ def lade_dokumente(source: str, nutzer: str | None = None, graph=None) -> tuple[
     from graph_client import GraphClient
     from connectors import files, kalender, onenote, outlook, teams
 
-    graph = graph or GraphClient(config.READ_SCOPES, nutzer)
+    graph = graph or GraphClient(config.EINLESE_SCOPES, nutzer)
     user = graph.get("/me")["userPrincipalName"]  # z. B. "max.muster@firma.de"
     if nutzer and user.lower() != nutzer.lower():  # doppelte Absicherung: nie in einen fremden Index schreiben
         raise RuntimeError(f"Token gehört zu {user}, erwartet {nutzer} – Einlesen abgebrochen")

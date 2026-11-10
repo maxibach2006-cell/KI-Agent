@@ -30,6 +30,7 @@ Ziel ist eine eigene Microsoft-365-Umgebung mit Teams, Outlook, OneNote und Shar
    | Zweck | Berechtigungen |
    |---|---|
    | Lesen (Agent) | `User.Read`, `Notes.Read`, `Mail.Read`, `Calendars.Read`, `Chat.Read`, `Team.ReadBasic.All`, `Channel.ReadBasic.All`, `ChannelMessage.Read.All`, `Files.Read.All`, `Sites.Read.All` |
+   | Ablage im OneDrive (Agent) | `Files.ReadWrite` |
    | Befüllen (nur Seed) | `Notes.ReadWrite`, `Mail.ReadWrite`, `Calendars.ReadWrite`, `ChannelMessage.Send`, `Channel.Create`, `Files.ReadWrite.All` |
 
 4. **„Administratorzustimmung für … erteilen“** klicken. Als Admin des Test-Tenants darfst du das selbst.
@@ -44,6 +45,7 @@ streamlit run app.py        # in der Seitenleiste "Microsoft 365 (Graph)" wähle
 ```
 
 ## Hinweise
+- Bestehende Installation: Nach dem Hinzufügen von `Files.ReadWrite` die Administratorzustimmung erneut erteilen. Danach fragt das nächste Einlesen das Recht mit an. Bis dahin meldet die App in der Seitenleiste, dass der OneDrive-Abgleich fehlschlägt, die Arbeitskopie bleibt erhalten.
 - Es gibt nur **delegierte** Rechte. Der Agent sieht deshalb genau das, was das angemeldete Konto sehen darf, und keine fremden Postfächer. Das setzt die Datenschutz-Vorgabe technisch um.
 - Mails und OneNote-Seiten werden mit ihrem Originaldatum angelegt, z. B. 2019. Teams-Nachrichten lassen sich nicht rückdatieren. Das Seed-Skript schreibt deshalb `[Datum – Absender]` in die Nachricht, und `connectors/teams.py` liest das wieder aus.
 - `.msg`-Dateien werden genauso unterstützt wie `.eml`. Für echte `.msg`-Dateien kannst du in Outlook (Desktop) eine Mail auf den Desktop ziehen und in die Team-Dateiablage hochladen.

@@ -138,8 +138,10 @@ KAM-Ablage/<nutzer>/
 - Fragen ohne Kunden- oder Projektbezug („Welche Termine habe ich nächste Woche?“) werden nicht abgelegt. Steht der Kunde nicht in der Frage, wird er aus den Quellen nur übernommen, wenn mindestens die Hälfte der Quellen zu ihm gehört (`ABLAGE_KUNDE_ANTEIL`).
 - Das Sprachmodell beschreibt nur Kunde und Thema. Ob es ein bekannter Kunde bzw. ein bekanntes Thema ist, entscheidet der Code (Namensvergleich, gleiche Vertrags- oder Projektnummer, Embedding-Ähnlichkeit).
 - **Steckbrief bei Verträgen:** Im Themenordner entsteht `_Stand.md` mit Laufzeit, Rabatt, Zahlungsziel, Kündigungsfrist, Preisanpassung und Ansprechpartner, jeweils mit Quelle und Datum der Quelle, dazu Fristen (inkl. berechnetem letzten Kündigungstermin) und Änderungen. Jeder Wert wird vom Code gegen die Originalquelle geprüft; eine neuere Quelle ersetzt einen alten Wert, gleich alte Quellen mit verschiedenen Werten werden als ⚠️ Widerspruch angezeigt. Alle Quellen des Steckbriefs liegen als Kopie bzw. Auszug in `Quellen/` und sind verlinkt. Der Steckbrief ist eine Zusammenfassung, keine Quelle für Antworten.
+- **Ablage im OneDrive:** Bei Microsoft-365-Konten liegt die Ablage im OneDrive des Nutzers unter `KAM-Ablage` (änderbar mit `ABLAGE_ONEDRIVE_ORDNER`). Der Server bzw. PC hält nur eine Arbeitskopie: Nach jeder Ablage lädt [ablage_onedrive.py](ablage_onedrive.py) im Hintergrund die geänderten Dateien hoch und entfernt verschobene. Fehlt die Arbeitskopie (neuer Server), wird sie vor der nächsten Ablage aus OneDrive geholt. Dateien, die der Nutzer selbst in den Ordner legt, bleiben unangetastet. Nötig ist das delegierte Recht `Files.ReadWrite`, es wird beim Einlesen mit angefragt. Abschalten: `ABLAGE_ONEDRIVE=0`. Demo-Daten werden nie hochgeladen.
+- **Arbeitskopie nur während der Sitzung** (im Serverbetrieb an, `ABLAGE_KOPIE_LOESCHEN`): Die App sendet jede Minute ein Lebenszeichen. Bleibt es `ABLAGE_SITZUNG_ENDE_MINUTEN` lang aus (Standard 10), wird ein letztes Mal abgeglichen und die Arbeitskopie gelöscht, aber nur, wenn danach jede Datei unverändert im OneDrive liegt. Sonst bleibt sie, und es wird jede Minute erneut versucht. Danach liegt die Ablage nur noch beim Nutzer, die nächste Ablage holt sie zurück.
 - In der App lässt sich die Ablage in der Seitenleiste abschalten. `python ablage.py` zeigt den aktuellen Stand. Der Testlauf legt nichts ab.
-- Tests ohne Ollama: `python evaluation/test_ablage.py` und `python evaluation/test_steckbrief.py`
+- Tests ohne Ollama: `python evaluation/test_ablage.py`, `python evaluation/test_steckbrief.py` und `python evaluation/test_ablage_onedrive.py` (ohne Microsoft 365)
 
 ## Evaluation
 ```bash
@@ -200,6 +202,7 @@ Die Demo-Kalendertermine liegen relativ zum heutigen Tag (letzte, diese und näc
 | [einlesen.py](einlesen.py) | Server: Einlesen im Hintergrund beim Öffnen der App, ein Nutzer nach dem anderen |
 | [agent.py](agent.py) | Suche, Antwort, Quellenliste |
 | [ablage.py](ablage.py) | persönliche Ablage: Ordner je Kunde/Thema, wächst mit jeder Frage |
+| [ablage_onedrive.py](ablage_onedrive.py) | Ablage im OneDrive des Nutzers: Abgleich im Hintergrund, Wiederherstellen |
 | [steckbrief.py](steckbrief.py) | Steckbrief je Vertrag (_Stand.md): aktueller Stand mit Quellen und Fristen |
 | [wiederholung.py](wiederholung.py) | wiederholte Fragen erkennen, ähnliche Fragen vorschlagen |
 | [grafik.py](grafik.py) | Grafik zu Zahlen: Angebot, Datenpunkte mit Belegprüfung, Diagramm |

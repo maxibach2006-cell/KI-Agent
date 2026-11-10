@@ -25,6 +25,7 @@ import ollama
 import streamlit as st
 
 import ablage
+import ablage_onedrive
 import agent
 import config
 import einlesen
@@ -35,6 +36,7 @@ from ingest import ingest, oeffne_collection
 
 st.set_page_config(page_title="KAM Informations-Agent", page_icon="🔎", layout="wide")
 strom.starte()  # Strommessung im Hintergrund, läuft nur einmal je Serverprozess
+ablage_onedrive.starte_aufraeumen()  # löscht Arbeitskopien der Ablage nach dem Ende einer Sitzung, einmal je Prozess
 
 # Feste Fragen für die Präsentation (siehe Demo-Ablauf im README)
 BEISPIELFRAGEN = [
@@ -84,12 +86,29 @@ with st.sidebar:
     ablage_an = st.toggle("Antworten in Ablage einordnen", value=config.ABLAGE_AKTIV,
                           help=f"Ab der {config.ABLAGE_MIN_FRAGEN}. Frage zu einem Kunden oder Projekt entsteht dafür "
                                "ein Ordner mit allen Antworten und Quellen.")
-    if ablage_nutzer and not config.SERVER_MODUS:
+    if ablage_onedrive.aktiv(ablage_nutzer):
+        # Lebenszeichen bei jedem Seitenaufbau und jede Minute, solange der Tab offen ist (nur dieser Teil läuft neu).
+        # Bleibt es aus, gilt die Sitzung als beendet und die Arbeitskopie der Ablage wird gelöscht.
+        st.fragment(ablage_onedrive.lebenszeichen, run_every=60)(ablage_nutzer)
+        # Die Ablage gehört dem Nutzer: Sie liegt in seinem OneDrive, der Server hält nur eine Arbeitskopie
+        abgleich = ablage_onedrive.status(ablage_nutzer)
+        ordner = f"OneDrive / {config.ABLAGE_ONEDRIVE_ORDNER}"
+        if abgleich and abgleich.get("link"):
+            ordner = f"[{ordner}]({abgleich['link']})"
+        st.caption(f"📁 Ablage: {ordner}")
+        if abgleich and abgleich["zustand"] == "fehler":
+            st.caption(f"⚠️ OneDrive-Abgleich fehlgeschlagen, wird bei der nächsten Ablage nachgeholt: "
+                       f"{abgleich['meldung']}")
+    elif ablage_nutzer and not config.SERVER_MODUS:
         st.caption(f"📁 Ablage: `{ablage.ablage_pfad(ablage_nutzer)}`")
     st.divider()
     ort = "auf dem Server des Projekts" if config.SERVER_MODUS else "lokal auf diesem Rechner"
-    st.caption(f"Alle Daten und das Sprachmodell bleiben {ort}. "
-               "Es werden nur Daten des angemeldeten Nutzers durchsucht.")
+    if ablage_onedrive.aktiv(ablage_nutzer):
+        st.caption(f"Suchindex und Sprachmodell bleiben {ort}, die Ablage liegt in deinem OneDrive. "
+                   "Es werden nur Daten des angemeldeten Nutzers durchsucht.")
+    else:
+        st.caption(f"Alle Daten und das Sprachmodell bleiben {ort}. "
+                   "Es werden nur Daten des angemeldeten Nutzers durchsucht.")
 
 @st.cache_resource(show_spinner="Lade Sprachmodell …")
 def modell_laden(name: str) -> bool:
@@ -271,7 +290,16 @@ elif frage and user:
         # Schritt 5: in die persönliche Ablage einordnen
         if ablage_an and treffer:
             with st.spinner("Ordne in die Ablage ein …"):
-                abgelegt = agent.ablage_sicher(frage, treffer, antwort + quellen, ablage_nutzer, model, verstanden)
+                try:
+                    # Fehlt die Arbeitskopie auf dem Server, erst aus OneDrive holen: Eine neue, leere Ablage
+                    # würde sonst beim Abgleich die alte im OneDrive überschreiben
+                    if hinweis := ablage_onedrive.wiederherstellen_falls_noetig(ablage_nutzer):
+                        st.caption(f"☁️ {hinweis}")
+                    abgelegt = agent.ablage_sicher(frage, treffer, antwort + quellen, ablage_nutzer, model, verstanden)
+                except Exception as e:
+                    abgelegt = {"status": "fehler", "meldung": f"Nicht abgelegt: OneDrive nicht erreichbar ({e})"}
+            if abgelegt["status"] in ("abgelegt", "vorgemerkt"):
+                ablage_onedrive.anstossen(ablage_nutzer)  # im Hintergrund, die Antwort steht schon
             symbol = {"abgelegt": "📁", "fehler": "⚠️"}.get(abgelegt["status"], "📝")
             st.caption(f"{symbol} {abgelegt['meldung']}")
 

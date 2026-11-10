@@ -56,14 +56,17 @@ class GraphClient:
         nutzer: erwartetes Konto (UPN). Empfohlen, sobald mehr als ein Nutzer auf demselben Rechner einliest.
         melde_anmeldung: bekommt Link und Code der Anmeldung (dict von MSAL) statt der Ausgabe im Terminal.
             Auf dem Server nötig, sonst stünde der Code im Log und jeder mit Log-Zugriff könnte ihn benutzen.
+        interaktiv: False = nie per Gerätecode anmelden, sondern abbrechen, wenn kein gültiges Token im Cache liegt.
+            Für Arbeiten im Hintergrund, bei denen niemand den Code sehen würde (ablage_onedrive.py).
     """
 
-    def __init__(self, scopes: list[str], nutzer: str | None = None, melde_anmeldung=None):
+    def __init__(self, scopes: list[str], nutzer: str | None = None, melde_anmeldung=None, interaktiv: bool = True):
         if not config.CLIENT_ID:
             raise RuntimeError("CLIENT_ID fehlt – bitte .env anlegen (siehe .env.example).")
         self.scopes = scopes
         self.nutzer = nutzer.lower() if nutzer else None
         self.melde_anmeldung = melde_anmeldung
+        self.interaktiv = interaktiv
         self.cache_datei = config.token_cache(nutzer)
         self.probleme: list[str] = []  # Teilfehler der Connectoren (siehe melde_problem)
         self.dateien_cache: Path | None = None  # bereits gelesene Dateien (connectors/files.py), setzt ingest.py
@@ -87,6 +90,9 @@ class GraphClient:
         """Gültiges Zugriffstoken holen: erst still aus dem Cache, sonst per Device-Code-Anmeldung."""
         konto = waehle_konto(self.app.get_accounts(), self.nutzer)
         ergebnis = self.app.acquire_token_silent(self.scopes, account=konto) if konto else None
+        if not ergebnis and not self.interaktiv:
+            raise RuntimeError("Keine gültige Microsoft-Anmeldung im Token-Cache. Bitte Daten neu einlesen und dabei "
+                               "anmelden (gibt auch den Zugriff auf OneDrive frei).")
         if not ergebnis:
             flow = self.app.initiate_device_flow(scopes=self.scopes)
             if "message" not in flow:  # z. B. App-Registrierung falsch eingerichtet

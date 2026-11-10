@@ -59,6 +59,9 @@ READ_SCOPES = [
     "Files.Read.All",          # Dateien in OneDrive
     "Sites.Read.All",          # Dateien in SharePoint (Teams-Ablagen)
 ]
+# Schreibrecht für die persönliche Ablage im eigenen OneDrive (ablage_onedrive.py). Nur das eigene OneDrive, keine
+# fremden Dateien und kein SharePoint. Wird beim Einlesen mit angefragt, damit eine Anmeldung für beides reicht.
+ABLAGE_SCOPES = ["User.Read", "Files.ReadWrite"]
 # Zusätzliche Schreibrechte nur für seed_graph.py (Befüllen eines Test-Tenants mit Demo-Daten).
 SEED_SCOPES = [
     "User.Read",
@@ -122,6 +125,15 @@ EINLESEN_ALLE_STUNDEN = float(os.getenv("EINLESEN_ALLE_STUNDEN", "8"))
 # Bewusst außerhalb des Projektordners (keine Kundendaten im Repository) und standardmäßig nicht in OneDrive.
 ABLAGE_DIR = Path(os.getenv("ABLAGE_DIR", str(Path.home() / "KAM-Ablage")))
 ABLAGE_AKTIV = os.getenv("ABLAGE_AKTIV", "1") != "0"  # Voreinstellung des Schalters in der App
+# Ablage zusätzlich im OneDrive des Nutzers (ablage_onedrive.py). Nur mit App-Registrierung und nur für Graph-Konten.
+ABLAGE_ONEDRIVE = bool(CLIENT_ID) and os.getenv("ABLAGE_ONEDRIVE", "1") != "0"
+ABLAGE_ONEDRIVE_ORDNER = os.getenv("ABLAGE_ONEDRIVE_ORDNER", "KAM-Ablage")  # Ordner im Stamm des OneDrive
+# Arbeitskopie der Ablage nur für die Dauer der Sitzung (ablage_onedrive.aufraeumen). Im Serverbetrieb an: Danach
+# liegt die Ablage nur noch im OneDrive des Nutzers. Ende der Sitzung = so lange kein Lebenszeichen der App.
+ABLAGE_KOPIE_LOESCHEN = os.getenv("ABLAGE_KOPIE_LOESCHEN", "1" if SERVER_MODUS else "0") == "1"
+ABLAGE_SITZUNG_ENDE_MINUTEN = float(os.getenv("ABLAGE_SITZUNG_ENDE_MINUTEN", "10"))
+# Rechte beim Anmelden zum Einlesen: mit Ablage in OneDrive gleich das Schreibrecht dafür, eine Anmeldung für beides
+EINLESE_SCOPES = list(dict.fromkeys(READ_SCOPES + (ABLAGE_SCOPES if ABLAGE_ONEDRIVE else [])))
 ABLAGE_MIN_FRAGEN = 2       # Ordner für Kunde bzw. Thema erst ab so vielen Fragen (vorher nur vorgemerkt)
 # Frage ohne Kundennamen: Kunde aus den Quellen nur übernehmen, wenn mindestens dieser Anteil der Quellen zu ihm gehört
 ABLAGE_KUNDE_ANTEIL = 0.5
