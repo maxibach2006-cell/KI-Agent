@@ -101,6 +101,22 @@ ROLLEN = ["Leitung Einkauf", "Strategischer Einkauf", "Leitung Technik", "Konstr
 
 HEUTE = date(2026, 11, 5)
 
+# Listenpreise (EUR je Stück bzw. je Jahr beim Servicevertrag) 2023 und die jährlichen Erhöhungen für ALLE Kunden.
+# 2027 = Leitplanke der Preisrunde (+6,5 %), siehe Mail "Preisrunde 2027 – Leitplanken" von Ingrid Heller.
+LISTENPREISE_2023 = {"SM-400": 1240, "SR-200": 860, "PA-50": 2150, "PA-70": 2980, "SensPak": 420, "Service": 18500}
+PREISERHOEHUNG = {2024: 4.0, 2025: 3.5, 2026: 4.2, 2027: 6.5}
+
+
+def listenpreise() -> dict[str, dict[int, int]]:
+    """Listenpreis je Produkt und Jahr 2023–2027, auf ganze Euro gerundet (für alle Kunden gleich)."""
+    preise = {}
+    for produkt, preis in LISTENPREISE_2023.items():
+        jahre = {2023: preis}
+        for jahr, prozent in PREISERHOEHUNG.items():
+            jahre[jahr] = round(jahre[jahr - 1] * (1 + prozent / 100))
+        preise[produkt] = jahre
+    return preise
+
 
 def _mail(vor: str, nach: str, kurz: str) -> str:
     domain = "".join(c for c in kurz.lower().replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
@@ -150,6 +166,21 @@ def fakten(k: dict, nr: int) -> dict:
           "preiserhoehung": r.choice([3.9, 4.2, 4.5]), "status": r.choice(["angenommen", "angenommen", "offen"])}]
     k["verhandlung"] = {"angebot": ang_nr, "versionen": v, "volumen": r.randint(80, 900) * 1000}
     k["kunde_seit"] = r.choice([2009, 2012, 2015, 2017, 2019, 2021])
+
+    # Kennzahlen für Grafiken (eigener Zufallsstartwert: alle Werte oben bleiben unverändert, sie sind schon im Tenant)
+    z = random.Random(f"kennzahlen-{k['kurz']}")
+    umsatz = {2025: k["umsatz_2025"]}
+    for jahr in range(2024, max(2020, k["kunde_seit"]) , -1):  # rückwärts aus dem Umsatz 2025, ab Kundenbeginn
+        umsatz[jahr] = round(umsatz[jahr + 1] / (1 + z.uniform(-0.06, 0.14)), 2)
+    k["umsatz"] = dict(sorted(umsatz.items()))                                  # Mio. EUR, Ist
+    plan_2026 = round(umsatz[2025] * (1 + z.uniform(0.02, 0.09)), 2)
+    k["plan"] = {2026: plan_2026, 2027: round(plan_2026 * (1 + z.uniform(0.03, 0.08)), 2)}
+    k["umsatz_2026_bis_oktober"] = round(plan_2026 * z.uniform(0.74, 0.86), 2)
+    reklamation = "reklamation" in k["geschichte"]
+    k["kosten"] = {jahr: {"Fracht": round(umsatz.get(jahr, umsatz[2025]) * 1000 * z.uniform(0.011, 0.022), 1),
+                          "Service vor Ort": round(z.uniform(3, 18), 1),
+                          "Reklamationen": round(z.uniform(6, 14) if reklamation and jahr == 2025 else z.uniform(0, 3.5), 1)}
+                   for jahr in (2023, 2024, 2025)}                                # Tsd. EUR
     return k
 
 

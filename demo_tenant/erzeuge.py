@@ -31,7 +31,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table
 
-from kunden import FIRMA, HEUTE, NUTZER, PRODUKTE, alle_kunden
+from kunden import FIRMA, HEUTE, NUTZER, PRODUKTE, alle_kunden, listenpreise
 
 AUSGABE = Path(__file__).parent / "ausgabe"
 DATEIEN = AUSGABE / "dateien"
@@ -48,6 +48,16 @@ def d(tag: date) -> str:
 def pz(wert: float) -> str:
     """Prozentzahl mit deutschem Komma: 3.9 -> '3,9'."""
     return f"{wert:.1f}".replace(".", ",")
+
+
+def mio(wert: float) -> str:
+    """Millionen mit deutschem Komma: 1.72 -> '1,72 Mio. EUR'."""
+    return f"{wert:.2f}".replace(".", ",") + " Mio. EUR"
+
+
+def tsd(wert: float) -> str:
+    """Tausend mit deutschem Komma: 4.8 -> '4,8 Tsd. EUR'."""
+    return f"{wert:.1f}".replace(".", ",") + " Tsd. EUR"
 
 
 def eur(betrag: float) -> str:
@@ -238,7 +248,7 @@ def kunde_erzeugen(k: dict) -> list[str]:
                                         f"Profil_{k['kurz'].replace(' ', '_')}_2024.docx"]))
     schreibe_docx(profil, f"Kundenprofil {k['name']}", [
         f"Kundennummer: {k['kundennummer']} · Kunde seit {k['kunde_seit']} · Branche: {k['branche']} · Sitz: {k['ort']}",
-        f"Umsatz 2025: ca. {k['umsatz_2025']:.2f} Mio. EUR. Produkte: {', '.join(PRODUKTE[p] for p in k['produkte'])}.",
+        f"Umsatz 2025: ca. {mio(k['umsatz_2025'])}. Produkte: {', '.join(PRODUKTE[p] for p in k['produkte'])}.",
         f"Verantwortlich bei {FIRMA}: {person(kam)}"
         + (f", weitere Ansprechpartner intern: {', '.join(person(t) for t in k['team'])}." if k["team"] else "."),
         "Ansprechpartner beim Kunden:"],
@@ -322,6 +332,9 @@ def kunde_erzeugen(k: dict) -> list[str]:
         f"- {r.choice(['zahlungsziel bleibt', 'skonto egal', 'liefertreue wichtiger als preis'])}\n"
         f"- rückruf bis {d(werktag(notiz_tag + timedelta(days=7)))}\n", encoding="utf-8")
 
+    # --- 13.-14. Kennzahlen für Grafiken: Jahresbericht (Umsatz, Kosten) und Preisblatt (Listenpreise) ---
+    kennzahlen_erzeugen(k, o, lege)
+
     # --- Geschichten ---
     for g in k["geschichte"]:
         dateien += geschichte(k, g, o, r, lege)
@@ -362,6 +375,63 @@ def kunde_erzeugen(k: dict) -> list[str]:
                 f"nach Mail von {person(kam).split()[0]}\n- v3 {d(v3['datum'])}\nKundennummer {k['kundennummer']}, "
                 f"Bestellungen laufen über {r.choice(['EDI', 'das Kundenportal', 'Mail an den Innendienst'])}.")
     return dateien
+
+
+def kennzahlen_erzeugen(k: dict, o: dict, lege) -> None:
+    """Zahlen über mehrere Jahre, damit Fragen nach Verläufen eine Grafik ergeben können:
+    OneNote-Seite "Umsatz und Kennzahlen" beim KAM, Jahresbericht (PDF) und Preisblatt (Word) im OneDrive."""
+    kam, vt = k["kam"], k["vertrag"]
+    jahre = list(k["umsatz"])
+    umsatz_zeilen = [f"Umsatz {j}: {mio(w)}" for j, w in k["umsatz"].items()]
+    plan_zeilen = [f"Plan {j}: {mio(w)}" for j, w in k["plan"].items()]
+    kosten_zeilen = [f"{art} {j}: {tsd(w)}" for j, posten in k["kosten"].items() for art, w in posten.items()]
+    onenote(kam, k["name"], "Umsatz und Kennzahlen", date(2026, 1, 20),
+            f"Kennzahlen {k['name']} (Kundennummer {k['kundennummer']}), Quelle: Controlling-Bericht Januar 2026\n\n"
+            "Umsatz (Ist):\n" + "\n".join(f"- {z}" for z in umsatz_zeilen) + "\n\n"
+            "Planung:\n" + "\n".join(f"- {z}" for z in plan_zeilen)
+            + f"\n- Umsatz 2026 bis Oktober: {mio(k['umsatz_2026_bis_oktober'])}\n\n"
+            "Kosten für den Kunden (Tsd. EUR):\n" + "\n".join(f"- {z}" for z in kosten_zeilen))
+
+    bericht = lege(o["basis"], f"Jahresbericht {k['kurz']} 2025.pdf")
+    schreibe_pdf(bericht, f"Jahresbericht 2025 – {k['name']}", [
+        f"Kunde seit {k['kunde_seit']}, KAM {person(kam)}, Rahmenvertrag {vt['nr']} bis {d(vt['ende'])}.",
+        f"Umsatzentwicklung {jahre[0]}–2025 und Planung 2026/2027 (Mio. EUR):",
+        "\n".join(umsatz_zeilen + plan_zeilen),
+        "Kosten für den Kunden 2023–2025 (Tsd. EUR):",
+        "\n".join(kosten_zeilen),
+        f"Erstellt vom Controlling, {FIRMA}, Januar 2026."],
+        [["Jahr", "Umsatz (Mio. EUR)", "Fracht (Tsd. EUR)", "Service (Tsd. EUR)", "Reklamationen (Tsd. EUR)"]]
+        + [[str(j), f"{w:.2f}".replace(".", ","),
+            *(f"{k['kosten'][j][a]:.1f}".replace(".", ",") if j in k["kosten"] else "–"
+              for a in ("Fracht", "Service vor Ort", "Reklamationen"))]
+           for j, w in k["umsatz"].items()])
+
+    preise = listenpreise()
+    zeilen = [f"Listenpreis {PRODUKTE[p]} {j}: {eur(preise[p][j])}" for p in k["produkte"] for j in range(2023, 2028)]
+    schreibe_docx(lege(o["angebote"], f"Preisblatt {k['kurz']} 2027.docx"),
+                  f"Preisblatt {k['name']} – Listenpreise 2023–2027", [
+        "Listenpreise je Stück (Servicevertrag je Jahr), gültig jeweils ab 01.01. Erhöhungen: 2024 +4,0 %, 2025 +3,5 %, "
+        "2026 +4,2 %, 2027 +6,5 % (Leitplanke Preisrunde 2027).",
+        *zeilen,
+        f"Kundenrabatt laut {vt['nr']}: {vt['rabatt']} % auf den Listenpreis."],
+        [["Produkt"] + [str(j) for j in range(2023, 2028)]]
+        + [[PRODUKTE[p]] + [eur(preise[p][j]) for j in range(2023, 2028)] for p in k["produkte"]])
+
+
+def kennzahlen_uebersichten(kunden: list[dict]) -> None:
+    """Vergleich über Kunden: Gebietsübersicht je KAM und Gesamtübersicht für die Vertriebsleitung."""
+    for kam in ("jonas", "bella", "peter", "ingrid"):
+        eigene = [k for k in kunden if k["kam"] == kam]
+        onenote(kam, "Allgemein", "Umsatz je Kunde 2025", date(2026, 1, 22),
+                f"Umsatz je Kunde im eigenen Gebiet ({NUTZER[kam]['rolle']}), Ist 2025 und Plan 2026:\n"
+                + "\n".join(f"- {k['name']}: Umsatz 2025 {mio(k['umsatz'][2025])}, Plan 2026 {mio(k['plan'][2026])}"
+                            for k in eigene)
+                + f"\nSumme 2025: {mio(sum(k['umsatz'][2025] for k in eigene))}")
+    onenote("ingrid", "Forecast", "Umsatz je Gebiet 2021–2025", date(2026, 1, 25),
+            "Umsatz je Gebiet (Summe der Kunden, Mio. EUR), Ist:\n"
+            + "\n".join(f"- {NUTZER[kam]['rolle']} ({person(kam)}) {j}: "
+                        f"{mio(sum(k['umsatz'].get(j, 0) for k in kunden if k['kam'] == kam))}"
+                        for kam in ("jonas", "bella", "peter", "ingrid") for j in range(2021, 2026)))
 
 
 def geschichte(k: dict, g: str, o: dict, r: random.Random, lege) -> list[str]:
@@ -536,10 +606,10 @@ def geschichte(k: dict, g: str, o: dict, r: random.Random, lege) -> list[str]:
                f"Strategiegespräch {k['kurz']} 2027–2029", tag, "13:00", "15:00", "Raum Vorstand",
                f"Vorbereitung Jahresgespräch {k['name']}: Volumen, Mehrjahresvertrag, Preisstrategie.")
         schreibe_pptx(lege(o["basis"], f"{k['kurz']} Account-Plan 2027.pptx"), f"Account-Plan {k['name']}",
-                      [f"Umsatz 2025: {k['umsatz_2025']:.2f} Mio. EUR", "Ziel 2027: +12 %", "Risiken: Preisdruck, Second Source",
+                      [f"Umsatz 2025: {mio(k['umsatz_2025'])}", "Ziel 2027: +12 %", "Risiken: Preisdruck, Second Source",
                        "Maßnahmen: Mehrjahresvertrag, technischer Support vor Ort"])
         onenote("heinrich", "Strategische Kunden", k["name"], werktag(HEUTE - timedelta(days=30)),
-                f"{k['name']}: Umsatz 2025 {k['umsatz_2025']:.2f} Mio. EUR, Verantwortung {person('ingrid')}.\n"
+                f"{k['name']}: Umsatz 2025 {mio(k['umsatz_2025'])}, Verantwortung {person('ingrid')}.\n"
                 f"Ziel: Mehrjahresvertrag bis 2029. Strategiegespräch am {d(tag)}.")
         mail_intern("ingrid", ["heinrich"] + [t for t in k["team"] if t != "heinrich"][:1],
                     f"Vorbereitung Strategiegespräch {k['kurz']}", werktag(tag - timedelta(days=5)),
@@ -585,6 +655,7 @@ def main() -> None:
                        f"{vt['zahlungsziel']} Tage · Verhandlung: " + " → ".join(f"v{x['version']} {x['rabatt']} %" for x in v)
                        + f" ({v[2]['status']})", "", "OneDrive:"] + [f"- `{x}`" for x in sorted(dateien)] + [""]
     allgemeines()
+    kennzahlen_uebersichten(kunden)
     AUSGABE.mkdir(parents=True, exist_ok=True)
     (AUSGABE / "plan.json").write_text(json.dumps(PLAN, ensure_ascii=False, indent=1), encoding="utf-8")
     zeilen = ["| Nutzer | OneNote | Mails Eingang | Gesendet | Termine | OneDrive | Teams-Posts | Teams-Dateien | Chats |",
