@@ -346,11 +346,12 @@ def kunde_erzeugen(k: dict) -> list[str]:
             + f"\n\nRahmenvertrag {vt['nr']}: {d(vt['beginn'])} bis {d(vt['ende'])}, Rabatt {vt['rabatt']} %, "
             f"Zahlungsziel {vt['zahlungsziel']} Tage netto, Kündigungsfrist {vt['kuendigung_monate']} Monate.\n"
             f"Ablage Vertrag: OneDrive > {o['vertrag']}")
-    onenote(kam, k["name"], "Preisverhandlung 2027", v3["datum"],
-            f"Angebot {vh['angebot']}, Volumen ca. {eur(vh['volumen'])}\n"
-            + "\n".join(f"- v{x['version']} vom {d(x['datum'])}: {x['rabatt']} % Rabatt, +{pz(x['preiserhoehung'])} % – {x['status']}"
-                        for x in vh["versionen"])
-            + f"\n\nStand {d(v3['datum'])}: Version 3 {'angenommen' if v3['status'] == 'angenommen' else 'noch offen, Kunde wartet auf GF-Freigabe'}.")
+    if kam != "sven":  # Sven: Verhandlung steht in Angeboten und Mails, OneNote bleibt kurz
+        onenote(kam, k["name"], "Preisverhandlung 2027", v3["datum"],
+                f"Angebot {vh['angebot']}, Volumen ca. {eur(vh['volumen'])}\n"
+                + "\n".join(f"- v{x['version']} vom {d(x['datum'])}: {x['rabatt']} % Rabatt, +{pz(x['preiserhoehung'])} % – {x['status']}"
+                            for x in vh["versionen"])
+                + f"\n\nStand {d(v3['datum'])}: Version 3 {'angenommen' if v3['status'] == 'angenommen' else 'noch offen, Kunde wartet auf GF-Freigabe'}.")
 
     # --- Teams-Kanal: offizielle Ablage (teilweise dieselben Dateien) + Nachrichten ---
     kanal = k["kurz"]
@@ -385,12 +386,13 @@ def kennzahlen_erzeugen(k: dict, o: dict, lege) -> None:
     umsatz_zeilen = [f"Umsatz {j}: {mio(w)}" for j, w in k["umsatz"].items()]
     plan_zeilen = [f"Plan {j}: {mio(w)}" for j, w in k["plan"].items()]
     kosten_zeilen = [f"{art} {j}: {tsd(w)}" for j, posten in k["kosten"].items() for art, w in posten.items()]
-    onenote(kam, k["name"], "Umsatz und Kennzahlen", date(2026, 1, 20),
-            f"Kennzahlen {k['name']} (Kundennummer {k['kundennummer']}), Quelle: Controlling-Bericht Januar 2026\n\n"
-            "Umsatz (Ist):\n" + "\n".join(f"- {z}" for z in umsatz_zeilen) + "\n\n"
-            "Planung:\n" + "\n".join(f"- {z}" for z in plan_zeilen)
-            + f"\n- Umsatz 2026 bis Oktober: {mio(k['umsatz_2026_bis_oktober'])}\n\n"
-            "Kosten für den Kunden (Tsd. EUR):\n" + "\n".join(f"- {z}" for z in kosten_zeilen))
+    if kam != "sven":  # Sven: Kennzahlen nur im Jahresbericht (PDF), damit das Hochladen in OneNote kurz bleibt
+        onenote(kam, k["name"], "Umsatz und Kennzahlen", date(2026, 1, 20),
+                f"Kennzahlen {k['name']} (Kundennummer {k['kundennummer']}), Quelle: Controlling-Bericht Januar 2026\n\n"
+                "Umsatz (Ist):\n" + "\n".join(f"- {z}" for z in umsatz_zeilen) + "\n\n"
+                "Planung:\n" + "\n".join(f"- {z}" for z in plan_zeilen)
+                + f"\n- Umsatz 2026 bis Oktober: {mio(k['umsatz_2026_bis_oktober'])}\n\n"
+                "Kosten für den Kunden (Tsd. EUR):\n" + "\n".join(f"- {z}" for z in kosten_zeilen))
 
     bericht = lege(o["basis"], f"Jahresbericht {k['kurz']} 2025.pdf")
     schreibe_pdf(bericht, f"Jahresbericht 2025 – {k['name']}", [
@@ -617,9 +619,10 @@ def geschichte(k: dict, g: str, o: dict, r: random.Random, lege) -> list[str]:
                     "prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\n" + signatur("ingrid"))
 
     elif g == "besuchsberichte":
-        # Altdaten: ein Besuchsbericht je Jahr seit 2019 (Word im Ordner, Kurzfassung in OneNote), Themen wechseln
+        # Altdaten: ein Besuchsbericht je Jahr seit 2019 (Word im Ordner), in OneNote nur eine Übersichtsseite je Kunde
         themen = ["Jahresgespräch und Bedarf", "Werksführung und neue Linie", "Preisgespräch", "Qualität und Liefertreue",
                   "Technologietag", "Nachfolgeplanung Einkauf", "Rahmenvertrag und Mengen", "Ausblick Folgejahr"]
+        historie = []
         for jahr in range(max(2019, k["kunde_seit"]), 2027):
             tag = werktag(date(jahr, r.choice([2, 3, 5, 6, 9, 10]), r.randint(2, 26)))
             if tag > HEUTE:
@@ -639,7 +642,10 @@ def geschichte(k: dict, g: str, o: dict, r: random.Random, lege) -> list[str]:
                              f"Besuch {tag.month:02d}-{jahr}.docx"])
             ordner = f"{o['basis']}/Besuchsberichte" if jahr >= 2023 else r.choice([f"{o['basis']}/Besuchsberichte/alt", o["alt"]])
             schreibe_docx(lege(ordner, name), f"Besuchsbericht {k['name']} vom {d(tag)}", punkte)
-            onenote(kam, k["name"], f"Besuch {d(tag)} – {thema}", tag, "\n".join(punkte))
+            historie.append(f"- {d(tag)}: {thema} mit {wer['name']}. {punkte[3]}")
+        # nur EINE OneNote-Seite je Kunde (OneNote ist bei neuen Konten sehr langsam), Details stehen in den Word-Dateien
+        onenote(kam, k["name"], "Besuchshistorie", HEUTE - timedelta(days=5),
+                f"Besuche bei {k['name']} (Berichte im OneDrive unter {o['basis']}/Besuchsberichte):\n" + "\n".join(historie))
         notiz = lege(o["lose"], f"todo {k['kurz'].lower()}.txt")
         notiz.write_text(f"- besuchsberichte 2019-2022 noch ins neue ablagesystem\n- {k['kontakte'][-1]['name']} geburtstag "
                          f"im {r.choice(['märz', 'juni', 'oktober'])}\n- preisliste 2027 schicken\n", encoding="utf-8")
