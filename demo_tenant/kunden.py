@@ -25,7 +25,7 @@ NUTZER = {
     "udo":      {"name": "Udo Heußer",      "upn": f"Udo@{DOMAIN}",      "rolle": "Supply Chain / Disposition"},
     "herbert":  {"name": "Herbert Heiner",  "upn": f"Herbert@{DOMAIN}",  "rolle": "Qualitätsmanagement"},
     "heinrich": {"name": "Heinrich Frei",   "upn": f"Heinrich@{DOMAIN}", "rolle": "Geschäftsführung"},
-    "sven":     {"name": "Sven Seidenstricker", "upn": f"Sven@{DOMAIN}", "rolle": "Key-Account-Manager Ost"},
+    "sven":     {"name": "Sven Seidenstricker", "upn": f"Sven_Seidenstricker@{DOMAIN}", "rolle": "Key-Account-Manager Ost"},
 }
 
 PRODUKTE = {
