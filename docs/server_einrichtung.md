@@ -184,7 +184,7 @@ gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert d
 ## Phase 2: Tunnel und Domain (begonnen)
 
 ### Stand 04.11.2026
-- Domain `auremlips.store` bei **Strato**, geplante Adresse `agent.auremlips.store`, Cloudflare-Konto vorhanden.
+- Domain `<eigene-domain>` bei **Strato**, geplante Adresse `agent.<eigene-domain>`, Cloudflare-Konto vorhanden.
 - Container `tunnel` ist vorbereitet, aber noch nicht gestartet (kein Token, keine Access-Regel).
 - Nameserver bei Strato auf Cloudflare umgestellt. Die Registry führt jetzt `marge.ns.cloudflare.com` und
   `uriah.ns.cloudflare.com` (per RDAP geprüft). Bei der ersten Prüfung stand dort noch Strato: Erst die Abfrage bei der
@@ -195,20 +195,10 @@ gibt es nur noch das Container-Ollama. Der Testlauf unter Windows funktioniert d
   Projekt nicht braucht. Ist sie an, scheitert der Test mit „Failed to fetch Entra ID Authentication Context“.
 
 ### DNS-Bestandsaufnahme vor dem Umzug (öffentliche Abfrage über 1.1.1.1, 04.11.2026)
-Die Domain galt als ungenutzt. Die Abfrage zeigte aber Einträge, die beim Umzug verloren gehen könnten (P6):
-
-| Name | Typ | Wert | Bedeutung |
-|---|---|---|---|
-| `auremlips.store` | NS | `docks14.rzone.de`, `shades18.rzone.de` | Nameserver von Strato |
-| `auremlips.store` | A / AAAA | `217.160.0.224` / `2001:8d8:100f:f000::200` | Webserver, HTTP antwortet (Apache), HTTPS schlägt fehl |
-| `www.auremlips.store` | CNAME | `auremlips.store` | zeigt auf denselben Webserver |
-| `auremlips.store`, `send.auremlips.store` | MX | `feedback-smtp.eu-west-1.amazonses.com` | Rückläufer beim Mailversand über Amazon SES |
-| `resend._domainkey.auremlips.store` | TXT | DKIM-Schlüssel | Mailversand über den Dienst Resend |
-| `_dmarc.auremlips.store` | TXT | `v=DMARC1;p=reject;` | Mail-Richtlinie der Domain |
-| `mail.`, `shop.`, `_amazonses.auremlips.store` | MX | `smtpin.rzone.de` | Mail-Server von Strato, vermutlich ein Sammeleintrag |
-
-Die Liste ist nicht vollständig, weil sich öffentlich nur gezielt nach Namen fragen lässt. Maßgeblich ist die
-DNS-Verwaltung bei Strato.
+Die Domain galt als ungenutzt. Die Abfrage zeigte aber Einträge, die beim Umzug verloren gehen könnten (P6): eine
+Website (A/AAAA und `www` als CNAME), Mailversand über zwei Dienste (MX, DKIM, DMARC) und Sammeleinträge des Anbieters.
+Die Einzelwerte stehen hier bewusst nicht, weil das Repository öffentlich ist. Die Liste war ohnehin nicht vollständig,
+weil sich öffentlich nur gezielt nach Namen fragen lässt. Maßgeblich ist die DNS-Verwaltung bei Strato.
 
 ### Geplante Reihenfolge
 1. **Bestandsaufnahme bei Strato:** Welche DNS-Einträge gibt es (MX für Mail, A/CNAME für eine Website, TXT für
@@ -334,7 +324,7 @@ Reihenfolge wie in E15: erst Anmeldung, dann Tunnel.
 1. **Zweite App in Entra** (`KAM Cloudflare Anmeldung`) mit geheimem Schlüssel, getrennt von der App zum Einlesen. Der
    Schlüssel liegt nur bei Cloudflare. **Sein Ablaufdatum notieren:** Danach funktioniert die Anmeldung nicht mehr.
 2. **Entra ID als Anmeldeweg** bei Cloudflare, mit „Support Groups“ und PKCE.
-3. **Access-Anwendung** `KAM Agent` für `agent.auremlips.store`, Sitzung 8 Stunden, Regel „Allow“ nur für die Gruppe des
+3. **Access-Anwendung** `KAM Agent` für `agent.<eigene-domain>`, Sitzung 8 Stunden, Regel „Allow“ nur für die Gruppe des
    Teams „Key Account - Kunden“.
 4. **Tunnel** `kam-server`: Token in `server/tunnel.env`, Container mit `--profile tunnel`, Ziel `http://agent:8510`.
 5. **Tenant-Index im Container** eingelesen, Anmeldetoken im Volume `token`.
