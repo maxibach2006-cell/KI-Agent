@@ -755,6 +755,88 @@ def gebiet_ost() -> None:
     chat("sven", "sally", werktag(HEUTE - timedelta(days=2)), "Kannst du mir die offenen Aufträge von Elbtal und Havelland schicken?")
 
 
+def ordner_ost(kunden: list[dict]) -> None:
+    """Zusätzliche, verstreute Ordnerstrukturen in Svens OneDrive: viele Ordner mit nur einzelnen Dateien
+    (Archiv nach Jahren, Ausschreibungen, Schulungen, Vorlagen, tief verschachtelte Gebietsordner, Kopien)."""
+    ost = [k for k in kunden if k["kam"] == "sven"]
+    r = random.Random("ordner-ost")
+    roh = DATEIEN / "sven" / "OneDrive"
+
+    def lege(rel: str) -> Path:
+        pfad = roh / rel
+        pfad.parent.mkdir(parents=True, exist_ok=True)
+        ablegen("sven", pfad, rel)
+        return pfad
+
+    # Archiv: je Jahr ein paar Kunden mit genau einer Datei
+    for jahr in range(2019, 2024):
+        for k in r.sample(ost, 3):
+            art = r.choice(["Lieferantenbewertung", "Jahresgespräch", "Mengenplanung"])
+            note = r.choice(["A", "A", "B", "B", "C"])
+            menge = r.randint(40, 600)
+            schreibe_pdf(lege(f"Archiv/{jahr}/{k['kurz']}/{art} {jahr}.pdf"), f"{art} {jahr} – {k['name']}", [
+                f"Kundennummer {k['kundennummer']}, Betreuer {person('sven')}",
+                f"Bewertung durch den Kunden: Note {note} (Liefertreue, Qualität, Service)" if art == "Lieferantenbewertung"
+                else f"Geplante Menge {jahr + 1}: ca. {menge} Einheiten {PRODUKTE[k['produkte'][0]]}",
+                f"Ansprechpartner damals: {r.choice(k['kontakte'])['name']}"])
+
+    # Ausschreibungen: ein Ordner je Verfahren, darin eine einzelne Datei
+    for k in r.sample(ost, 4):
+        jahr = r.choice([2024, 2025, 2026])
+        nr = f"AS-{jahr}-{r.randint(10, 99)}"
+        frist = werktag(date(jahr, r.randint(2, 10), r.randint(1, 25)))
+        ergebnis = r.choice(["gewonnen", "verloren an Wettbewerb", "zurückgezogen durch Kunde"])
+        schreibe_docx(lege(f"Ausschreibungen/{jahr}/{k['kurz']} {nr}/Angebotsabgabe {nr}.docx"),
+                      f"Ausschreibung {nr} – {k['name']}", [
+            f"Gegenstand: {r.randint(50, 500)} Einheiten {PRODUKTE[r.choice(k['produkte'])]}",
+            f"Abgabefrist: {d(frist)}, abgegeben von {person('sven')}",
+            f"Ergebnis: {ergebnis}"])
+
+    # Schulungen, Vorlagen, Reisekosten, Persönliches: je Ordner eine Datei
+    schreibe_pdf(lege("Schulungen/2025 Verhandlungstraining/Handout Verhandlung.pdf"), "Verhandlungstraining 2025",
+                 ["Grundregel: Nie Rabatt ohne Gegenleistung (Menge, Laufzeit, Zahlungsziel).",
+                  "Vorbereitung: Ziel, Schmerzgrenze und Alternativen vor dem Gespräch festlegen."])
+    lege("Schulungen/2026 Produktschulung PA-70/notizen schulung.txt").write_text(
+        "pa-70 schulung 03/2026\n- wirkungsgrad +6% ggü pa-50\n- lieferzeit aktuell 10 wochen\n- demo-kit bei ingo\n",
+        encoding="utf-8")
+    schreibe_docx(lege("Vorlagen/Angebote/Vorlage Angebot 2027.docx"), "Angebotsvorlage 2027",
+                  ["Kunde, Ansprechpartner, Datum", "Listenpreiserhöhung 2027: 6,5 % (Leitplanke)", "Rabatt laut Rahmenvertrag"])
+    schreibe_docx(lege("Vorlagen/Besuchsbericht/Besuchsbericht leer.docx"), "Besuchsbericht",
+                  ["Teilnehmer:", "Thema:", "Bedarf:", "Nächster Schritt:"])
+    reise = r.sample(ost, 3)
+    for i, k in enumerate(reise, start=8):
+        schreibe_pdf(lege(f"Reisekosten/2026/{i:02d}/Hotel {k['ort']}.pdf"), f"Hotelrechnung {k['ort']}",
+                     [f"Gast: {person('sven')}", f"Anlass: Kundenbesuch {k['name']}",
+                      f"Betrag: {eur(r.randint(89, 179))} inkl. Frühstück"])
+    schreibe_pdf(lege("Persönlich/Zielvereinbarung/Zielvereinbarung 2026.pdf"), "Zielvereinbarung 2026 Gebiet Ost",
+                 [f"Mitarbeiter: {person('sven')}, Führungskraft: {person('ingrid')}",
+                  f"Umsatzziel 2026: {mio(sum(k['plan'][2026] for k in ost))}",
+                  "Weitere Ziele: zwei Neukunden, Besuchsberichte vollständig im OneDrive"])
+
+    # tief verschachtelte Gebietsordner mit nur einer Kontaktliste
+    bundesland = {"Dresden": "Sachsen", "Annaberg-Buchholz": "Sachsen", "Plauen": "Sachsen", "Chemnitz": "Sachsen",
+                  "Halle (Saale)": "Sachsen-Anhalt", "Magdeburg": "Sachsen-Anhalt", "Ilmenau": "Thüringen",
+                  "Rostock": "Mecklenburg-Vorpommern", "Berlin": "Berlin"}
+    for k in r.sample(ost, 5):
+        land = bundesland.get(k["ort"], "Brandenburg")
+        lege(f"01_Kunden/Ost/{land}/{k['ort']}/{k['kurz']}/Kontakte {k['kurz']}.txt").write_text(
+            f"Kontakte {k['name']} (Stand {d(HEUTE - timedelta(days=r.randint(20, 400)))})\n"
+            + "\n".join(f"{c['name']} – {c['rolle']} – {c['tel']} – {c['mail']}" for c in k["kontakte"]) + "\n",
+            encoding="utf-8")
+
+    # Forecast in verschachtelten Quartalsordnern
+    for q, faktor in (("Q3", 0.72), ("Q4", 0.81)):
+        schreibe_docx(lege(f"Gebiet Ost/Forecast/2026/{q}/Forecast Ost {q} 2026.docx"), f"Forecast Gebiet Ost {q}/2026",
+                      [f"Umsatz kumuliert bis {q}: {mio(sum(k['plan'][2026] for k in ost) * faktor)}"]
+                      + [f"{k['name']}: Plan 2026 {mio(k['plan'][2026])}" for k in ost])
+
+    # Kopien und Zufallsfunde, wie in echten Ordnern
+    k = r.choice(ost)
+    quelle = next(Path(DATEIEN / "sven" / "OneDrive").rglob(f"Preisblatt {k['kurz']} 2027.docx"))
+    shutil.copy2(quelle, lege(f"Neuer Ordner (2)/Kopie von {quelle.name}"))
+    lege("Neuer Ordner (2)/alt/unbenannt.txt").write_text("rückruf messe kontakt warnow – erledigt?\n", encoding="utf-8")
+
+
 def main() -> None:
     if AUSGABE.exists():
         shutil.rmtree(AUSGABE)
@@ -770,6 +852,7 @@ def main() -> None:
                        + f" ({v[2]['status']})", "", "OneDrive:"] + [f"- `{x}`" for x in sorted(dateien)] + [""]
     allgemeines()
     gebiet_ost()
+    ordner_ost(kunden)
     kennzahlen_uebersichten(kunden)
     AUSGABE.mkdir(parents=True, exist_ok=True)
     (AUSGABE / "plan.json").write_text(json.dumps(PLAN, ensure_ascii=False, indent=1), encoding="utf-8")

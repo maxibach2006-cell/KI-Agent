@@ -249,17 +249,21 @@ def chats(g: Graph, liste: list[dict], name: str) -> None:
 
 def main() -> None:
     if len(sys.argv) not in (2, 3) or sys.argv[1] not in NUTZER:
-        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}> [--nur-onenote|--ohne-onenote]")
+        sys.exit(f"Aufruf: python demo_tenant/seed_tenant.py <{'|'.join(NUTZER)}> [--nur-onenote|--ohne-onenote|--nur-onedrive]")
     kuerzel = sys.argv[1]
     plan = json.loads((AUSGABE / "plan.json").read_text(encoding="utf-8"))[kuerzel]
     g = Graph(kuerzel)
     print("Angemeldet als", g.ok("GET", "/me")["userPrincipalName"], "–", datetime.now().strftime("%H:%M"))
     fehler = []
     s = lambda name: schritt(name, fehler)  # noqa: E731
-    if sys.argv[2:] != ["--ohne-onenote"]:
+    if sys.argv[2:] not in (["--ohne-onenote"], ["--nur-onedrive"]):
         s("OneNote")(onenote, g, plan["onenote"])
     if sys.argv[2:] == ["--nur-onenote"]:
         print("Fertig (nur OneNote)." + (f" Fehler: {fehler}" if fehler else ""))
+        return
+    if sys.argv[2:] == ["--nur-onedrive"]:  # z. B. nach neuen Ordnern: nur Dateien (vorhandene werden überschrieben)
+        s("OneDrive")(onedrive, g, plan["onedrive"])
+        print("Fertig (nur OneDrive)." + (f" Fehler: {fehler}" if fehler else ""))
         return
     s("Posteingang")(mails, g, plan["inbox"], "inbox")
     s("Gesendet")(mails, g, plan["gesendet"], "sentitems")
