@@ -5,7 +5,7 @@ ALLE Firmen, Personen, Adressen und Zahlen sind erfunden. Mailadressen externer 
 
 Aufbau:
     NUTZER    die Konten im Tenant (Kürzel -> Name, Anmeldename, Rolle)
-    KUNDEN    20 Kunden mit Branche, Ort, betreuenden Nutzern und Besonderheiten ("geschichte")
+    KUNDEN    32 Kunden (20 + 12 im Gebiet Ost) mit Branche, Ort, betreuenden Nutzern und Besonderheiten ("geschichte")
     fakten()  ergänzt jeden Kunden um abgeleitete, aber feste Fakten (Kundennummer, Ansprechpartner, Vertrag,
               Preisverhandlung in 3 Versionen …). Zufall mit festem Startwert -> jeder Lauf erzeugt dasselbe.
 """
@@ -25,6 +25,7 @@ NUTZER = {
     "udo":      {"name": "Udo Heußer",      "upn": f"Udo@{DOMAIN}",      "rolle": "Supply Chain / Disposition"},
     "herbert":  {"name": "Herbert Heiner",  "upn": f"Herbert@{DOMAIN}",  "rolle": "Qualitätsmanagement"},
     "heinrich": {"name": "Heinrich Frei",   "upn": f"Heinrich@{DOMAIN}", "rolle": "Geschäftsführung"},
+    "sven":     {"name": "Sven Seidenstricker", "upn": f"Sven@{DOMAIN}", "rolle": "Key-Account-Manager Ost"},
 }
 
 PRODUKTE = {
@@ -88,6 +89,39 @@ KUNDEN = [
     {"kurz": "Talheim Chemie", "name": "Talheim Chemie AG", "ort": "Ludwigshafen", "branche": "Chemie",
      "kam": "ingrid", "team": ["peter", "herbert"], "produkte": ["PA-50", "PA-70", "Service"],
      "geschichte": ["strategisch", "audit"]},
+    # --- Ost: Sven (später ergänzt, deutlich mehr Daten: Besuchsberichte seit 2019, Altprojekte, Wettbewerb, Messe) ---
+    # Am Ende angehängt, damit Kundennummern und Zufallswerte der bisherigen Kunden unverändert bleiben.
+    {"kurz": "Elbtal", "name": "Elbtal Anlagenbau GmbH", "ort": "Dresden", "branche": "Anlagenbau",
+     "kam": "sven", "team": ["herbert", "sally"], "produkte": ["SM-400", "SR-200"],
+     "geschichte": ["reklamation", "besuchsberichte", "altprojekt"]},
+    {"kurz": "Saale Kunststoff", "name": "Saale Kunststofftechnik GmbH", "ort": "Halle (Saale)",
+     "branche": "Kunststoffverarbeitung", "kam": "sven", "team": ["udo"], "produkte": ["PA-50"],
+     "geschichte": ["lieferverzug", "besuchsberichte"]},
+    {"kurz": "Lausitz Energie", "name": "Lausitz Energiesysteme AG", "ort": "Cottbus", "branche": "Energietechnik",
+     "kam": "sven", "team": ["ingo", "ingrid"], "produkte": ["PA-70", "SensPak", "Service"],
+     "geschichte": ["projekt", "preisfreigabe", "besuchsberichte"]},
+    {"kurz": "Erzgebirge Feinmechanik", "name": "Erzgebirge Feinmechanik KG", "ort": "Annaberg-Buchholz",
+     "branche": "Feinmechanik", "kam": "sven", "team": [], "produkte": ["SM-400"],
+     "geschichte": ["kuendigung", "wettbewerb"]},
+    {"kurz": "Spree Automation", "name": "Spree Automation GmbH", "ort": "Berlin", "branche": "Automatisierungstechnik",
+     "kam": "sven", "team": ["ingo", "sally"], "produkte": ["SR-200", "SensPak"],
+     "geschichte": ["techniktermin", "projekt", "besuchsberichte"]},
+    {"kurz": "Ilm Glas", "name": "Thüringer Glaswerke Ilm GmbH", "ort": "Ilmenau", "branche": "Glasherstellung",
+     "kam": "sven", "team": ["herbert"], "produkte": ["PA-50", "PA-70"], "geschichte": ["audit", "besuchsberichte"]},
+    {"kurz": "Havelland", "name": "Havelland Lebensmittelwerke GmbH", "ort": "Brandenburg an der Havel",
+     "branche": "Lebensmittelindustrie", "kam": "sven", "team": ["herbert", "sally"], "produkte": ["PA-50", "Service"],
+     "geschichte": ["reklamation", "wettbewerb"]},
+    {"kurz": "Oder Logistik", "name": "Oder Logistiksysteme GmbH", "ort": "Frankfurt (Oder)", "branche": "Intralogistik",
+     "kam": "sven", "team": ["udo"], "produkte": ["SM-400", "SensPak"], "geschichte": ["lieferverzug", "messe"]},
+    {"kurz": "Vogtland Textil", "name": "Vogtland Textilmaschinen GmbH", "ort": "Plauen", "branche": "Textilmaschinen",
+     "kam": "sven", "team": [], "produkte": ["SR-200"], "geschichte": ["altprojekt", "besuchsberichte"]},
+    {"kurz": "Magdeburger Pumpen", "name": "Magdeburger Pumpenwerk AG", "ort": "Magdeburg", "branche": "Pumpenbau",
+     "kam": "sven", "team": ["ingo", "ingrid", "sally"], "produkte": ["PA-50", "PA-70", "SM-400"],
+     "geschichte": ["preisfreigabe", "techniktermin", "besuchsberichte"]},
+    {"kurz": "Chemnitzer Werkzeugbau", "name": "Chemnitzer Werkzeugbau GmbH", "ort": "Chemnitz", "branche": "Werkzeugbau",
+     "kam": "sven", "team": ["ingo"], "produkte": ["SR-200", "SM-400"], "geschichte": ["projekt", "wettbewerb"]},
+    {"kurz": "Warnow Schiffstechnik", "name": "Warnow Schiffstechnik GmbH", "ort": "Rostock", "branche": "Schiffbau-Zulieferer",
+     "kam": "sven", "team": ["sally"], "produkte": ["PA-70", "Service"], "geschichte": ["messe", "besuchsberichte"]},
 ]
 
 VORNAMEN = ["Anke", "Bernd", "Carola", "Dirk", "Elke", "Frank", "Gabriele", "Holger", "Ines", "Jörg", "Karin",

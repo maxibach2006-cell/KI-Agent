@@ -420,7 +420,7 @@ def kennzahlen_erzeugen(k: dict, o: dict, lege) -> None:
 
 def kennzahlen_uebersichten(kunden: list[dict]) -> None:
     """Vergleich über Kunden: Gebietsübersicht je KAM und Gesamtübersicht für die Vertriebsleitung."""
-    for kam in ("jonas", "bella", "peter", "ingrid"):
+    for kam in ("jonas", "bella", "peter", "ingrid", "sven"):
         eigene = [k for k in kunden if k["kam"] == kam]
         onenote(kam, "Allgemein", "Umsatz je Kunde 2025", date(2026, 1, 22),
                 f"Umsatz je Kunde im eigenen Gebiet ({NUTZER[kam]['rolle']}), Ist 2025 und Plan 2026:\n"
@@ -615,6 +615,94 @@ def geschichte(k: dict, g: str, o: dict, r: random.Random, lege) -> list[str]:
                     f"Vorbereitung Strategiegespräch {k['kurz']}", werktag(tag - timedelta(days=5)),
                     f"Hallo zusammen,\n\nzum Strategiegespräch {k['kurz']} am {d(tag)} bitte die Zahlen aus dem Account-Plan "
                     "prüfen. Offene Frage: Laufzeit 3 oder 5 Jahre?\n\n" + signatur("ingrid"))
+
+    elif g == "besuchsberichte":
+        # Altdaten: ein Besuchsbericht je Jahr seit 2019 (Word im Ordner, Kurzfassung in OneNote), Themen wechseln
+        themen = ["Jahresgespräch und Bedarf", "Werksführung und neue Linie", "Preisgespräch", "Qualität und Liefertreue",
+                  "Technologietag", "Nachfolgeplanung Einkauf", "Rahmenvertrag und Mengen", "Ausblick Folgejahr"]
+        for jahr in range(max(2019, k["kunde_seit"]), 2027):
+            tag = werktag(date(jahr, r.choice([2, 3, 5, 6, 9, 10]), r.randint(2, 26)))
+            if tag > HEUTE:
+                continue
+            thema, wer = r.choice(themen), r.choice(k["kontakte"])
+            menge = r.randint(60, 900)
+            punkte = [f"Teilnehmer: {wer['name']} ({wer['rolle']}), {person(kam)}",
+                      f"Thema: {thema}",
+                      f"Bedarf {jahr + 1} laut Kunde: ca. {menge} Einheiten {PRODUKTE[r.choice(k['produkte'])]}",
+                      r.choice([f"Kunde lobt Liefertreue, Kritik an Reaktionszeit Service.",
+                                f"Wettbewerber war im {r.choice(['Frühjahr', 'Sommer', 'Herbst'])} im Haus, Preis {r.randint(4, 12)} % unter uns.",
+                                f"Neue Halle in Planung, Entscheidung {jahr + 1}.",
+                                f"Einkauf will Konsignationslager prüfen.",
+                                f"Zufrieden, keine offenen Reklamationen."]),
+                      f"Nächster Schritt: {r.choice(['Angebot schicken', 'Techniker vorbeischicken', 'Termin in 6 Monaten', 'Muster liefern'])}"]
+            name = r.choice([f"Besuchsbericht {k['kurz']} {d(tag)}.docx", f"BB_{jahr}_{k['kurz'].replace(' ', '_')}.docx",
+                             f"Besuch {tag.month:02d}-{jahr}.docx"])
+            ordner = f"{o['basis']}/Besuchsberichte" if jahr >= 2023 else r.choice([f"{o['basis']}/Besuchsberichte/alt", o["alt"]])
+            schreibe_docx(lege(ordner, name), f"Besuchsbericht {k['name']} vom {d(tag)}", punkte)
+            onenote(kam, k["name"], f"Besuch {d(tag)} – {thema}", tag, "\n".join(punkte))
+        notiz = lege(o["lose"], f"todo {k['kurz'].lower()}.txt")
+        notiz.write_text(f"- besuchsberichte 2019-2022 noch ins neue ablagesystem\n- {k['kontakte'][-1]['name']} geburtstag "
+                         f"im {r.choice(['märz', 'juni', 'oktober'])}\n- preisliste 2027 schicken\n", encoding="utf-8")
+
+    elif g == "altprojekt":
+        # Abgeschlossenes Projekt aus 2019/2020 mit damaligen Konditionen (Falle: alte Preise und Ansprechpartner)
+        jahr = r.choice([2019, 2020])
+        projekt = r.choice(["Umrüstung Antriebe Halle 2", "Automatisierung Verpackung", "Retrofit Altanlage"])
+        alt = r.choice(["Gunter Wiesner", "Petra Albrecht", "Rolf Kunze"])
+        basis = f"{o['basis']}/Projekte alt/{jahr} {projekt}"
+        schreibe_pdf(lege(basis, f"Abschlussbericht {projekt}.pdf"), f"Abschlussbericht {projekt} – {k['name']}", [
+            f"Projektzeitraum: {d(date(jahr, 3, 1))} bis {d(date(jahr, 11, 30))}",
+            f"Ansprechpartner Kunde damals: {alt} (Leitung Technik, inzwischen im Ruhestand)",
+            f"Geliefert: {r.randint(40, 250)} Einheiten {PRODUKTE[k['produkte'][0]]}, Projektrabatt {r.randint(10, 14)} % "
+            f"(einmalig, gilt nicht für Folgeaufträge)",
+            f"Ergebnis: Energieverbrauch der Anlage um {r.randint(8, 22)} % gesenkt, Abnahme ohne Mängel.",
+            "Lessons learned: Schnittstellen früher klären, Schulung vor Inbetriebnahme."])
+        schreibe_docx(lege(basis, f"Angebot {projekt} {jahr}.docx"), f"Angebot {projekt} ({jahr})", [
+            f"{k['name']}, z. Hd. {alt}", f"Projektrabatt: {r.randint(10, 14)} % – nur für dieses Projekt",
+            f"Zahlungsziel: 30 Tage netto", f"{person(kam)}, {FIRMA}"])
+        schreibe_pptx(lege(basis, "Abnahme Präsentation.pptx"), f"Abnahme {projekt}", ["Ziele erreicht", "Messwerte", "Offene Punkte: keine"])
+        onenote(kam, k["name"], f"Altprojekt {jahr}: {projekt}", date(jahr, 12, 5),
+                f"Projekt {projekt} {jahr} abgeschlossen. Damaliger Ansprechpartner {alt} (heute nicht mehr im Unternehmen).\n"
+                "Projektrabatt war einmalig, Kunde bezieht sich in Verhandlungen gern darauf.")
+
+    elif g == "wettbewerb":
+        # Kunde nennt ein Wettbewerbsangebot; Infos verteilt auf Mail, Notiz und Mail an die Vertriebsleitung
+        wettbewerber = r.choice(["Nordantrieb AG", "Kraftwerk Motion GmbH", "Asia Drives Europe"])
+        tag = werktag(HEUTE - timedelta(days=r.randint(15, 45)))
+        abstand = r.randint(6, 14)
+        text = (f"Hallo {person(kam).split()[0]},\n\nzur Info: Uns liegt ein Angebot von {wettbewerber} vor, das ca. {abstand} % "
+                f"unter Ihrem Preis liegt. Wir würden gerne bei Ihnen bleiben, brauchen aber Bewegung beim Preis oder "
+                f"längere Garantie.\n\n{ein['name']}\n{ein['rolle']}, {k['name']}")
+        mail_extern(kam, ein["name"], ein["mail"], f"Wettbewerbsangebot {k['kurz']}", tag, text)
+        if r.random() < 0.6:
+            schreibe_eml(lege(o["mails"], f"Wettbewerbsangebot {k['kurz']}.eml"), f"{ein['name']} <{ein['mail']}>",
+                         NUTZER[kam]["upn"], f"Wettbewerbsangebot {k['kurz']}", tag, text)
+        notiz = lege(o["lose"], f"wettbewerb {k['kurz'].lower()}.txt")
+        notiz.write_text(f"{wettbewerber} bei {k['kurz']}\n- ca {abstand}% billiger lt {ein['name'].split()[-1]}\n"
+                         f"- lieferzeit dort 14 wochen (!)\n- argument: service vor ort, garantie 36 monate anbieten?\n",
+                         encoding="utf-8")
+        mail_intern(kam, ["ingrid"], f"Wettbewerb bei {k['kurz']}: {wettbewerber}", werktag(tag + timedelta(days=1)),
+                    f"Hallo Ingrid,\n\n{k['name']} hat ein Angebot von {wettbewerber}, ca. {abstand} % unter uns. Ich schlage "
+                    "vor, statt Rabatt eine Garantieverlängerung auf 36 Monate anzubieten.\n\n" + signatur(kam))
+        onenote(kam, k["name"], f"Wettbewerb {wettbewerber}", tag,
+                f"{ein['name']} nennt Angebot {wettbewerber}, ca. {abstand} % günstiger.\nUnsere Stärken: Lieferzeit, Service vor Ort.\n"
+                "Idee: Garantie 36 statt 24 Monate, Rabatt unverändert.")
+
+    elif g == "messe":
+        # Kontakt von der Messe: neue Ansprechpartner, Folgetermin, Lead-Liste im OneDrive
+        tag = werktag(date(2026, 4, r.randint(20, 24)))
+        kontakt = k["kontakte"][-1]
+        onenote(kam, k["name"], f"Messe Hannover {tag.year} – {kontakt['name']}", tag,
+                f"Gespräch am Stand mit {kontakt['name']} ({kontakt['rolle']}).\nInteresse: {PRODUKTE[k['produkte'][-1]]}, "
+                f"Bedarf ca. {r.randint(50, 400)} Stück ab {tag.year + 1}.\nFolgetermin vereinbart.")
+        mail_extern(kam, kontakt["name"], kontakt["mail"], "Nachgang Hannover Messe", werktag(tag + timedelta(days=6)),
+                    f"Hallo {person(kam).split()[0]},\n\ndanke für das Gespräch am Stand. Schicken Sie uns bitte Unterlagen zu "
+                    f"{PRODUKTE[k['produkte'][-1]]} und einen Terminvorschlag.\n\n{kontakt['name']}")
+        termin(kam, [kam] + [t for t in k["team"] if t == "sally"], f"Folgetermin {k['kurz']} nach Messe",
+               werktag(HEUTE + timedelta(days=r.randint(2, 12))), "10:00", "11:30", f"{k['name']}, {k['ort']}",
+               f"Vorstellung {PRODUKTE[k['produkte'][-1]]} bei {kontakt['name']}.")
+        schreibe_xlsx(lege("Messe/Hannover 2026", f"Leads {k['kurz']}.xlsx"),
+                      [["Firma", "Kontakt", "Thema", "Status"], [k["name"], kontakt["name"], PRODUKTE[k["produkte"][-1]], "Folgetermin"]])
     return neu
 
 
@@ -641,6 +729,26 @@ def allgemeines() -> None:
                 "Urlaub: 22.12.–05.01.")
 
 
+def gebiet_ost() -> None:
+    """Allgemeines für Sven (Gebiet Ost, später dazugekommen): Gebietsplan, Zielvereinbarung, Reiseplanung."""
+    onenote("sven", "Allgemein", "Gebietsplanung Ost 2027", date(2026, 10, 12),
+            "Schwerpunkte 2027:\n- Lausitz Energie: Projekt und Preisfreigabe abschließen\n- Magdeburger Pumpen: Mehrjahresvertrag\n"
+            "- Wettbewerbsdruck bei Erzgebirge Feinmechanik, Havelland und Chemnitzer Werkzeugbau\n"
+            "- Besuchsrhythmus A-Kunden alle 3 Monate, B-Kunden halbjährlich")
+    onenote("sven", "Allgemein", "Persönliche Notizen (privat)", werktag(HEUTE - timedelta(days=35)),
+            "Private Notiz von Sven Seidenstricker – nur für mich.\nZiel 2027: zwei Neukunden in Sachsen.\nUrlaub: 27.12.–09.01.")
+    mail_intern("ingrid", ["sven"], "Zielvereinbarung 2027 Gebiet Ost", date(2026, 10, 8),
+                "Hallo Sven,\n\nwie besprochen: Umsatzziel Gebiet Ost 2027 +8 % gegenüber 2026, Rabatte über +2 Punkte nur "
+                "mit meiner Freigabe (siehe Leitplanken Preisrunde 2027: Listenpreis +6,5 %, Untergrenze +3,9 %).\n\n"
+                + signatur("ingrid"))
+    termin("sven", ["sven", "ingrid"], "Jour fixe Gebiet Ost", werktag(HEUTE + timedelta(days=3)), "08:30", "09:15",
+           "Teams-Besprechung", "Forecast Ost, offene Freigaben, Wettbewerbssituation.")
+    for woche, kunden in enumerate([("Elbtal", "Erzgebirge Feinmechanik"), ("Spree Automation", "Oder Logistik")], start=1):
+        termin("sven", ["sven"], f"Reisetag {kunden[0]} / {kunden[1]}", werktag(HEUTE + timedelta(days=7 * woche + 1)),
+               "08:00", "17:00", "unterwegs", f"Besuche bei {kunden[0]} und {kunden[1]}.")
+    chat("sven", "sally", werktag(HEUTE - timedelta(days=2)), "Kannst du mir die offenen Aufträge von Elbtal und Havelland schicken?")
+
+
 def main() -> None:
     if AUSGABE.exists():
         shutil.rmtree(AUSGABE)
@@ -655,6 +763,7 @@ def main() -> None:
                        f"{vt['zahlungsziel']} Tage · Verhandlung: " + " → ".join(f"v{x['version']} {x['rabatt']} %" for x in v)
                        + f" ({v[2]['status']})", "", "OneDrive:"] + [f"- `{x}`" for x in sorted(dateien)] + [""]
     allgemeines()
+    gebiet_ost()
     kennzahlen_uebersichten(kunden)
     AUSGABE.mkdir(parents=True, exist_ok=True)
     (AUSGABE / "plan.json").write_text(json.dumps(PLAN, ensure_ascii=False, indent=1), encoding="utf-8")
